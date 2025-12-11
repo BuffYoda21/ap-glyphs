@@ -1,7 +1,7 @@
 using MelonLoader;
 using Il2CppInterop.Runtime.Injection;
 
-[assembly: MelonInfo(typeof(ApGlyphs.Main), "CustomAssetTestMod", "1.0.0", "BuffYoda21")]
+[assembly: MelonInfo(typeof(ApGlyphs.Main), "ApGlyphs", "1.0.0", "BuffYoda21")]
 [assembly: MelonGame("Vortex Bros.", "GLYPHS")]
 
 namespace ApGlyphs {
