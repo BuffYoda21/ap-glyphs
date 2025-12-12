@@ -51,7 +51,9 @@ namespace ApGlyphs {
             if (!File.Exists(settingsPath)) {
                 var defaultObj = new {
                     WebHostUrl = client.WebHostUrl,
-                    WebHostPort = client.WebHostPort
+                    WebHostPort = client.WebHostPort,
+                    SlotName = client.SlotName,
+                    password = client.password
                 };
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(defaultObj, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(settingsPath, json);
@@ -64,11 +66,16 @@ namespace ApGlyphs {
                 var root = Newtonsoft.Json.Linq.JObject.Parse(json);
                 client.WebHostUrl = root["WebHostUrl"] != null ? (string)root["WebHostUrl"] : client.WebHostUrl;
                 client.WebHostPort = root["WebHostPort"] != null ? (int)root["WebHostPort"] : client.WebHostPort;
+                client.SlotName = root["SlotName"] != null ? (string)root["SlotName"] : client.SlotName;
+                client.password = root["password"] != null ? (string)root["password"] : client.password;
                 MelonLogger.Msg($"Loaded ConnectionConfig.json from {settingsPath}");
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to read ConnectionConfig.json: {ex.Message}");
                 return;
             }
+
+            // start connecting to server
+            client.initialized = true;
         }
 #pragma warning restore IDE0060 // Restore unused parameter warning
 
