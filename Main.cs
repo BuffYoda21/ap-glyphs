@@ -1,6 +1,5 @@
 using MelonLoader;
 using Il2CppInterop.Runtime.Injection;
-using System.IO;
 using System;
 using UnityEngine;
 using HarmonyLib;
@@ -12,15 +11,16 @@ using UnityEngine.SceneManagement;
 namespace ApGlyphs {
     [HarmonyPatch]
     public class Main : MelonMod {
-        [System.Obsolete]
+        [Obsolete]
         public override void OnApplicationStart() {
             if (isInitialized) return;
             var harmony = new HarmonyLib.Harmony("ApGlyphs.Patches");
             harmony.PatchAll();
 
             // class injection here
-            ClassInjector.RegisterTypeInIl2Cpp<NetworkClient>();
-            ClassInjector.RegisterTypeInIl2Cpp<NetworkClient.ConnectionIndicator>();
+            ClassInjector.RegisterTypeInIl2Cpp<ArchipelagoItem>();
+            ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper>();
+            ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper.ConnectionIndicator>();
 
             isInitialized = true;
         }
@@ -34,54 +34,23 @@ namespace ApGlyphs {
             lastSceneHandle = scene.handle;
             if (scene.name != "Intro" || client) return;  // only run on Intro scene when NetworkClient is not initialized
 
-
-            // create NetworkClient instance
-            client = GameObject.Find("Manager intro")?.AddComponent<NetworkClient>();
-            if (!client) {
+            // create NetworkClient and ItemCache instances
+            GameObject manager = GameObject.Find("Manager intro");
+            client = manager?.AddComponent<ClientWrapper>();
+            itemCache = new ItemCache();
+            if (!client)
                 MelonLogger.Error("Failed to create NetworkClient instance");
-                return;
-            }
+            if (itemCache == null)
+                MelonLogger.Error("Failed to create ItemCache instance");
+            if (!client || itemCache == null) return;
 
-            // retreive network info from json
-            string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
-            string settingsPath = Path.Combine(userDataDir, "ConnectionConfig.json");
-            if (!Directory.Exists(userDataDir))
-                Directory.CreateDirectory(userDataDir);
-
-            // create ConnectionConfig.json if it doesn't exist
-            if (!File.Exists(settingsPath)) {
-                var defaultObj = new {
-                    WebHostUrl = client.WebHostUrl,
-                    WebHostPort = client.WebHostPort,
-                    SlotName = client.SlotName,
-                    password = client.password
-                };
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(defaultObj, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText(settingsPath, json);
-                MelonLogger.Msg($"Created default ConnectionConfig.json at {settingsPath}");
-            }
-
-            // read ConnectionConfig.json
-            try {
-                string json = File.ReadAllText(settingsPath);
-                var root = Newtonsoft.Json.Linq.JObject.Parse(json);
-                client.WebHostUrl = root["WebHostUrl"] != null ? (string)root["WebHostUrl"] : client.WebHostUrl;
-                client.WebHostPort = root["WebHostPort"] != null ? (int)root["WebHostPort"] : client.WebHostPort;
-                client.SlotName = root["SlotName"] != null ? (string)root["SlotName"] : client.SlotName;
-                client.password = root["password"] != null ? (string)root["password"] : client.password;
-                MelonLogger.Msg($"Loaded ConnectionConfig.json from {settingsPath}");
-            } catch (Exception ex) {
-                MelonLogger.Error($"Failed to read ConnectionConfig.json: {ex.Message}");
-                return;
-            }
-
-            // start connecting to server
-            client.initialized = true;
+            client.SetItemCacheRef(itemCache);
         }
 #pragma warning restore IDE0060 // Restore unused parameter warning
 
 
-        public static NetworkClient client;
+        public static ClientWrapper client;
+        public static ItemCache itemCache;
         private static int lastSceneHandle;
         private bool isInitialized = false;
     }

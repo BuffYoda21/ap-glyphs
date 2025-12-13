@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using MelonLoader;
@@ -7,63 +9,53 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace ApGlyphs {
-    public class NetworkClient : MonoBehaviour {
-        public void Update() {
-            if (!initialized) return;
+    public class ClientWrapper : MonoBehaviour {
+        public void Start() {
+            client = new NetworkClient();
+            client.itemCache = itemCache;
 
-            if (!indicator) CreateConnectionIndicator();
-            if (indicator) indicator.SetConnectionState(isConnected);
+            // retreive network info from json
+            string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
+            string settingsPath = Path.Combine(userDataDir, "ConnectionConfig.json");
+            if (!Directory.Exists(userDataDir))
+                Directory.CreateDirectory(userDataDir);
 
-            if (!isConnected && Time.time - lastConnectAttempt > 15) {
-                // connect to server
-                lastConnectAttempt = Time.time;
-                MelonLogger.Msg("Attempting to connect to server at " + WebHostUrl + ":" + WebHostPort);
-                bool success = Connect();
-                if (!success) {
-                    MelonLogger.Error("Failed to connect to server");
-                    return;
-                } else {
-                    MelonLogger.Msg("Connected to Multiworld server");
-                    MelonLogger.Msg("-------------------------------------------------------------------------");
-                    MelonLogger.Msg("Session DEBUG:");
-                    MelonLogger.Msg("  Game: " + session.ConnectionInfo.Game);
-                    MelonLogger.Msg("  ItemsHandling: " + session.ConnectionInfo.ItemsHandlingFlags);
-                    MelonLogger.Msg("  Slot: " + session.ConnectionInfo.Slot);
-                    MelonLogger.Msg("  Tags: " + string.Join(", ", session.ConnectionInfo.Tags));
-                    MelonLogger.Msg("  Team: " + session.ConnectionInfo.Team);
-                    MelonLogger.Msg("  Uuid: " + session.ConnectionInfo.Uuid);
-                    MelonLogger.Msg("-------------------------------------------------------------------------");
-                    MelonLogger.Msg($"You are connected on slot {session.ConnectionInfo.Slot}, on team {session.ConnectionInfo.Team}");
-                    MelonLogger.Msg($"You have {session.RoomState.HintPoints}, and need {session.RoomState.HintCost} for a hint");
-                    isConnected = true;
-                }
-            } else if (isConnected) {
-                isConnected = session.Socket.Connected;
+            // create ConnectionConfig.json if it doesn't exist
+            if (!File.Exists(settingsPath)) {
+                var defaultObj = new {
+                    WebHostUrl = client.WebHostUrl,
+                    WebHostPort = client.WebHostPort,
+                    SlotName = client.SlotName,
+                    password = client.password
+                };
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(defaultObj, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(settingsPath, json);
+                MelonLogger.Msg($"Created default ConnectionConfig.json at {settingsPath}");
             }
+
+            // read ConnectionConfig.json
+            try {
+                string json = File.ReadAllText(settingsPath);
+                var root = Newtonsoft.Json.Linq.JObject.Parse(json);
+                client.WebHostUrl = root["WebHostUrl"] != null ? (string)root["WebHostUrl"] : client.WebHostUrl;
+                client.WebHostPort = root["WebHostPort"] != null ? (int)root["WebHostPort"] : client.WebHostPort;
+                client.SlotName = root["SlotName"] != null ? (string)root["SlotName"] : client.SlotName;
+                client.password = root["password"] != null ? (string)root["password"] : client.password;
+                MelonLogger.Msg($"Loaded ConnectionConfig.json from {settingsPath}");
+            } catch (Exception ex) {
+                MelonLogger.Error($"Failed to read ConnectionConfig.json: {ex.Message}");
+                return;
+            }
+
+            // start connecting to server
+            client.initialized = true;
         }
 
-        public bool Connect() {
-            session = ArchipelagoSessionFactory.CreateSession(WebHostUrl, WebHostPort);
-            LoginResult loginResult = session.TryConnectAndLogin("GLYPHS",
-                                                            SlotName,
-                                                            ItemsHandlingFlags.AllItems,
-                                                            ArchipelagoProtocolVersion,
-                                                            null,
-                                                            null,
-                                                            password,
-                                                            false);
-
-            if (loginResult is LoginFailure failure) {
-                string errors = string.Join(", ", failure.Errors);
-                MelonLogger.Error($"Unable to connect to Archipelago because: {string.Join(", ", failure.Errors)}");
-                return false;
-            } else if (loginResult is LoginSuccessful success) {
-                return true;
-            } else {
-                MelonLogger.Error($"Unexpected LoginResult type when connecting to Archipelago: {loginResult}");
-                return false;
-            }
+        public void SetItemCacheRef(ItemCache cache) {
+            itemCache = cache;
         }
+
+        public void Update() => client.Update();
 
         public class ConnectionIndicator : MonoBehaviour {
             public void SetConnectionState(bool connected) {
@@ -83,6 +75,75 @@ namespace ApGlyphs {
                     }
                 }
             }
+        }
+
+        public NetworkClient client;
+        private ItemCache itemCache;
+    }
+
+    public class NetworkClient {
+        public void Update() {
+            if (!initialized) return;
+
+            if (!indicator) CreateConnectionIndicator();
+            if (indicator) indicator.SetConnectionState(isConnected);
+
+            if (!isConnected && !isConnecting && Time.time - lastConnectAttempt > 15) {
+                lastConnectAttempt = Time.time;
+                isConnecting = true;
+                MelonLogger.Msg("Attempting to connect to server at " + WebHostUrl + ":" + WebHostPort);
+                _ = ConnectAsync();
+            } else if (isConnected) {
+                isConnected = session.Socket.Connected;
+            }
+        }
+
+        private async Task ConnectAsync() {
+            session = ArchipelagoSessionFactory.CreateSession(WebHostUrl, WebHostPort);
+            LoginResult loginResult = session.TryConnectAndLogin(
+                "GLYPHS",
+                SlotName,
+                ItemsHandlingFlags.AllItems,
+                ArchipelagoProtocolVersion,
+                null,
+                null,
+                password,
+                false
+            );
+
+            if (loginResult is LoginFailure failure) {
+                MelonLogger.Error($"Failed to connect: {string.Join(", ", failure.Errors)}");
+                isConnecting = false;
+                return;
+            }
+
+            MelonLogger.Msg("Connected to Multiworld server");
+            MelonLogger.Msg("-------------------------------------------------------------------------");
+            MelonLogger.Msg("Session DEBUG:");
+            MelonLogger.Msg("  Game: " + session.ConnectionInfo.Game);
+            MelonLogger.Msg("  ItemsHandling: " + session.ConnectionInfo.ItemsHandlingFlags);
+            MelonLogger.Msg("  Slot: " + session.ConnectionInfo.Slot);
+            MelonLogger.Msg("  Tags: " + string.Join(", ", session.ConnectionInfo.Tags));
+            MelonLogger.Msg("  Team: " + session.ConnectionInfo.Team);
+            MelonLogger.Msg("  Uuid: " + session.ConnectionInfo.Uuid);
+            MelonLogger.Msg("-------------------------------------------------------------------------");
+            MelonLogger.Msg($"You are connected on slot {session.ConnectionInfo.Slot}, on team {session.ConnectionInfo.Team}");
+            MelonLogger.Msg($"You have {session.RoomState.HintPoints}, and need {session.RoomState.HintCost} for a hint");
+
+            isConnected = true;
+            isConnecting = false;
+
+            await OnConnectionSuccess();
+        }
+
+        private async Task OnConnectionSuccess() {
+            await itemCache.FetchItemPool(session, session.Locations.AllLocations);
+        }
+
+        public void CollectItem(ArchipelagoItem apItem) {
+            long[] locationArray = new long[1];
+            locationArray[0] = apItem.locId;
+            session.Locations.CompleteLocationChecks(locationArray);
         }
 
         private void CreateConnectionIndicator() {
@@ -128,7 +189,7 @@ namespace ApGlyphs {
             foreach (var rect in orbRects) {
                 rect.SetAsLastSibling();
             }
-            indicator = rootObj.AddComponent<ConnectionIndicator>();
+            indicator = rootObj.AddComponent<ClientWrapper.ConnectionIndicator>();
         }
 
         private static Sprite CreateCircleSprite(int diameter) {
@@ -186,6 +247,7 @@ namespace ApGlyphs {
         }
 
         public bool initialized = false;
+        private bool isConnecting = false;
         public bool isConnected = false;
         private float lastConnectAttempt = -15f;
         public ArchipelagoSession session;
@@ -194,6 +256,7 @@ namespace ApGlyphs {
         public int WebHostPort = 0;
         public string SlotName = "Player1";
         public string password = null;
-        public ConnectionIndicator indicator;
+        public ClientWrapper.ConnectionIndicator indicator;
+        public ItemCache itemCache;
     }
 }
