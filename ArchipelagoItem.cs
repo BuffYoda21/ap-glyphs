@@ -13,7 +13,7 @@ namespace ApGlyphs {
         }
 
         public void Update() {
-            if (locId == -1) { Destroy(gameObject); return; }  // AP items must have these parameteres defined on creation
+            if (locId == -1) { Destroy(gameObject); return; }  // AP items must have a location id defined on creation
             if (itemInfo == null) FetchItemInfo();
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
             sr.sprite = GetItemSprite();

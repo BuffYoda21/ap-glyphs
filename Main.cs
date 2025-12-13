@@ -21,6 +21,8 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<ArchipelagoItem>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper.ConnectionIndicator>();
+            ClassInjector.RegisterTypeInIl2Cpp<InventoryManager>();
+            ClassInjector.RegisterTypeInIl2Cpp<MainThreadDispatcher>();
 
             isInitialized = true;
         }
@@ -34,15 +36,17 @@ namespace ApGlyphs {
             lastSceneHandle = scene.handle;
             if (scene.name != "Intro" || client) return;  // only run on Intro scene when NetworkClient is not initialized
 
-            // create NetworkClient and ItemCache instances
+            // create required class instances
             GameObject manager = GameObject.Find("Manager intro");
             client = manager?.AddComponent<ClientWrapper>();
+            inventory = manager?.AddComponent<InventoryManager>();
             itemCache = new ItemCache();
-            if (!client)
-                MelonLogger.Error("Failed to create NetworkClient instance");
-            if (itemCache == null)
-                MelonLogger.Error("Failed to create ItemCache instance");
-            if (!client || itemCache == null) return;
+            itemCache.dispatcher = manager?.AddComponent<MainThreadDispatcher>();
+            if (!client) MelonLogger.Error("Failed to create ClientWrapper");
+            if (!inventory) MelonLogger.Error("Failed to create InventoryManager instance");
+            if (itemCache == null) MelonLogger.Error("Failed to create ItemCache instance");
+            if (!itemCache?.dispatcher) MelonLogger.Error("Failed to create MainThreadDispatcher instance");
+            if (!client || !inventory || itemCache == null || !itemCache.dispatcher) return;
 
             client.SetItemCacheRef(itemCache);
         }
@@ -51,6 +55,7 @@ namespace ApGlyphs {
 
         public static ClientWrapper client;
         public static ItemCache itemCache;
+        public static InventoryManager inventory;
         private static int lastSceneHandle;
         private bool isInitialized = false;
     }
