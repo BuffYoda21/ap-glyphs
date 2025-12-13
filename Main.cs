@@ -20,6 +20,7 @@ namespace ApGlyphs {
 
             // class injection here
             ClassInjector.RegisterTypeInIl2Cpp<NetworkClient>();
+            ClassInjector.RegisterTypeInIl2Cpp<NetworkClient.ConnectionIndicator>();
 
             isInitialized = true;
         }
