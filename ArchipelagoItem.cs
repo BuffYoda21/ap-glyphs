@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Archipelago.MultiClient.Net.Models;
 using Il2Cpp;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace ApGlyphs {
             col = gameObject.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
             client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
+            inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
             itemCache = client.client.itemCache;
         }
 
@@ -23,9 +25,10 @@ namespace ApGlyphs {
         public void OnTriggerEnter2D(Collider2D other) {
             if (other.gameObject.name != "Player") return;
             client.client.CollectItem(this);
-            if (itemInfo.ItemGame == "GLYPHS" && itemInfo.ItemName.EndsWith("Dash Orb")) {
-                player.midairJumpsMax++;
+            if (itemInfo.ItemGame == "GLYPHS") {
+                inventory.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
             }
+            Destroy(gameObject);
         }
 
         private void FetchItemInfo() {
@@ -47,8 +50,8 @@ namespace ApGlyphs {
         private SpriteRenderer sr;
         private ClientWrapper client;
         private ItemCache itemCache;
+        private InventoryManager inventory;
         public long locId;
-        private bool ranStart = false;
         public ScoutedItemInfo itemInfo;
     }
 }

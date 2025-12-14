@@ -13,6 +13,7 @@ namespace ApGlyphs {
         public void Start() {
             client = new NetworkClient();
             client.itemCache = itemCache;
+            client.inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
 
             // retreive network info from json
             string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
@@ -258,5 +259,6 @@ namespace ApGlyphs {
         public string password = null;
         public ClientWrapper.ConnectionIndicator indicator;
         public ItemCache itemCache;
+        public InventoryManager inventory;
     }
 }

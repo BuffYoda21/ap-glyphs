@@ -12,7 +12,7 @@ namespace ApGlyphs {
         public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
-            if (scene.name != "Game") return;
+            if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
 
             GameObject sword = GameObject.Find("World/Region1/(R3D)(sword)/Sword");
             GameObject ap_obj_test = new GameObject("AP Test Object");

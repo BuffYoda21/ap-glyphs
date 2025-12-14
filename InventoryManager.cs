@@ -12,13 +12,13 @@ namespace ApGlyphs {
         public void Start() {
             LoadInventoryFromFile();
         }
-        
+
         public void ImportInventoryFromServer(ReadOnlyCollection<ItemInfo> importedItems) {
             Dictionary<string, int> loadedItems = new Dictionary<string, int>();
             foreach (ItemInfo item in importedItems) {
                 if (loadedItems.ContainsKey(item.ItemName))
                     loadedItems[item.ItemName]++;
-                else 
+                else
                     loadedItems.Add(item.ItemName, 1);
             }
             items = loadedItems;
@@ -30,7 +30,7 @@ namespace ApGlyphs {
 
             try {
                 string json = "{}";
-                if (File.Exists(inventoryPath)) 
+                if (File.Exists(inventoryPath))
                     json = File.ReadAllText(inventoryPath);
                 else {
                     MelonLogger.Warning("Found no localInventory.json. Creating new.");
@@ -41,8 +41,7 @@ namespace ApGlyphs {
                 MelonLogger.Msg($"Loaded {items.Count} items from localInventory.json");
                 inventoryLoaded = true;
                 return true;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 MelonLogger.Error($"Failed to load inventory from localInventory.json: {e}");
                 inventoryLoaded = true;
                 return false;
@@ -59,11 +58,21 @@ namespace ApGlyphs {
                 File.WriteAllText(inventoryPath, json);
                 MelonLogger.Msg("Saved inventory to localInventory.json");
                 return true;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 MelonLogger.Error($"Failed to save inventory: {e}");
                 return false;
             }
+        }
+
+        public void CollectAndSaveLocalInventory(List<string> items) {
+            foreach (string item in items) {
+                if (this.items.ContainsKey(item))
+                    this.items[item]++;
+                else
+                    this.items.Add(item, 1);
+            }
+            AbilityManager.UpdatePlayer();
+            SaveInventoryToFile();
         }
 
         private string GetInventoryPath() {
@@ -73,9 +82,9 @@ namespace ApGlyphs {
             string inventoryPath = Path.Combine(userDataDir, "localInventory.json");
             return inventoryPath;
         }
-        
-        private Dictionary<string, int> items = new Dictionary<string, int>(); // <name, count>
-        private bool inventoryLoaded = false;
+
+        public Dictionary<string, int> items = new Dictionary<string, int>(); // <name, count>
+        public bool inventoryLoaded = false;
     }
 }
 
