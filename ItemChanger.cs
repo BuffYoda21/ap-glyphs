@@ -46,7 +46,8 @@ namespace ApGlyphs {
                 loc3.transform.position = dashOrb.transform.position;
                 dashOrb.SetActive(false);
                 loc3.AddComponent<ArchipelagoItem>().locId = 3;
-                loc3.SetActive(false); // needs conditional script
+                loc3.SetActive(false);
+                loc3.AddComponent<AppearOnCondition>().target = dashOrb;
             }
 
             GameObject map = GameObject.Find("World/Region1/(R2B)(Map)/Map");
@@ -54,7 +55,7 @@ namespace ApGlyphs {
                 GameObject loc4 = new GameObject("4_Map Pedestal");
                 loc4.transform.SetParent(APItemParent);
                 loc4.transform.position = map.transform.position;
-                map.SetActive(false);
+                map.transform.position = GameObject.Find("Player").transform.position; // for some reason setting playerprefs doesn't give map so just moving it to the player on load
                 loc4.AddComponent<ArchipelagoItem>().locId = 4;
             }
 
@@ -119,7 +120,8 @@ namespace ApGlyphs {
                 loc11.transform.position = cube2.transform.position;
                 cube2.SetActive(false);
                 loc11.AddComponent<ArchipelagoItem>().locId = 11;
-                loc11.SetActive(false); // needs conditional script
+                loc11.SetActive(false);
+                loc11.AddComponent<AppearOnCondition>().target = cube2;
             }
         }
 

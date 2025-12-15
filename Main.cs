@@ -23,6 +23,7 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper.ConnectionIndicator>();
             ClassInjector.RegisterTypeInIl2Cpp<InventoryManager>();
             ClassInjector.RegisterTypeInIl2Cpp<MainThreadDispatcher>();
+            ClassInjector.RegisterTypeInIl2Cpp<AppearOnCondition>();
 
             isInitialized = true;
         }

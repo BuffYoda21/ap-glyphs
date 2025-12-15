@@ -29,6 +29,8 @@ namespace ApGlyphs {
             if (itemInfo.ItemGame == "GLYPHS") {
                 inventory.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
             }
+            if (GetComponent<AppearOnCondition>() != null)
+                Destroy(GetComponent<AppearOnCondition>().target);
             Destroy(gameObject);
         }
 

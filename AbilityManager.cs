@@ -26,7 +26,7 @@ namespace ApGlyphs {
             if (!player) player = GameObject.Find("Player")?.GetComponent<PlayerController>();
             if (!player) return;
 
-            PlayerPrefs.SetString("Unlocked-map", "true");
+            //PlayerPrefs.SetString("Unlocked-map", "true");    // doesn't work for some reason. ItemChanger.cs moves map to player on load now as a workaround
             player.mapDisabled = true;
             player.hasWeapon = false;
             player.attackBonus = 0f;
