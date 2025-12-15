@@ -20,11 +20,14 @@ namespace ApGlyphs {
 #pragma warning restore IDE0060 // Restore unused parameter warning
 
         public static void UpdatePlayer() {
+            if (!sm) sm = GameObject.Find("Manager intro")?.GetComponent<SaveManager>();
             if (!inventory) inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
-            if ((scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") || !inventory || !inventory.inventoryLoaded) return;
+            if ((scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") || !inventory || !inventory.inventoryLoaded || !sm) return;
             if (!player) player = GameObject.Find("Player")?.GetComponent<PlayerController>();
             if (!player) return;
 
+            PlayerPrefs.SetString("Unlocked-map", "true");
+            player.mapDisabled = true;
             player.hasWeapon = false;
             player.attackBonus = 0f;
             player.midairJumpsMax = 0;
@@ -36,6 +39,9 @@ namespace ApGlyphs {
             // other collectables will be handled by a scene setup script that is to be implemented
             foreach (KeyValuePair<string, int> kv in inventory.items) {
                 switch (kv.Key) {
+                    case "Map":
+                        player.mapDisabled = false;
+                        break;
                     case "Progressive Sword":
                         if (kv.Value >= 1)
                             player.hasWeapon = true;
@@ -72,39 +78,17 @@ namespace ApGlyphs {
                             player.attackBonus += 2f; //extra healing will need to be handled separately
                         break;
                     case "Silver Shard":
-                        if (kv.Value >= 3) {
-                            player.maxHp = 110;
-                            player.hp = 110;
-                        }
-                        if (kv.Value >= 6) {
-                            player.maxHp = 120;
-                            player.hp = 120;
-                        }
-                        if (kv.Value >= 9) {
-                            player.maxHp = 130;
-                            player.hp = 130;
-                        }
-                        if (kv.Value >= 12) {
-                            player.maxHp = 140;
-                            player.hp = 140;
-                        }
-                        if (kv.Value >= 15) {
-                            player.maxHp = 150;
-                            player.hp = 150;
-                        }
+                        player.fragments = kv.Value;
                         break;
                     case "Gold Shard":
-                        if (kv.Value == 1)
-                            player.goldfragments = 1;
-                        else if (kv.Value == 2)
-                            player.goldfragments = 2;
-                        else if (kv.Value >= 3)
-                            player.goldfragments = 3;
+                        player.goldfragments = kv.Value;
                         break;
                 }
             }
+            sm.Save();
         }
 
+        private static SaveManager sm;
         private static InventoryManager inventory;
         private static PlayerController player;
         private static Scene scene;

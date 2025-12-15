@@ -148,16 +148,16 @@ namespace ApGlyphs {
         }
 
         private void CreateConnectionIndicator() {
-            var canvasObj = new GameObject("ConnectionIndicatorCanvas");
+            GameObject canvasObj = new GameObject("AP Canvas");
             UnityEngine.Object.DontDestroyOnLoad(canvasObj);
-            var canvas = canvasObj.AddComponent<Canvas>();
+            Canvas canvas = canvasObj.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 9999;
             canvasObj.AddComponent<CanvasScaler>();
             canvasObj.AddComponent<GraphicRaycaster>();
-            var rootObj = new GameObject("ConnectionIndicator");
+            GameObject rootObj = new GameObject("ConnectionIndicator");
             rootObj.transform.SetParent(canvasObj.transform, false);
-            var rootRect = rootObj.AddComponent<RectTransform>();
+            RectTransform rootRect = rootObj.AddComponent<RectTransform>();
             rootRect.anchorMin = new Vector2(1f, 0f);
             rootRect.anchorMax = new Vector2(1f, 0f);
             rootRect.pivot = new Vector2(1f, 0f);
@@ -166,13 +166,13 @@ namespace ApGlyphs {
             const int orbCount = 6;
             const float radius = 27f;
             const float orbSize = 32f;
-            var orbSprite = CreateCircleSprite((int)orbSize);
-            var orbRects = new List<RectTransform>();
+            Sprite orbSprite = CreateCircleSprite((int)orbSize);
+            List<RectTransform> orbRects = new List<RectTransform>();
             for (int i = 0; i < orbCount; i++) {
                 float angleRad = Mathf.Deg2Rad * (i * 360f / orbCount + 360f / (orbCount * 2f));
-                var orbObj = new GameObject($"Orb_{i}");
+                GameObject orbObj = new GameObject($"Orb_{i}");
                 orbObj.transform.SetParent(rootObj.transform, false);
-                var rect = orbObj.AddComponent<RectTransform>();
+                RectTransform rect = orbObj.AddComponent<RectTransform>();
                 orbRects.Add(rect);
                 rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
                 rect.pivot = new Vector2(0.5f, 0.5f);
@@ -181,20 +181,20 @@ namespace ApGlyphs {
                     Mathf.Sin(angleRad) * radius
                 );
                 rect.sizeDelta = new Vector2(orbSize, orbSize);
-                var img = orbObj.AddComponent<Image>();
+                Image img = orbObj.AddComponent<Image>();
                 img.color = new Color32(49, 107, 132, 255);
                 img.sprite = orbSprite;
             }
             orbRects.Sort((a, b) =>
                 b.anchoredPosition.y.CompareTo(a.anchoredPosition.y));
-            foreach (var rect in orbRects) {
+            foreach (RectTransform rect in orbRects) {
                 rect.SetAsLastSibling();
             }
             indicator = rootObj.AddComponent<ClientWrapper.ConnectionIndicator>();
         }
 
         private static Sprite CreateCircleSprite(int diameter) {
-            var tex = new Texture2D(diameter, diameter, TextureFormat.ARGB32, false);
+            Texture2D tex = new Texture2D(diameter, diameter, TextureFormat.ARGB32, false);
             tex.filterMode = FilterMode.Bilinear;
             tex.wrapMode = TextureWrapMode.Clamp;
             float r = diameter / 2f;

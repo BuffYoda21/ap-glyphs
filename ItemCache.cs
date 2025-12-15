@@ -16,6 +16,7 @@ namespace ApGlyphs {
             foreach (KeyValuePair<long, ScoutedItemInfo> kv in result)
                 itemPool[kv.Key] = kv.Value;
             ReadOnlyCollection<ItemInfo> receivedItems = new List<ItemInfo>(session.Items.AllItemsReceived).AsReadOnly();
+            checkedLocations = session.Locations.AllLocationsChecked;
             MainThreadDispatcher.Enqueue(() => {
                 ApplyInventory(receivedItems);
                 itemsReady = true;
@@ -38,6 +39,7 @@ namespace ApGlyphs {
         }
 
         private readonly Dictionary<long, ScoutedItemInfo> itemPool = new Dictionary<long, ScoutedItemInfo>();
+        public ReadOnlyCollection<long> checkedLocations;
         private InventoryManager inventoryManager;
         public MainThreadDispatcher dispatcher;
         public bool itemsReady;
