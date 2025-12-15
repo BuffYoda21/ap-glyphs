@@ -46,6 +46,7 @@ namespace ApGlyphs {
                 loc3.transform.position = dashOrb.transform.position;
                 dashOrb.SetActive(false);
                 loc3.AddComponent<ArchipelagoItem>().locId = 3;
+                loc3.SetActive(false); // needs conditional script
             }
 
             GameObject map = GameObject.Find("World/Region1/(R2B)(Map)/Map");
@@ -118,7 +119,7 @@ namespace ApGlyphs {
                 loc11.transform.position = cube2.transform.position;
                 cube2.SetActive(false);
                 loc11.AddComponent<ArchipelagoItem>().locId = 11;
-                loc11.SetActive(false); // this needs a seperate script to appear on puzzle completion
+                loc11.SetActive(false); // needs conditional script
             }
         }
 
