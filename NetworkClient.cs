@@ -134,6 +134,8 @@ namespace ApGlyphs {
             isConnected = true;
             isConnecting = false;
 
+            SlotId = session.ConnectionInfo.Slot;
+
             await OnConnectionSuccess();
         }
 
@@ -256,6 +258,7 @@ namespace ApGlyphs {
         public string WebHostUrl = "archipelago.gg";
         public int WebHostPort = 0;
         public string SlotName = "Player1";
+        public int SlotId = 0;
         public string password = null;
         public ClientWrapper.ConnectionIndicator indicator;
         public ItemCache itemCache;

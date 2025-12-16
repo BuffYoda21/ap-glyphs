@@ -7,6 +7,7 @@ namespace ApGlyphs {
     public class ArchipelagoItem : MonoBehaviour {
         public void Start() {
             player = GameObject.Find("Player")?.GetComponent<PlayerController>();
+            if (GetComponent<BoxCollider2D>()) col = GetComponent<BoxCollider2D>();
             col = gameObject.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
             client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
@@ -18,9 +19,33 @@ namespace ApGlyphs {
             if (locId == -1) { Destroy(gameObject); return; }  // AP items must have a location id defined on creation
             if (itemInfo == null) FetchItemInfo();
             if (itemInfo == null) return;
+            if (isUsingAPlogo) return;
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
             sr.sprite = GetItemSprite();
-            if (!sr.sprite && !isUsingAPlogo) CreateAPLogo();
+            if (!sr.sprite)
+                if (itemInfo.Player.Slot == client.client.SlotId)
+                    CreateAPLogo();
+                else {
+                    switch (itemInfo.ItemName) {
+                        case "Grapple":
+                            GameObject grapple = Object.Instantiate(Resources.Load<GameObject>("prefabs/game/Grapple Worm"), transform);
+                            Destroy(grapple.GetComponent<Pickup>());
+                            break;
+                        case "Rune Cube":
+                            GameObject cube = Object.Instantiate(Resources.Load<GameObject>("prefabs/game/Cube"), transform);
+                            Destroy(cube.GetComponent<Pickup>());
+                            break;
+                        default:
+                            CreateAPLogo();
+                            break;
+                    }
+                }
+            else {
+                foreach (Transform child in transform) {
+                    if (child.name.StartsWith("Orb_"))
+                        child.gameObject.SetActive(false);
+                }
+            }
         }
 
         public void OnTriggerEnter2D(Collider2D other) {
@@ -34,13 +59,50 @@ namespace ApGlyphs {
 
         private void FetchItemInfo() {
             itemInfo = itemCache.TryGetItem(locId, out var info) ? info : null;
+            if (itemInfo != null) isUsingAPlogo = false;    // this item has data now so we need to check it again to see if we still need the AP logo
             if (itemInfo != null && itemCache.checkedLocations.Contains(itemInfo.LocationId))
                 Destroy(gameObject);
         }
 
         private Sprite GetItemSprite() {
-            if (itemInfo.ItemGame != "GLYPHS") return null;
-            if (itemInfo.ItemName.EndsWith("Dash Orb")) return Resources.Load<Sprite>("sprites/items/dashorb/DashOrb");
+            if (itemInfo.Player.Slot != client.client.SlotId) return null;
+            switch (itemInfo.ItemName) {
+                case "Progressive Sword":
+                    if (!player.hasWeapon) return Resources.Load<Sprite>("sprites/items/SwordFull");
+                    return Resources.Load<Sprite>("sprites/items/Sword Upgrade");
+                case "Progressive Dash Orb":
+                    if (player.midairJumpsMax == 0) return Resources.Load<Sprite>("sprites/items/dashorb/DashOrb");
+                    if (!player.dashAttack) return Resources.Load<Sprite>("sprites/items/DashAttack");
+                    return Resources.Load<Sprite>("sprites/items/DashAttackUpgrade");
+                case "Map":
+                    return Resources.Load<Sprite>("sprites/items/Map");
+                // constructed model bundled in prefabs
+                // case "Grapple":
+                //     return Resources.Load<Sprite>("sprites/items/Grapple");
+                case "Progressive Parry":
+                    if (!player.hasParry) return Resources.Load<Sprite>("sprites/items/parry/Parry");
+                    return Resources.Load<Sprite>("sprites/items/Parry Upgrade");
+                case "Shroud":
+                    return Resources.Load<Sprite>("sprites/items/Shroud");
+                case "Progressive Essence of George":
+                    return Resources.Load<Sprite>("sprites/default/hats/chicken/egg");
+                case "Silver Shard":
+                    return Resources.Load<Sprite>("sprites/items/Fragment");
+                case "Gold Shard":
+                    sr.color = new UnityEngine.Color32(255, 197, 0, 255);
+                    return Resources.Load<Sprite>("sprites/items/Fragment");
+                case "Smile Token":
+                    return Resources.Load<Sprite>("sprites/default/smile coin");
+                // constructed model bundled in prefabs
+                // case: "Rune Cube":
+                //    return Resources.Load<Sprite>("sprites/items/Rune Cube");
+                case "Void Gate Shard":
+                    return Resources.Load<Sprite>("sprites/items/GateFragment");
+                case "Glyphstone":
+                    return Resources.Load<Sprite>("sprites/depictions/glyphstone/GlyphStone 0");
+                case "Seeds":
+                    return Resources.Load<Sprite>("sprites/default/hats/chicken/seed");
+            }
             return null;
         }
 
