@@ -47,7 +47,7 @@ namespace ApGlyphs {
                 dashOrb.SetActive(false);
                 loc3.AddComponent<ArchipelagoItem>().locId = 3;
                 loc3.SetActive(false);
-                loc3.AddComponent<AppearOnCondition>().target = dashOrb;
+                dashOrb.AddComponent<ReplaceOnEnable>().replacement = loc3;
             }
 
             GameObject map = GameObject.Find("World/Region1/(R2B)(Map)/Map");
@@ -121,7 +121,7 @@ namespace ApGlyphs {
                 cube2.SetActive(false);
                 loc11.AddComponent<ArchipelagoItem>().locId = 11;
                 loc11.SetActive(false);
-                loc11.AddComponent<AppearOnCondition>().target = cube2;
+                cube2.AddComponent<ReplaceOnEnable>().replacement = loc11;
             }
         }
 
