@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using HarmonyLib;
 using Il2Cpp;
+using MelonLoader;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,8 +26,12 @@ namespace ApGlyphs {
 #pragma warning restore IDE0060 // Restore unused parameter warning
 
         private static void EditWorldGame() {
-            GameObject missedSwordTrigger = GameObject.Find("World/Region1/(R3D)(sword)/SaveConditional");
-            if (missedSwordTrigger) GameObject.Destroy(missedSwordTrigger);
+            try {
+                GameObject missedSwordTrigger = GameObject.Find("World/Region1/(R3D)(sword)/SaveConditional");
+                GameObject.Destroy(missedSwordTrigger);
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to destroy missedSwordTrigger: " + ex.Message);
+            }
         }
 
         private static void EditWorldMemory() {
