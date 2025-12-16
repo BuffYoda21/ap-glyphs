@@ -102,6 +102,28 @@ namespace ApGlyphs {
                     return Resources.Load<Sprite>("sprites/depictions/glyphstone/GlyphStone 0");
                 case "Seeds":
                     return Resources.Load<Sprite>("sprites/default/hats/chicken/seed");
+                case "Pink Bow":
+                    return Resources.Load<Sprite>("sprites/default/hats/Pink Bow");
+                case "Propeller Hat":
+                    return Resources.Load<Sprite>("sprites/default/hats/PropellerHat");
+                case "Traffic Cone":
+                    return Resources.Load<Sprite>("sprites/default/hats/ConeHat");
+                case "John Hat":
+                    return Resources.Load<Sprite>("sprites/default/hats/JohnHat");
+                case "Top Hat":
+                    return Resources.Load<Sprite>("sprites/default/hats/Top Hat");
+                case "Fez":
+                    return Resources.Load<Sprite>("sprites/default/hats/Fez");
+                case "Party Hat":
+                    return Resources.Load<Sprite>("sprites/default/hats/PartyHat");
+                case "Bomb Hat":
+                    return Resources.Load<Sprite>("sprites/default/hats/bombHat");
+                // case "Progressive Chicken Hat":
+                //     return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken");  // wrote this when I only had access to 1.7 assets. rewrite for 1.9 later.
+                case "Crown":
+                    return Resources.Load<Sprite>("sprites/default/hats/crown");
+                case "HP Refill":
+                    return Resources.Load<Sprite>("sprites/items/Heal");
             }
             return null;
         }
