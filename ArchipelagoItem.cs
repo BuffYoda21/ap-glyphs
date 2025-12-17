@@ -23,7 +23,7 @@ namespace ApGlyphs {
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
             sr.sprite = GetItemSprite();
             if (!sr.sprite)
-                if (itemInfo.Player.Slot == client.client.SlotId)
+                if (itemInfo.Player.Slot != client.client.SlotId)
                     CreateAPLogo();
                 else {
                     switch (itemInfo.ItemName) {
@@ -51,7 +51,7 @@ namespace ApGlyphs {
         public void OnTriggerEnter2D(Collider2D other) {
             if (other.gameObject.name != "Player") return;
             client.client.CollectItem(this);
-            if (itemInfo.ItemGame == "GLYPHS") {
+            if (itemInfo.Player.Slot == client.client.SlotId) {
                 inventory.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
             }
             Destroy(gameObject);
