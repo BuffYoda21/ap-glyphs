@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Archipelago.MultiClient.Net.Models;
 using Il2Cpp;
+using MelonLoader;
 using UnityEngine;
 
 namespace ApGlyphs {
@@ -54,6 +55,7 @@ namespace ApGlyphs {
             if (itemInfo.Player.Slot == client.client.SlotId) {
                 inventory.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
             }
+            MelonLogger.Msg($"{client.client.SlotName} sent {itemInfo.ItemName} to slot {itemInfo.Player.Slot} ({itemInfo.ItemGame})");
             Destroy(gameObject);
         }
 

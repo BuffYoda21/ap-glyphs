@@ -15,6 +15,9 @@ namespace ApGlyphs {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
             AbilityManager.scene = scene;
+            if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
+            if (!inventory) inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
+            inventory.scene = scene;
             UpdatePlayer();
         }
 #pragma warning restore IDE0060 // Restore unused parameter warning

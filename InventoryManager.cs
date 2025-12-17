@@ -2,15 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using Il2Cpp;
 using MelonLoader;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
     public class InventoryManager : MonoBehaviour {
         public void Start() {
             LoadInventoryFromFile();
+        }
+
+        public void Update() {
+            if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
+            if (!player) player = GameObject.Find("Player")?.GetComponent<PlayerController>();
+            if (!player) return;
+            if (!player.hasGeorge && items.Keys.Contains("Progressive Essence of George") && items["Progressive Essence of George"] > 0)
+                player.hasGeorge = true;
         }
 
         public void ImportInventoryFromServer(ReadOnlyCollection<ItemInfo> importedItems) {
@@ -85,6 +96,8 @@ namespace ApGlyphs {
 
         public Dictionary<string, int> items = new Dictionary<string, int>(); // <name, count>
         public bool inventoryLoaded = false;
+        private PlayerController player;
+        public Scene scene;
     }
 }
 
