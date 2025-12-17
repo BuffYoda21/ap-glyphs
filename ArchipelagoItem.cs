@@ -118,10 +118,11 @@ namespace ApGlyphs {
                     return Resources.Load<Sprite>("sprites/default/hats/PartyHat");
                 case "Bomb Hat":
                     return Resources.Load<Sprite>("sprites/default/hats/bombHat");
-                // case "Progressive Chicken Hat":
-                //     return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken");  // wrote this when I only had access to 1.7 assets. rewrite for 1.9 later.
+                case "Progressive Chicken Hat":
+                    if (!player.hasGeorge) return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken");
+                    return Resources.Load<Sprite>("sprites/default/hats/chicken/george");
                 case "Crown":
-                    return Resources.Load<Sprite>("sprites/default/hats/crown");
+                    return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken 1");
                 case "HP Refill":
                     return Resources.Load<Sprite>("sprites/items/Heal");
             }
