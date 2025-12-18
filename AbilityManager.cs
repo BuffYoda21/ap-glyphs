@@ -38,6 +38,11 @@ namespace ApGlyphs {
             player.hasGrapple = false;
             player.hasParry = false;
             player.parryCD = 2f;
+            player.hasShroud = false;
+            player.hasGeorge = false;
+            player.fragments = 0;
+            player.maxHp = 100;
+            player.goldfragments = 0;
 
             // other collectables will be handled by a scene setup script that is to be implemented
             foreach (KeyValuePair<string, int> kv in inventory.items) {
@@ -81,7 +86,8 @@ namespace ApGlyphs {
                             player.attackBonus += 2f; //extra healing will need to be handled separately
                         break;
                     case "Silver Shard":
-                        player.fragments = kv.Value;
+                        player.maxHp = 100 + kv.Value / 3 * 10;
+                        player.fragments = kv.Value % 3;
                         break;
                     case "Gold Shard":
                         player.goldfragments = kv.Value;

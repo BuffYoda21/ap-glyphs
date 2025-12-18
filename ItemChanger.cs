@@ -281,7 +281,7 @@ namespace ApGlyphs {
                 loc23.transform.SetParent(APItemParent);
                 loc23.transform.position = grapple.transform.position;
                 grapple.SetActive(false);
-                loc23.AddComponent<ArchipelagoItem>().locId = 22;
+                loc23.AddComponent<ArchipelagoItem>().locId = 23;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 23_Gilded Serpent Reward: " + ex.Message);
             }
@@ -292,7 +292,7 @@ namespace ApGlyphs {
                 loc24.transform.SetParent(APItemParent);
                 loc24.transform.position = propHat.transform.position;
                 propHat.SetActive(false);
-                loc24.AddComponent<ArchipelagoItem>().locId = 23;
+                loc24.AddComponent<ArchipelagoItem>().locId = 24;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 24_Cameo Room Pickup: " + ex.Message);
             }
@@ -303,7 +303,7 @@ namespace ApGlyphs {
                 loc25.transform.SetParent(APItemParent);
                 loc25.transform.position = coneHat.transform.position;
                 coneHat.SetActive(false);
-                loc25.AddComponent<ArchipelagoItem>().locId = 24;
+                loc25.AddComponent<ArchipelagoItem>().locId = 25;
                 loc25.SetActive(false);
                 GameObject carGrouping = coneHat.transform.parent.gameObject;
                 carGrouping.AddComponent<ReplaceOnEnable>().replacement = loc25;
@@ -318,7 +318,7 @@ namespace ApGlyphs {
                 loc26.transform.SetParent(APItemParent);
                 loc26.transform.position = seed6.transform.position;
                 seed6.SetActive(false);
-                loc26.AddComponent<ArchipelagoItem>().locId = 25;
+                loc26.AddComponent<ArchipelagoItem>().locId = 26;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 26_Near Shooters Pickup: " + ex.Message);
             }
@@ -329,7 +329,7 @@ namespace ApGlyphs {
                 loc27.transform.SetParent(APItemParent);
                 loc27.transform.position = seed7.transform.position;
                 seed7.SetActive(false);
-                loc27.AddComponent<ArchipelagoItem>().locId = 26;
+                loc27.AddComponent<ArchipelagoItem>().locId = 27;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 27_Collapsed Tunnel Pickup: " + ex.Message);
             }
@@ -340,7 +340,7 @@ namespace ApGlyphs {
                 loc28.transform.SetParent(APItemParent);
                 loc28.transform.position = seed9.transform.position;
                 seed9.SetActive(false);
-                loc28.AddComponent<ArchipelagoItem>().locId = 27;
+                loc28.AddComponent<ArchipelagoItem>().locId = 28;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 28_Nest Room Pickup: " + ex.Message);
             }
@@ -351,7 +351,7 @@ namespace ApGlyphs {
                 loc29.transform.SetParent(APItemParent);
                 loc29.transform.position = seed10.transform.position;
                 seed10.SetActive(false);
-                loc29.AddComponent<ArchipelagoItem>().locId = 28;
+                loc29.AddComponent<ArchipelagoItem>().locId = 29;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 29_Serpent Boss Room Pickup: " + ex.Message);
             }
@@ -362,7 +362,7 @@ namespace ApGlyphs {
                 loc30.transform.SetParent(APItemParent);
                 loc30.transform.position = dashAttackOrb.transform.position;
                 dashAttackOrb.SetActive(false);
-                loc30.AddComponent<ArchipelagoItem>().locId = 29;
+                loc30.AddComponent<ArchipelagoItem>().locId = 30;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 30_Shadow Chase Reward: " + ex.Message);
             }
@@ -373,7 +373,7 @@ namespace ApGlyphs {
                 loc31.transform.SetParent(APItemParent);
                 loc31.transform.position = topHat.transform.position;
                 topHat.SetActive(false);
-                loc31.AddComponent<ArchipelagoItem>().locId = 30;
+                loc31.AddComponent<ArchipelagoItem>().locId = 31;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 31_Water Room Pickup: " + ex.Message);
             }
@@ -384,7 +384,7 @@ namespace ApGlyphs {
                 loc32.transform.SetParent(APItemParent);
                 loc32.transform.position = new Vector3(395f, 15f, 0f);
                 loc32.SetActive(false);
-                loc32.AddComponent<ArchipelagoItem>().locId = 31;
+                loc32.AddComponent<ArchipelagoItem>().locId = 32;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 32_George Reward 1: " + ex.Message);
             }
@@ -394,7 +394,7 @@ namespace ApGlyphs {
                 loc33.transform.SetParent(APItemParent);
                 loc33.transform.position = new Vector3(402f, 15f, 0f);
                 loc33.SetActive(false);
-                loc33.AddComponent<ArchipelagoItem>().locId = 32;
+                loc33.AddComponent<ArchipelagoItem>().locId = 33;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 33_George Reward 2: " + ex.Message);
             }
@@ -405,7 +405,7 @@ namespace ApGlyphs {
                 loc34.transform.SetParent(APItemParent);
                 loc34.transform.position = seed8.transform.position;
                 seed8.SetActive(false);
-                loc34.AddComponent<ArchipelagoItem>().locId = 33;
+                loc34.AddComponent<ArchipelagoItem>().locId = 34;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 34_Shadow Chase Pickup: " + ex.Message);
             }
@@ -416,7 +416,7 @@ namespace ApGlyphs {
                 loc35.transform.SetParent(APItemParent);
                 loc35.transform.position = cube1.transform.position;
                 cube1.SetActive(false);
-                loc35.AddComponent<ArchipelagoItem>().locId = 34;
+                loc35.AddComponent<ArchipelagoItem>().locId = 35;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 35_Master Puzzle 1: " + ex.Message);
             }
