@@ -27,6 +27,7 @@ namespace ApGlyphs {
         private static void PlaceItemsGame() {
             Transform APItemParent = new GameObject("AP_Items").transform;
 
+            // Region 1
             try {
                 GameObject loc1 = new GameObject("1_Starting Item");
                 loc1.transform.SetParent(APItemParent);
@@ -148,6 +149,276 @@ namespace ApGlyphs {
                 cube2.AddComponent<ReplaceOnEnable>().replacement = loc11;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 11_Master Puzzle 2: " + ex.Message);
+            }
+
+            // Region 2
+            try {
+                GameObject shard4 = GameObject.Find("World/Region2/Sector 1/(R1-E) (Fragment4)/Fragment 4");
+                GameObject loc12 = new GameObject("12_Silver Shard Puzzle 4");
+                loc12.transform.SetParent(APItemParent);
+                loc12.transform.position = shard4.transform.position;
+                shard4.SetActive(false);
+                loc12.AddComponent<ArchipelagoItem>().locId = 12;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 12_Silver Shard Puzzle 4: " + ex.Message);
+            }
+
+            try {
+                GameObject shard5 = GameObject.Find("World/Region2/(R7-A) (Fragment 5)/Fragment 5");
+                GameObject loc13 = new GameObject("13_Silver Shard Puzzle 5");
+                loc13.transform.SetParent(APItemParent);
+                loc13.transform.position = shard5.transform.position;
+                shard5.SetActive(false);
+                loc13.AddComponent<ArchipelagoItem>().locId = 13;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 13_Silver Shard Puzzle 5: " + ex.Message);
+            }
+
+            try {
+                GameObject shard6 = GameObject.Find("World/Region2/(R5B) (Fragment 6)/Fragment 6");
+                GameObject loc14 = new GameObject("14_Silver Shard Puzzle 6");
+                loc14.transform.SetParent(APItemParent);
+                loc14.transform.position = shard6.transform.position;
+                shard6.SetActive(false);
+                loc14.AddComponent<ArchipelagoItem>().locId = 14;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 14_Silver Shard Puzzle 6: " + ex.Message);
+            }
+
+            try {
+                GameObject shard7 = GameObject.Find("World/Region2/Sector 2/(R10-D)>(R11-D) (Fragment 7)/Fragment 7");
+                GameObject loc15 = new GameObject("15_Silver Shard Puzzle 7");
+                loc15.transform.SetParent(APItemParent);
+                loc15.transform.position = shard7.transform.position;
+                shard7.SetActive(false);
+                loc15.AddComponent<ArchipelagoItem>().locId = 15;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 15_Silver Shard Puzzle 7: " + ex.Message);
+            }
+
+            try {
+                GameObject shard8 = GameObject.Find("World/Region2/(R7E) (Fragment8)/Fragment 8");
+                GameObject loc16 = new GameObject("16_Silver Shard Puzzle 8");
+                loc16.transform.SetParent(APItemParent);
+                loc16.transform.position = shard8.transform.position;
+                shard8.SetActive(false);
+                loc16.AddComponent<ArchipelagoItem>().locId = 16;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 16_Silver Shard Puzzle 8: " + ex.Message);
+            }
+
+            try {
+                GameObject shard9 = GameObject.Find("World/Region2/(R7F) (Fragment9)/Fragment  9");
+                GameObject loc17 = new GameObject("17_Silver Shard Puzzle 9");
+                loc17.transform.SetParent(APItemParent);
+                loc17.transform.position = shard9.transform.position;
+                shard9.SetActive(false);
+                loc17.AddComponent<ArchipelagoItem>().locId = 17;
+                loc17.SetActive(false);
+                shard9.AddComponent<ReplaceOnEnable>().replacement = loc17;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 17_Silver Shard Puzzle 9: " + ex.Message);
+            }
+
+            try {
+                GameObject shard15 = GameObject.Find("World/Region2/(R12B) (Fragment 15)/Fragment 15");
+                GameObject loc18 = new GameObject("18_Silver Shard Puzzle 15");
+                loc18.transform.SetParent(APItemParent);
+                loc18.transform.position = shard15.transform.position;
+                shard15.SetActive(false);
+                loc18.AddComponent<ArchipelagoItem>().locId = 18;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 18_Silver Shard Puzzle 15: " + ex.Message);
+            }
+
+            try {
+                GameObject token3 = GameObject.Find("World/Region2/Sector 2/(R7-F)(Secret)/SMIlE III");
+                GameObject loc19 = new GameObject("19_Smile Token Puzzle 3");
+                loc19.transform.SetParent(APItemParent);
+                loc19.transform.position = token3.transform.position;
+                token3.SetActive(false);
+                loc19.AddComponent<ArchipelagoItem>().locId = 19;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 19_Smile Token Puzzle 3: " + ex.Message);
+            }
+
+            try {
+                GameObject token6 = GameObject.Find("World/Region2/(R10-A)(SMILE VI)/SMIlE VI");
+                GameObject loc20 = new GameObject("20_Smile Token Puzzle 6");
+                loc20.transform.SetParent(APItemParent);
+                loc20.transform.position = token6.transform.position;
+                token6.SetActive(false);
+                loc20.AddComponent<ArchipelagoItem>().locId = 20;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 20_Smile Token Puzzle 6: " + ex.Message);
+            }
+
+            try {
+                GameObject token8 = GameObject.Find("World/Region2/Sector 1/(SMILE VIII)/SMIlE VIII");
+                GameObject loc21 = new GameObject("21_Smile Token Puzzle 8");
+                loc21.transform.SetParent(APItemParent);
+                loc21.transform.position = token8.transform.position;
+                token8.SetActive(false);
+                loc21.AddComponent<ArchipelagoItem>().locId = 21;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 21_Smile Token Puzzle 8: " + ex.Message);
+            }
+
+            try {
+                GameObject token10 = GameObject.Find("World/Region2/Sector 2/(R11-E)>(R20-E)  (Shadow Rush)/SMILE X ROOM/SMIlE X");
+                GameObject loc22 = new GameObject("22_Smile Token Puzzle 10");
+                loc22.transform.SetParent(APItemParent);
+                loc22.transform.position = token10.transform.position;
+                token10.SetActive(false);
+                loc22.AddComponent<ArchipelagoItem>().locId = 22;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 22_Smile Token Puzzle 10: " + ex.Message);
+            }
+
+            try {
+                GameObject grapple = GameObject.Find("World/Region2/(R10A) (Boss2)/Grapple Worm");
+                GameObject loc23 = new GameObject("23_Gilded Serpent Reward");
+                loc23.transform.SetParent(APItemParent);
+                loc23.transform.position = grapple.transform.position;
+                grapple.SetActive(false);
+                loc23.AddComponent<ArchipelagoItem>().locId = 22;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 23_Gilded Serpent Reward: " + ex.Message);
+            }
+
+            try {
+                GameObject propHat = GameObject.Find("World/Region2/Sector 1/(R5-D) (Cameo Room)/propellerHat");
+                GameObject loc24 = new GameObject("24_Cameo Room Pickup");
+                loc24.transform.SetParent(APItemParent);
+                loc24.transform.position = propHat.transform.position;
+                propHat.SetActive(false);
+                loc24.AddComponent<ArchipelagoItem>().locId = 23;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 24_Cameo Room Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject coneHat = GameObject.Find("World/Region2/Sector 2/(R7-F)(Secret)/Car grouping/coneHat");
+                GameObject loc25 = new GameObject("25_Car Hall Pickup");
+                loc25.transform.SetParent(APItemParent);
+                loc25.transform.position = coneHat.transform.position;
+                coneHat.SetActive(false);
+                loc25.AddComponent<ArchipelagoItem>().locId = 24;
+                loc25.SetActive(false);
+                GameObject carGrouping = coneHat.transform.parent.gameObject;
+                carGrouping.AddComponent<ReplaceOnEnable>().replacement = loc25;
+                carGrouping.GetComponent<ReplaceOnEnable>().destroyTarget = coneHat;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 25_Car Hall Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject seed6 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (6)");
+                GameObject loc26 = new GameObject("26_Near Shooters Pickup");
+                loc26.transform.SetParent(APItemParent);
+                loc26.transform.position = seed6.transform.position;
+                seed6.SetActive(false);
+                loc26.AddComponent<ArchipelagoItem>().locId = 25;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 26_Near Shooters Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject seed7 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (7)");
+                GameObject loc27 = new GameObject("27_Collapsed Tunnel Pickup");
+                loc27.transform.SetParent(APItemParent);
+                loc27.transform.position = seed7.transform.position;
+                seed7.SetActive(false);
+                loc27.AddComponent<ArchipelagoItem>().locId = 26;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 27_Collapsed Tunnel Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject seed9 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (9)");
+                GameObject loc28 = new GameObject("28_Nest Room Pickup");
+                loc28.transform.SetParent(APItemParent);
+                loc28.transform.position = seed9.transform.position;
+                seed9.SetActive(false);
+                loc28.AddComponent<ArchipelagoItem>().locId = 27;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 28_Nest Room Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject seed10 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (10)");
+                GameObject loc29 = new GameObject("29_Serpent Boss Room Pickup");
+                loc29.transform.SetParent(APItemParent);
+                loc29.transform.position = seed10.transform.position;
+                seed10.SetActive(false);
+                loc29.AddComponent<ArchipelagoItem>().locId = 28;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 29_Serpent Boss Room Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject dashAttackOrb = GameObject.Find("World/Region2/Sector 2/(R11-E)>(R20-E)  (Shadow Rush)/Dash Attack Orb");
+                GameObject loc30 = new GameObject("30_Shadow Chase Reward");
+                loc30.transform.SetParent(APItemParent);
+                loc30.transform.position = dashAttackOrb.transform.position;
+                dashAttackOrb.SetActive(false);
+                loc30.AddComponent<ArchipelagoItem>().locId = 29;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 30_Shadow Chase Reward: " + ex.Message);
+            }
+
+            try {
+                GameObject topHat = GameObject.Find("World/Region2/Sector 4/(WATER ROOM)/topHat");
+                GameObject loc31 = new GameObject("31_Water Room Pickup");
+                loc31.transform.SetParent(APItemParent);
+                loc31.transform.position = topHat.transform.position;
+                topHat.SetActive(false);
+                loc31.AddComponent<ArchipelagoItem>().locId = 30;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 31_Water Room Pickup: " + ex.Message);
+            }
+
+            // George rewards need a seperate script
+            try {
+                GameObject loc32 = new GameObject("32_George Reward 1");
+                loc32.transform.SetParent(APItemParent);
+                loc32.transform.position = new Vector3(395f, 15f, 0f);
+                loc32.SetActive(false);
+                loc32.AddComponent<ArchipelagoItem>().locId = 31;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 32_George Reward 1: " + ex.Message);
+            }
+
+            try {
+                GameObject loc33 = new GameObject("33_George Reward 2");
+                loc33.transform.SetParent(APItemParent);
+                loc33.transform.position = new Vector3(402f, 15f, 0f);
+                loc33.SetActive(false);
+                loc33.AddComponent<ArchipelagoItem>().locId = 32;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 33_George Reward 2: " + ex.Message);
+            }
+
+            try {
+                GameObject seed8 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (8)");
+                GameObject loc34 = new GameObject("34_Shadow Chase Pickup");
+                loc34.transform.SetParent(APItemParent);
+                loc34.transform.position = seed8.transform.position;
+                seed8.SetActive(false);
+                loc34.AddComponent<ArchipelagoItem>().locId = 33;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 34_Shadow Chase Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject cube1 = GameObject.Find("World/Region2/Sector 2/R10-C (Map Room)/Cube");
+                GameObject loc35 = new GameObject("35_Master Puzzle 1");
+                loc35.transform.SetParent(APItemParent);
+                loc35.transform.position = cube1.transform.position;
+                cube1.SetActive(false);
+                loc35.AddComponent<ArchipelagoItem>().locId = 34;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 35_Master Puzzle 1: " + ex.Message);
             }
         }
 

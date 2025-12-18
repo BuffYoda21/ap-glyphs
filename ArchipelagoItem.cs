@@ -20,7 +20,7 @@ namespace ApGlyphs {
             if (locId == -1) { Destroy(gameObject); return; }  // AP items must have a location id defined on creation
             if (itemInfo == null) FetchItemInfo();
             if (itemInfo == null) return;
-            if (isUsingAPlogo) return;
+            if (isUsingConstructedModel) return;
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
             sr.sprite = GetItemSprite();
             if (!sr.sprite)
@@ -40,6 +40,7 @@ namespace ApGlyphs {
                             CreateAPLogo();
                             break;
                     }
+                    isUsingConstructedModel = true;
                 }
             else {
                 foreach (Transform child in transform) {
@@ -61,7 +62,7 @@ namespace ApGlyphs {
 
         private void FetchItemInfo() {
             itemInfo = itemCache.TryGetItem(locId, out var info) ? info : null;
-            if (itemInfo != null) isUsingAPlogo = false;    // this item has data now so we need to check it again to see if we still need the AP logo
+            if (itemInfo != null) isUsingConstructedModel = false;    // this item has data now so we need to check it again to see if we still need the AP logo
             if (itemInfo != null && itemCache.checkedLocations.Contains(itemInfo.LocationId))
                 Destroy(gameObject);
         }
@@ -165,7 +166,7 @@ namespace ApGlyphs {
                 transforms[i].GetComponent<SpriteRenderer>().sortingLayerID = sr.sortingLayerID;
                 transforms[i].GetComponent<SpriteRenderer>().sortingOrder = baseOrder + i + 1;
             }
-            isUsingAPlogo = true;
+            isUsingConstructedModel = true;
         }
 
         private static Sprite CreateCircleSprite(int diameter) {
@@ -197,6 +198,6 @@ namespace ApGlyphs {
         private InventoryManager inventory;
         public long locId;
         public ScoutedItemInfo itemInfo;
-        private bool isUsingAPlogo = false;
+        private bool isUsingConstructedModel = false;
     }
 }

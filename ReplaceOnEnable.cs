@@ -6,7 +6,10 @@ namespace ApGlyphs {
 
         public void OnEnable() {
             replacement.SetActive(true);
-            Destroy(gameObject);
+            if (!destroyTarget) Destroy(gameObject);
+            else Destroy(destroyTarget);
         }
+
+        public GameObject destroyTarget;
     }
 }
