@@ -52,6 +52,10 @@ namespace ApGlyphs {
 
         public void OnTriggerEnter2D(Collider2D other) {
             if (other.gameObject.name != "Player") return;
+            Collect();
+        }
+
+        public void Collect() {
             client.client.CollectItem(this);
             if (itemInfo.Player.Slot == client.client.SlotId) {
                 inventory.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
@@ -121,11 +125,12 @@ namespace ApGlyphs {
                     return Resources.Load<Sprite>("sprites/default/hats/PartyHat");
                 case "Bomb Hat":
                     return Resources.Load<Sprite>("sprites/default/hats/bombHat");
-                case "Progressive Chicken Hat":
-                    if (!player.hasGeorge) return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken");
-                    return Resources.Load<Sprite>("sprites/default/hats/chicken/george");
-                case "Crown":
+                case "Progressive Chicken Hat": //needs fixing
+                    if (!inventory.items.ContainsKey("Progressive Chicken Hat") || inventory.items["Progressive Chicken Hat"] == 0)
+                        return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken");
                     return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken 1");
+                case "Crown":
+                    return Resources.Load<Sprite>("sprites/default/hats/crown");
                 case "HP Refill":
                     return Resources.Load<Sprite>("sprites/items/Heal");
             }

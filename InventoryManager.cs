@@ -32,7 +32,10 @@ namespace ApGlyphs {
                 else
                     loadedItems.Add(item.ItemName, 1);
             }
+            if (loadedItems.Count == items.Count && loadedItems.All(kv => items.TryGetValue(kv.Key, out var v) && v == kv.Value))
+                return;
             items = loadedItems;
+            AbilityManager.UpdatePlayer();
             SaveInventoryToFile();
         }
 

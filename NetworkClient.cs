@@ -96,6 +96,22 @@ namespace ApGlyphs {
                 _ = ConnectAsync();
             } else if (isConnected) {
                 isConnected = session.Socket.Connected;
+                if (enablePeriodicSessionUpdates && !sessionUpdateInProgress && Time.time - lastSessionUpdate > SessionUpdateIntervalSeconds) {
+                    lastSessionUpdate = Time.time;
+                    sessionUpdateInProgress = true;
+                    _ = RefreshSessionAsync();
+                }
+            }
+        }
+
+        private async Task RefreshSessionAsync() {
+            try {
+                if (session == null || itemCache == null) return;
+                await itemCache.FetchItemPool(session, session.Locations.AllLocations);
+            } catch (Exception ex) {
+                MelonLogger.Error($"Session refresh failed: {ex.Message}");
+            } finally {
+                sessionUpdateInProgress = false;
             }
         }
 
@@ -116,6 +132,9 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to connect: {string.Join(", ", failure.Errors)}");
                 isConnecting = false;
                 return;
+            } else {
+                LoginSuccessful loginSuccessful = loginResult as LoginSuccessful;
+                slotData = loginSuccessful.SlotData;
             }
 
             MelonLogger.Msg("Connected to Multiworld server");
@@ -260,8 +279,14 @@ namespace ApGlyphs {
         public string SlotName = "Player1";
         public int SlotId = 0;
         public string password = null;
+        public Dictionary<string, object> slotData;
         public ClientWrapper.ConnectionIndicator indicator;
         public ItemCache itemCache;
         public InventoryManager inventory;
+        // Periodic session update control
+        private float lastSessionUpdate = -999f;
+        public float SessionUpdateIntervalSeconds = 20f;
+        private bool sessionUpdateInProgress = false;
+        public bool enablePeriodicSessionUpdates = true;
     }
 }

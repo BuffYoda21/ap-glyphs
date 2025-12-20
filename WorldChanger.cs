@@ -32,6 +32,12 @@ namespace ApGlyphs {
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to destroy missedSwordTrigger: " + ex.Message);
             }
+
+            try {
+                GameObject.Find("World/Region3/Black/(R7D)>(R9F) The False Primary Glyph").AddComponent<WizardTriggerManager>();
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to add WizardTriggerManager: " + ex.Message);
+            }
         }
 
         private static void EditWorldMemory() {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using HarmonyLib;
+using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -419,6 +420,159 @@ namespace ApGlyphs {
                 loc35.AddComponent<ArchipelagoItem>().locId = 35;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 35_Master Puzzle 1: " + ex.Message);
+            }
+
+            // Region 3
+            try {
+                GameObject greenStone = GameObject.Find("World/Region3/Green/(R4G)>(R3F) (GLYPHSTONE)/GlyphStone");
+                GameObject loc36 = new GameObject("36_Green Stone Trial");
+                loc36.transform.SetParent(APItemParent);
+                loc36.transform.position = greenStone.transform.position;
+                greenStone.SetActive(false);
+                loc36.AddComponent<ArchipelagoItem>().locId = 36;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 36_Green Stone Trial: " + ex.Message);
+            }
+
+            try {
+                GameObject blueStone = GameObject.Find("World/Region3/Blue/(R12G)>(R13F) (GLYPHSTONE)/GlyphStone");
+                GameObject loc37 = new GameObject("37_Blue Stone Trial");
+                loc37.transform.SetParent(APItemParent);
+                loc37.transform.position = blueStone.transform.position;
+                loc37.AddComponent<ArchipelagoItem>().locId = 37;
+                loc37.SetActive(false);
+                blueStone.AddComponent<ReplaceOnDestroy>().replacement = loc37;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 37_Blue Stone Trial: " + ex.Message);
+            }
+
+            try {
+                GameObject redStone = GameObject.Find("World/Region3/Red/(R7K)>(R9K) (GLYPHSTONE)/GlyphStone");
+                GameObject loc38 = new GameObject("38_Red Stone Trial");
+                loc38.transform.SetParent(APItemParent);
+                loc38.transform.position = redStone.transform.position;
+                loc38.AddComponent<ArchipelagoItem>().locId = 38;
+                loc38.SetActive(false);
+                redStone.AddComponent<ReplaceOnDestroy>().replacement = loc38;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 38_Red Stone Trial: " + ex.Message);
+            }
+
+            try {
+                GameObject shard10 = GameObject.Find("World/Region3/Blue/(R14A) (Fragment 10)/Fragment 10");
+                GameObject loc39 = new GameObject("39_Silver Shard Puzzle 10");
+                loc39.transform.SetParent(APItemParent);
+                loc39.transform.position = shard10.transform.position;
+                shard10.SetActive(false);
+                loc39.AddComponent<ArchipelagoItem>().locId = 39;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 39_Silver Shard Puzzle 10: " + ex.Message);
+            }
+
+            try {
+                GameObject shard11 = GameObject.Find("World/Region3/Green/(R2C) (Fragment 11)/Fragment 11");
+                GameObject loc40 = new GameObject("40_Silver Shard Puzzle 11");
+                loc40.transform.SetParent(APItemParent);
+                loc40.transform.position = shard11.transform.position;
+                shard11.SetActive(false);
+                loc40.AddComponent<ArchipelagoItem>().locId = 40;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 40_Silver Shard Puzzle 11: " + ex.Message);
+            }
+
+            try {
+                GameObject shard12 = GameObject.Find("World/Region3/Black/(R9C) (Fragment 12)/Fragment 12");
+                GameObject loc41 = new GameObject("41_Silver Shard Puzzle 12");
+                loc41.transform.SetParent(APItemParent);
+                loc41.transform.position = shard12.transform.position;
+                shard12.SetActive(false);
+                loc41.AddComponent<ArchipelagoItem>().locId = 41;
+                loc41.SetActive(false);
+                shard12.AddComponent<ReplaceOnEnable>().replacement = loc41;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 41_Silver Shard Puzzle 12: " + ex.Message);
+            }
+
+            try {
+                GameObject shard13 = GameObject.Find("World/Region3/Red/(R9G) (Fragment 13)/Fragment 13");
+                GameObject loc42 = new GameObject("42_Silver Shard Puzzle 13");
+                loc42.transform.SetParent(APItemParent);
+                loc42.transform.position = shard13.transform.position;
+                shard13.SetActive(false);
+                loc42.AddComponent<ArchipelagoItem>().locId = 42;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 42_Silver Shard Puzzle 13: " + ex.Message);
+            }
+
+            try {
+                GameObject shard14 = GameObject.Find("World/Region3/Blue/(R14E) (Fragment 14)/Fragment 14");
+                GameObject loc43 = new GameObject("43_Silver Shard Puzzle 14");
+                loc43.transform.SetParent(APItemParent);
+                loc43.transform.position = shard14.transform.position;
+                shard14.SetActive(false);
+                loc43.AddComponent<ArchipelagoItem>().locId = 43;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 43_Silver Shard Puzzle 14: " + ex.Message);
+            }
+
+            try {
+                GameObject token2 = GameObject.Find("World/Region3/Black/(R6D) (SMILE II)/SMILE II");
+                GameObject loc44 = new GameObject("44_Smile Token Puzzle 2");
+                loc44.transform.SetParent(APItemParent);
+                loc44.transform.position = token2.transform.position;
+                token2.SetActive(false);
+                loc44.AddComponent<ArchipelagoItem>().locId = 44;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 44_Smile Token Puzzle 2: " + ex.Message);
+            }
+
+            try {
+                GameObject token7 = GameObject.Find("World/Region3/Blue/(SMILE VII)/SMILE VII");
+                GameObject loc45 = new GameObject("45_Smile Token Puzzle 7");
+                loc45.transform.SetParent(token7.transform);    // used to follow token positon but at the cost of not appearing with other AP items in heiarchy tree
+                loc45.transform.position = token7.transform.position;
+                token7.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
+                UnityEngine.Object.Destroy(token7.GetComponent<Pickup>());
+                loc45.AddComponent<ArchipelagoItem>().locId = 45;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 45_Smile Token Puzzle 7: " + ex.Message);
+            }
+
+            GameObject collapseController = GameObject.Find("World/Region3/Black/(R7D)>(R9F) The False Primary Glyph/Collapse Sequence Controller");
+            if (!collapseController) MelonLogger.Msg("Collapse controller is null");
+
+            try {
+                GameObject loc46 = new GameObject("46_Wizard Reward");
+                loc46.transform.SetParent(APItemParent);
+                loc46.transform.position = new Vector3(475f, -225f, 0f);
+                loc46.AddComponent<ArchipelagoItem>().locId = 46;
+                loc46.SetActive(false);
+                collapseController.AddComponent<ReplaceOnEnable>().replacement = loc46;
+                collapseController.GetComponent<ReplaceOnEnable>().doNotDestroy = true;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 46_Wizard Reward: " + ex.Message);
+            }
+
+            try {
+                GameObject seed2 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (2)");
+                GameObject loc47 = new GameObject("47_Room Below Wizard Pickup");
+                loc47.transform.SetParent(APItemParent);
+                loc47.transform.position = seed2.transform.position;
+                seed2.SetActive(false);
+                loc47.AddComponent<ArchipelagoItem>().locId = 47;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 47_Room Below Wizard Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject cube3 = GameObject.Find("World/Region3/Red/(R11J) (CUBE III)/Cube III");
+                GameObject loc48 = new GameObject("48_Master Puzzle 3");
+                loc48.transform.SetParent(APItemParent);
+                loc48.transform.position = cube3.transform.position;
+                cube3.SetActive(false);
+                loc48.AddComponent<ArchipelagoItem>().locId = 48;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 48_Master Puzzle 3: " + ex.Message);
             }
         }
 

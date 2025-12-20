@@ -18,19 +18,10 @@ namespace ApGlyphs {
             ReadOnlyCollection<ItemInfo> receivedItems = new List<ItemInfo>(session.Items.AllItemsReceived).AsReadOnly();
             checkedLocations = session.Locations.AllLocationsChecked;
             MainThreadDispatcher.Enqueue(() => {
-                ApplyInventory(receivedItems);
+                if (!inventoryManager) inventoryManager = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
+                if (inventoryManager) inventoryManager.ImportInventoryFromServer(receivedItems);
                 itemsReady = true;
             });
-        }
-
-        private void ApplyInventory(ReadOnlyCollection<ItemInfo> receivedItems) {
-            if (!inventoryManager) {
-                GameObject manager = GameObject.Find("Manager intro");
-                if (manager)
-                    inventoryManager = manager.GetComponent<InventoryManager>();
-            }
-            if (inventoryManager)
-                inventoryManager.ImportInventoryFromServer(receivedItems);
         }
 
         public bool TryGetItem(long locationId, out ScoutedItemInfo info) {
