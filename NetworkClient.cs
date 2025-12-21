@@ -6,6 +6,7 @@ using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using MelonLoader;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 
 namespace ApGlyphs {
@@ -125,7 +126,7 @@ namespace ApGlyphs {
                 null,
                 null,
                 password,
-                false
+                true
             );
 
             if (loginResult is LoginFailure failure) {
@@ -135,6 +136,34 @@ namespace ApGlyphs {
             } else {
                 LoginSuccessful loginSuccessful = loginResult as LoginSuccessful;
                 slotData = loginSuccessful.SlotData;
+                try {
+                    if (slotData != null && slotData.ContainsKey("options") && slotData["options"] is JObject jOptions) {
+                        options = new Dictionary<string, object>();
+                        foreach (JProperty prop in jOptions.Properties()) {
+                            JToken val = prop.Value;
+                            switch (val.Type) {
+                                case JTokenType.Integer:
+                                    options[prop.Name] = (int)val;
+                                    break;
+                                case JTokenType.Float:
+                                    options[prop.Name] = (double)val;
+                                    break;
+                                case JTokenType.Boolean:
+                                    options[prop.Name] = (bool)val;
+                                    break;
+                                case JTokenType.String:
+                                    options[prop.Name] = (string)val;
+                                    break;
+                                default:
+                                    options[prop.Name] = val.ToString();
+                                    break;
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    MelonLogger.Error($"Failed to parse slot options: {ex.Message}");
+                }
+
             }
 
             MelonLogger.Msg("Connected to Multiworld server");
@@ -280,12 +309,14 @@ namespace ApGlyphs {
         public int SlotId = 0;
         public string password = null;
         public Dictionary<string, object> slotData;
+        public Dictionary<string, object> options;
         public ClientWrapper.ConnectionIndicator indicator;
         public ItemCache itemCache;
         public InventoryManager inventory;
+
         // Periodic session update control
         private float lastSessionUpdate = -999f;
-        public float SessionUpdateIntervalSeconds = 20f;
+        public float SessionUpdateIntervalSeconds = 5f;
         private bool sessionUpdateInProgress = false;
         public bool enablePeriodicSessionUpdates = true;
     }

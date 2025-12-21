@@ -10,7 +10,7 @@ namespace ApGlyphs {
             if (!client) client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
             trigger = transform.Find("Cutscene Conditional 1/Cutscene Conditional 2/Cutscene Conditional 3/CutsceneTrigger").gameObject;
             try {
-                wizGlyphstones = Convert.ToInt32(client.client.slotData["WizardRequirements"]);
+                wizGlyphstones = Convert.ToInt32(client.client.options["WizardRequirements"]);
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to get WizardRequirements: " + ex.Message);
                 wizGlyphstones = 3;
@@ -22,6 +22,7 @@ namespace ApGlyphs {
         }
 
         public void Update() {
+            if (!falsePrimaryGlyph || !falsePrimaryGlyph.activeSelf) { Destroy(trigger); Destroy(this); return; }
             if (!inventory.items.ContainsKey("Glyphstone") || inventory.items["Glyphstone"] < wizGlyphstones) return;
             trigger.transform.SetParent(transform, true);
             Destroy(this);
