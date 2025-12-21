@@ -28,9 +28,25 @@ namespace ApGlyphs {
         private static void EditWorldGame() {
             try {
                 GameObject missedSwordTrigger = GameObject.Find("World/Region1/(R3D)(sword)/SaveConditional");
-                GameObject.Destroy(missedSwordTrigger);
+                UnityEngine.Object.Destroy(missedSwordTrigger);
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to destroy missedSwordTrigger: " + ex.Message);
+            }
+
+            try {
+                GameObject secretWallTileParent = GameObject.Find("World/Region2/Sector 1/(R4-D)/Tiles");
+                UnityEngine.Object.Destroy(secretWallTileParent.transform.Find("dissapear on save falseending")?.gameObject);
+                UnityEngine.Object.Destroy(secretWallTileParent.transform.Find("dissapear on save smile1")?.gameObject);
+                UnityEngine.Object.Destroy(secretWallTileParent.transform.Find("dissapear on save smile2")?.gameObject);
+                UnityEngine.Object.Destroy(secretWallTileParent.transform.Find("dissapear on save smile3")?.gameObject);
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to destroy Cameo Room Entrance Tiles: " + ex.Message);
+            }
+
+            try {
+                UnityEngine.Object.Destroy(GameObject.Find("World/Region3/Red/(R9J) (hidden)/Tiles/Fragment Door"));
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to destroy Master Puzzle 3 Door: " + ex.Message);
             }
 
             try {
