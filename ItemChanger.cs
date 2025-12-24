@@ -321,7 +321,7 @@ namespace ApGlyphs {
                 GameObject seed6 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (6)");
                 GameObject loc26 = new GameObject("26_Near Shooters Pickup");
                 loc26.transform.SetParent(APItemParent);
-                loc26.transform.position = seed6.transform.position;
+                loc26.transform.position = new Vector3(seed6.transform.position.x - 2f, seed6.transform.position.y, seed6.transform.position.z);
                 seed6.SetActive(false);
                 loc26.AddComponent<ArchipelagoItem>().locId = 26;
             } catch (Exception ex) {
@@ -561,7 +561,7 @@ namespace ApGlyphs {
                 GameObject seed2 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (2)");
                 GameObject loc47 = new GameObject("47_Room Below Wizard Pickup");
                 loc47.transform.SetParent(APItemParent);
-                loc47.transform.position = seed2.transform.position;
+                loc47.transform.position = new Vector3(seed2.transform.position.x - 2f, seed2.transform.position.y + 2f, seed2.transform.position.z);
                 seed2.SetActive(false);
                 loc47.AddComponent<ArchipelagoItem>().locId = 47;
             } catch (Exception ex) {
