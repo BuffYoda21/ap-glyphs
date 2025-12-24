@@ -22,6 +22,7 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper.ConnectionIndicator>();
             ClassInjector.RegisterTypeInIl2Cpp<InventoryManager>();
+            ClassInjector.RegisterTypeInIl2Cpp<GamestateManager>();
             ClassInjector.RegisterTypeInIl2Cpp<MainThreadDispatcher>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnEnable>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnDestroy>();
@@ -43,6 +44,7 @@ namespace ApGlyphs {
             GameObject manager = GameObject.Find("Manager intro");
             client = manager?.AddComponent<ClientWrapper>();
             inventory = manager?.AddComponent<InventoryManager>();
+            gamestate = manager?.AddComponent<GamestateManager>();
             itemCache = new ItemCache();
             itemCache.dispatcher = manager?.AddComponent<MainThreadDispatcher>();
             if (!client) MelonLogger.Error("Failed to create ClientWrapper");
@@ -59,6 +61,7 @@ namespace ApGlyphs {
         public static ClientWrapper client;
         public static ItemCache itemCache;
         public static InventoryManager inventory;
+        public static GamestateManager gamestate;
         private static int lastSceneHandle;
         private bool isInitialized = false;
     }

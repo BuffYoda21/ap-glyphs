@@ -197,6 +197,10 @@ namespace ApGlyphs {
             session.Locations.CompleteLocationChecks(locationArray);
         }
 
+        public void ClearGoal() {
+            session.SetGoalAchieved();
+        }
+
         private void CreateConnectionIndicator() {
             GameObject canvasObj = new GameObject("AP Canvas");
             UnityEngine.Object.DontDestroyOnLoad(canvasObj);

@@ -16,12 +16,16 @@ namespace ApGlyphs {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
 
+            if (!gamestate) gamestate = GameObject.Find("Manager intro")?.GetComponent<GamestateManager>();
+
             if (scene.name == "Game")
                 PlaceItemsGame();
             else if (scene.name == "Memory")
                 PlaceItemsMemory();
             else if (scene.name == "Outer Void")
                 PlaceItemsOuterVoid();
+            else
+                CheckForCutsceneReward(scene.name);
         }
 #pragma warning restore IDE0060 // Restore unused parameter warning
 
@@ -584,7 +588,34 @@ namespace ApGlyphs {
 
         }
 
+        private static void CheckForCutsceneReward(string sceneName) {
+            if (!gamestate) return;
+            switch (sceneName) {
+                case "TheFalseEnding":
+                    gamestate.SaveFlag("FalseEnding");
+                    break;
+                case "TheGoodEnding":
+                    gamestate.SaveFlag("GoodEnding");
+                    break;
+                case "TheTrueEnding":
+                    gamestate.SaveFlag("TrueEnding");
+                    break;
+                case "Smilemask":
+                    gamestate.SaveFlag("SmilemaskEnding");
+                    break;
+                case "PerfectClarity":
+                    gamestate.SaveFlag("PerfectClarity");
+                    break;
+                case "Omnipotence":
+                    gamestate.SaveFlag("OmnipotenceEnding");
+                    break;
+                case "TheVeryEnd":
+                    gamestate.SaveFlag("EpilogueEnding");
+                    break;
+            }
+        }
+
         private static int lastSceneHandle = -1;
-        public List<ArchipelagoItem> items;
+        private static GamestateManager gamestate;
     }
 }
