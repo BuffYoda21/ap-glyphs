@@ -8,8 +8,8 @@ namespace ApGlyphs {
     public class ArchipelagoItem : MonoBehaviour {
         public void Start() {
             player = GameObject.Find("Player")?.GetComponent<PlayerController>();
-            if (GetComponent<BoxCollider2D>()) col = GetComponent<BoxCollider2D>();
-            col = gameObject.AddComponent<BoxCollider2D>();
+            col = GetComponent<BoxCollider2D>();
+            if (!col) col = gameObject.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
             client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
             inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
@@ -61,7 +61,7 @@ namespace ApGlyphs {
             if (itemInfo.Player.Slot == client.client.SlotId) {
                 inventory.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
             }
-            MelonLogger.Msg($"{client.client.SlotName} sent {itemInfo.ItemName} to slot {itemInfo.Player.Slot} ({itemInfo.ItemGame})");
+            MelonLogger.Msg($"{client.client.SlotName} sent {itemInfo.ItemName} to {itemInfo.Player.Name} ({itemInfo.ItemGame})");
             Destroy(gameObject);
         }
 
