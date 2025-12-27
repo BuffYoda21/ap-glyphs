@@ -578,6 +578,187 @@ namespace ApGlyphs {
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 48_Master Puzzle 3: " + ex.Message);
             }
+
+            // Region 4
+            try {
+                GameObject parry = GameObject.Find("World/Region2/Sector 3/(R1E) (Parry)/Parry");
+                GameObject loc49 = new GameObject("49_Spearman Reward");
+                loc49.transform.SetParent(APItemParent);
+                loc49.transform.position = parry.transform.position;
+                parry.SetActive(false);
+                loc49.AddComponent<ArchipelagoItem>().locId = 49;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 49_Spearman Reward: " + ex.Message);
+            }
+
+            try {
+                GameObject gold2 = GameObject.Find("World/Region2/Sector 3/(R-1H) (GOLDEN FRAGMENT II)/Gold Fragment II");
+                GameObject loc50 = new GameObject("50_Multiparry Gold Shard Puzzle");
+                loc50.transform.SetParent(APItemParent);
+                loc50.transform.position = gold2.transform.position;
+                gold2.SetActive(false);
+                loc50.AddComponent<ArchipelagoItem>().locId = 50;
+                loc50.SetActive(false);
+                gold2.AddComponent<ReplaceOnEnable>().replacement = loc50;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 50_Multiparry Gold Shard Puzzle: " + ex.Message);
+            }
+
+            try {
+                GameObject gold1 = GameObject.Find("World/Region2/Sector 3/(R-4F) (GOLD FRAGMENT I)/Gold Fragment");
+                GameObject loc51 = new GameObject("51_Platforming Gold Shard Room");
+                loc51.transform.SetParent(APItemParent);
+                loc51.transform.position = gold1.transform.position;
+                gold1.SetActive(false);
+                loc51.AddComponent<ArchipelagoItem>().locId = 51;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 51_Platforming Gold Shard Room: " + ex.Message);
+            }
+
+            try {
+                GameObject gold3 = GameObject.Find("World/Region2/Sector 3/(R-4H)(Flower)/Gold Fragment III");
+                GameObject loc52 = new GameObject("52_Flower Puzzle Reward");
+                loc52.transform.SetParent(APItemParent);
+                loc52.transform.position = gold3.transform.position;
+                gold3.SetActive(false);
+                loc52.AddComponent<ArchipelagoItem>().locId = 52;
+                loc52.SetActive(false);
+                gold3.AddComponent<ReplaceOnEnable>().replacement = loc52;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 52_Flower Puzzle Reward: " + ex.Message);
+            }
+
+            try {
+                GameObject token4 = GameObject.Find("World/Region2/Sector 3/(R-4C) (SMILE IV)/SMIlE IV");
+                GameObject loc53 = new GameObject("53_Smile Token Puzzle 4");
+                loc53.transform.SetParent(APItemParent);
+                loc53.transform.position = token4.transform.position;
+                token4.SetActive(false);
+                loc53.AddComponent<ArchipelagoItem>().locId = 53;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 53_Smile Token Puzzle 4: " + ex.Message);
+            }
+
+            try {
+                GameObject token5 = GameObject.Find("World/Region2/Sector 3/(R2D) (Smile V)/SMIlE V");
+                GameObject loc54 = new GameObject("54_Smile Token Puzzle 5");
+                loc54.transform.SetParent(APItemParent);
+                loc54.transform.position = token5.transform.position;
+                token5.SetActive(false);
+                loc54.AddComponent<ArchipelagoItem>().locId = 54;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 54_Smile Token Puzzle 5: " + ex.Message);
+            }
+
+            try {
+                GameObject seed4 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (4)");
+                GameObject loc55 = new GameObject("55_On top of the Rosetta Stone Pickup");
+                loc55.transform.SetParent(APItemParent);
+                loc55.transform.position = new Vector3(seed4.transform.position.x - 1f, seed4.transform.position.y - 1f, seed4.transform.position.z);
+                seed4.SetActive(false);
+                loc55.AddComponent<ArchipelagoItem>().locId = 55;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 55_On top of the Rosetta Stone Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject seed5 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (5)");
+                GameObject loc56 = new GameObject("Long Parry Platforming Room Pickup");
+                loc56.transform.SetParent(APItemParent);
+                loc56.transform.position = new Vector3(seed5.transform.position.x + 2f, seed5.transform.position.y + 2f, seed5.transform.position.z);
+                seed5.SetActive(false);
+                loc56.AddComponent<ArchipelagoItem>().locId = 56;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 56_Long Parry Platforming Room Pickup: " + ex.Message);
+            }
+
+            // Dark Region
+            try {
+                GameObject fez = GameObject.Find("World/Region2/Lab/(R13i)>(R15G)/fezHat");
+                GameObject loc57 = new GameObject("57_Secret Room Pickup");
+                loc57.transform.SetParent(APItemParent);
+                loc57.transform.position = fez.transform.position;
+                fez.SetActive(false);
+                loc57.AddComponent<ArchipelagoItem>().locId = 57;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 57_Secret Room Pickup: " + ex.Message);
+            }
+
+            try {
+                GameObject seed3 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (3)");
+                GameObject loc58 = new GameObject("58_Large Room Pickup in the Corner");
+                loc58.transform.SetParent(APItemParent);
+                loc58.transform.position = new Vector3(seed3.transform.position.x + 2f, seed3.transform.position.y + 2f, seed3.transform.position.z);
+                seed3.SetActive(false);
+                loc58.AddComponent<ArchipelagoItem>().locId = 58;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 58_Large Room Pickup in the Corner: " + ex.Message);
+            }
+
+            try {
+                GameObject nullBoss = GameObject.Find("World/Region2/Lab/(R17G) (Corrupted)/null");
+                GameObject loc59 = new GameObject("59_Null Reward");
+                loc59.transform.SetParent(APItemParent);
+                loc59.transform.position = new Vector3(741f, -96f, 0f);
+                nullBoss.AddComponent<ReplaceOnDestroy>().replacement = loc59;
+                loc59.AddComponent<ArchipelagoItem>().locId = 59;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 59_Null Reward: " + ex.Message);
+            }
+
+            // Smile Shop
+            GameObject purchaseTriggerObj = GameObject.Find("World/Smile Shop/OnHeld/Purchase");
+            if (purchaseTriggerObj)
+                purchaseTriggerObj.AddComponent<ShopPurchaseTrigger>();
+            ShopPurchaseTrigger purchaseTrigger = purchaseTriggerObj?.GetComponent<ShopPurchaseTrigger>();
+
+            try {
+                GameObject shopItem1 = GameObject.Find("World/Smile Shop/Sword ShopItem");
+                shopItem1.name = "60_Smile Shop Item 1";
+                ApShopItem shopItem = shopItem1.AddComponent<ApShopItem>();
+                shopItem.shopId = 1;
+                shopItem.price = 2;
+                shopItem.locId = 60;
+                purchaseTrigger.items.Add(shopItem);
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 60_Smile Shop Item 1: " + ex.Message);
+            }
+
+            try {
+                GameObject shopItem2 = GameObject.Find("World/Smile Shop/Shroud ShopItem");
+                shopItem2.name = "61_Smile Shop Item 2";
+                ApShopItem shopItem = shopItem2.AddComponent<ApShopItem>();
+                shopItem.shopId = 2;
+                shopItem.price = 4;
+                shopItem.locId = 61;
+                purchaseTrigger.items.Add(shopItem);
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 61_Smile Shop Item 2: " + ex.Message);
+            }
+
+            try {
+                GameObject shopItem3 = GameObject.Find("World/Smile Shop/Magic Recharge ShopItem");
+                shopItem3.name = "62_Smile Shop Item 3";
+                ApShopItem shopItem = shopItem3.AddComponent<ApShopItem>();
+                shopItem.shopId = 3;
+                shopItem.price = 2;
+                shopItem.locId = 62;
+                purchaseTrigger.items.Add(shopItem);
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 62_Smile Shop Item 3: " + ex.Message);
+            }
+
+            try {
+                GameObject shopItem4 = GameObject.Find("World/Smile Shop/Parry Recharge ShopItem");
+                shopItem4.name = "63_Smile Shop Item 4";
+                ApShopItem shopItem = shopItem4.AddComponent<ApShopItem>();
+                shopItem.shopId = 4;
+                shopItem.price = 2;
+                shopItem.locId = 63;
+                purchaseTrigger.items.Add(shopItem);
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 63_Smile Shop Item 4: " + ex.Message);
+            }
         }
 
         private static void PlaceItemsMemory() {

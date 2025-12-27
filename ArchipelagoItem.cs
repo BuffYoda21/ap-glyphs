@@ -43,7 +43,8 @@ namespace ApGlyphs {
                     isUsingConstructedModel = true;
                 }
             else {
-                foreach (Transform child in transform) {
+                for (int i = 0; i < transform.childCount; i++) {
+                    Transform child = transform.GetChild(i);
                     if (child.name.StartsWith("Orb_"))
                         child.gameObject.SetActive(false);
                 }
@@ -64,14 +65,14 @@ namespace ApGlyphs {
             Destroy(gameObject);
         }
 
-        private void FetchItemInfo() {
+        protected void FetchItemInfo() {
             itemInfo = itemCache.TryGetItem(locId, out var info) ? info : null;
             if (itemInfo != null) isUsingConstructedModel = false;    // this item has data now so we need to check it again to see if we still need the AP logo
             if (itemInfo != null && itemCache.checkedLocations.Contains(itemInfo.LocationId))
                 Destroy(gameObject);
         }
 
-        private Sprite GetItemSprite() {
+        protected Sprite GetItemSprite() {
             if (itemInfo.Player.Slot != client.client.SlotId) return null;
             switch (itemInfo.ItemName) {
                 case "Progressive Sword":
@@ -125,7 +126,7 @@ namespace ApGlyphs {
                     return Resources.Load<Sprite>("sprites/default/hats/PartyHat");
                 case "Bomb Hat":
                     return Resources.Load<Sprite>("sprites/default/hats/bombHat");
-                case "Progressive Chicken Hat": //needs fixing
+                case "Progressive Chicken Hat":
                     if (!inventory.items.ContainsKey("Progressive Chicken Hat") || inventory.items["Progressive Chicken Hat"] == 0)
                         return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken");
                     return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken 1");
@@ -137,7 +138,7 @@ namespace ApGlyphs {
             return null;
         }
 
-        private void CreateAPLogo() {
+        protected void CreateAPLogo() {
             const int orbCount = 6;
             const float radius = .333f;
             const float orbSize = .6f;
@@ -174,7 +175,7 @@ namespace ApGlyphs {
             isUsingConstructedModel = true;
         }
 
-        private static Sprite CreateCircleSprite(int diameter) {
+        protected static Sprite CreateCircleSprite(int diameter) {
             Texture2D tex = new Texture2D(diameter, diameter, TextureFormat.ARGB32, false);
             tex.filterMode = FilterMode.Bilinear;
             tex.wrapMode = TextureWrapMode.Clamp;
@@ -195,14 +196,14 @@ namespace ApGlyphs {
             );
         }
 
-        private PlayerController player;
-        private BoxCollider2D col;
-        private SpriteRenderer sr;
-        private ClientWrapper client;
-        private ItemCache itemCache;
-        private InventoryManager inventory;
+        protected PlayerController player;
+        protected BoxCollider2D col;
+        protected SpriteRenderer sr;
+        protected ClientWrapper client;
+        protected ItemCache itemCache;
+        protected InventoryManager inventory;
         public long locId;
         public ScoutedItemInfo itemInfo;
-        private bool isUsingConstructedModel = false;
+        protected bool isUsingConstructedModel = false;
     }
 }

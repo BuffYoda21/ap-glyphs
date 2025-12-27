@@ -9,7 +9,39 @@ namespace ApGlyphs {
     public class GamestateManager : MonoBehaviour {
         public void Start() {
             if (!client) client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
+            if (itemCache == null) itemCache = itemCache = client.client.itemCache;
             LoadGamestateFromFile();
+            if (!stateLoaded || itemCache == null) return;
+            foreach (string flag in flags) {
+                if (flag.StartsWith("purchased item ")) {
+                    string[] split = flag.Split(' ');
+                    purchasedItemIds.Add(int.Parse(split[2]));
+                }
+            }
+        }
+
+        public void Update() {
+            if (itemCache == null || !itemCache.itemsReady || spentTokens != -1) return;
+            spentTokens = 0;
+            foreach (int itemId in purchasedItemIds) {
+                if (itemCache.checkedLocations.Contains(itemId + 59)) {
+                    // will need to change when price randomization is implemented
+                    switch (itemId) {
+                        case 1:
+                            spentTokens += 2;
+                            break;
+                        case 2:
+                            spentTokens += 4;
+                            break;
+                        case 3:
+                            spentTokens += 2;
+                            break;
+                        case 4:
+                            spentTokens += 2;
+                            break;
+                    }
+                }
+            }
         }
 
         private void FetchGoal() {
@@ -120,6 +152,9 @@ namespace ApGlyphs {
         public bool stateLoaded = false;
         private ClientWrapper client;
         private Goal goal = Goal.None;
+        private List<int> purchasedItemIds = new List<int>();
+        public int spentTokens = -1;
+        private ItemCache itemCache;
         private enum Goal : int {
             None = 0,
             FalseEnding = 1,

@@ -18,6 +18,7 @@ namespace ApGlyphs {
             harmony.PatchAll();
 
             // class injection here
+            ClassInjector.RegisterTypeInIl2Cpp<ApShopItem>();
             ClassInjector.RegisterTypeInIl2Cpp<ArchipelagoItem>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper.ConnectionIndicator>();
@@ -26,6 +27,7 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<MainThreadDispatcher>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnEnable>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnDestroy>();
+            ClassInjector.RegisterTypeInIl2Cpp<ShopPurchaseTrigger>();
             ClassInjector.RegisterTypeInIl2Cpp<WizardTriggerManager>();
 
             isInitialized = true;
