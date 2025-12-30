@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
@@ -700,6 +699,7 @@ namespace ApGlyphs {
                 GameObject loc59 = new GameObject("59_Null Reward");
                 loc59.transform.SetParent(APItemParent);
                 loc59.transform.position = new Vector3(741f, -96f, 0f);
+                loc59.SetActive(false);
                 nullBoss.AddComponent<ReplaceOnDestroy>().replacement = loc59;
                 loc59.AddComponent<ArchipelagoItem>().locId = 59;
             } catch (Exception ex) {
@@ -759,6 +759,20 @@ namespace ApGlyphs {
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 63_Smile Shop Item 4: " + ex.Message);
             }
+
+            try {
+                GameObject partyHat = GameObject.Find("World/Smile Shop/Hat room/Pedestals/partyHat pickup");
+                GameObject loc64 = new GameObject("Dash Puzzle Reward");
+                loc64.transform.SetParent(APItemParent);
+                loc64.transform.position = partyHat.transform.position;
+                loc64.SetActive(false);
+                partyHat.AddComponent<ReplaceOnEnable>().replacement = loc64;
+                loc64.AddComponent<ArchipelagoItem>().locId = 64;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 64_Dash Puzzle Reward: " + ex.Message);
+            }
+
+            // between locations 65 - 70 are handled by seperate script
         }
 
         private static void PlaceItemsMemory() {

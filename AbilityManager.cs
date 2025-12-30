@@ -62,6 +62,8 @@ namespace ApGlyphs {
                         if (kv.Value >= 2) {
                             player.dashAttack = true;
                             player.dashAttackChargeMax = 1f;
+                            if (!shopItem3Square) shopItem3Square = GameObject.Find("World/Smile Shop/Dissappear on Save");
+                            if (shopItem3Square) shopItem3Square.SetActive(false);
                         }
                         if (kv.Value >= 3) {
                             player.dashAttackChargeMax = 0.5f;
@@ -73,6 +75,8 @@ namespace ApGlyphs {
                     case "Progressive Parry":
                         if (kv.Value >= 1)
                             player.hasParry = true;
+                        if (!shopItem4Square) shopItem4Square = GameObject.Find("World/Smile Shop/Dissappear on Save (1)");
+                        if (shopItem4Square) shopItem4Square.SetActive(false);
                         if (kv.Value >= 2)
                             player.parryCD = 1f;
                         break;
@@ -88,6 +92,7 @@ namespace ApGlyphs {
                     case "Silver Shard":
                         player.maxHp = 100 + kv.Value / 3 * 10;
                         player.fragments = kv.Value % 3;
+                        sm.playerHPBeforeCutscene = player.maxHp;
                         break;
                     case "Gold Shard":
                         player.goldfragments = kv.Value;
@@ -102,5 +107,7 @@ namespace ApGlyphs {
         private static PlayerController player;
         private static Scene scene;
         private static int lastSceneHandle = -1;
+        private static GameObject shopItem3Square;
+        private static GameObject shopItem4Square;
     }
 }

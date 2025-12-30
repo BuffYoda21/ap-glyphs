@@ -34,6 +34,7 @@ namespace ApGlyphs {
                             break;
                         case "Rune Cube":
                             GameObject cube = Object.Instantiate(Resources.Load<GameObject>("prefabs/game/Cube"), transform);
+                            cube.transform.localPosition = Vector3.zero;
                             Destroy(cube.GetComponent<Pickup>());
                             break;
                         default:

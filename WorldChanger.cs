@@ -34,6 +34,16 @@ namespace ApGlyphs {
             }
 
             try {
+                GameObject chickenRoomParent = GameObject.Find("World/Region2/(R5-b)");
+                chickenRoomParent.transform.Find("Tiles/Square (23)").gameObject.SetActive(false);
+                chickenRoomParent.transform.Find("Tiles/Square (24)").gameObject.SetActive(false);
+                chickenRoomParent.transform.Find("R5-B").gameObject.SetActive(false);
+                chickenRoomParent.transform.Find("door").gameObject.SetActive(true);
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to open between passage " + ex.Message);
+            }
+
+            try {
                 GameObject secretWallTileParent = GameObject.Find("World/Region2/Sector 1/(R4-D)/Tiles");
                 UnityEngine.Object.Destroy(secretWallTileParent.transform.Find("dissapear on save falseending")?.gameObject);
                 UnityEngine.Object.Destroy(secretWallTileParent.transform.Find("dissapear on save smile1")?.gameObject);

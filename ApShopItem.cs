@@ -19,6 +19,10 @@ namespace ApGlyphs {
             displayText.normaltext = true;
             reactParent = GameObject.Find("World/Smile Shop/reacttext");
             if (!reactParent) return;
+            for (int i = 0; i < reactParent.transform.childCount; i++) {
+                Transform child = reactParent.transform.GetChild(i);
+                otherReactions.Add(child.gameObject);
+            }
             apItemReaction = GameObject.Instantiate(reactParent.transform.Find("reaction (9)")?.gameObject, reactParent.transform)?.GetComponent<BuildText>();
             if (apItemReaction) apItemReaction.text = "";
         }
@@ -29,6 +33,9 @@ namespace ApGlyphs {
             if (!vanillaItem) return;
             if (vanillaItem.startpos != transform.position) {
                 if (!apItemReaction.gameObject.activeSelf) apItemReaction.gameObject.SetActive(true);
+                foreach (GameObject otherReaction in otherReactions) {
+                    if (otherReaction.activeSelf) otherReaction.SetActive(false);
+                }
                 itemHeld = true;
             } else {
                 if (apItemReaction.gameObject.activeSelf) apItemReaction.gameObject.SetActive(false);
@@ -66,10 +73,10 @@ namespace ApGlyphs {
                         possibleReactions.Add("how did i get this? idk");
                         break;
                     case "Silver Shard":
-                        possibleReactions.Add("i hear this will make you stronger");
+                        possibleReactions.Add("i hear that it will make you stronger");
                         break;
                     case "Gold Shard":
-                        possibleReactions.Add("this seems like a nice thing to have");
+                        possibleReactions.Add("that seems like a nice thing to have");
                         break;
                     case "Smile Token":
                         possibleReactions.Add("it is not a scam i swear");
@@ -90,10 +97,10 @@ namespace ApGlyphs {
                         possibleReactions.Add("pretty pink");
                         break;
                     case "Propeller Hat":
-                        possibleReactions.Add("this does not let you fly");
+                        possibleReactions.Add("that will not let you fly");
                         break;
                     case "Traffic Cone":
-                        possibleReactions.Add("why do you want this?");
+                        possibleReactions.Add("why do you want that?");
                         break;
                     case "John Hat":
                         possibleReactions.Add("mini john mini john");
@@ -116,23 +123,31 @@ namespace ApGlyphs {
                     case "Progressive Chicken Hat":
                         possibleReactions.Add("hi george");
                         break;
+                    case "HP Refill":
+                        possibleReactions.Add("worth it");
+                        break;
                 }
             } else {
-                if (itemInfo.ItemGame == "glyphs") {
+                if (itemInfo.ItemGame == "GLYPHS") {
+                    // special reactions if ap item is from another glyphs world
                     possibleReactions.Add("an item from another timeline?");
                     possibleReactions.Add("seems oddly familiar");
                     possibleReactions.Add("i think i recognize that one");
+                    if (itemInfo.ItemName == "Smile Token") possibleReactions.Add("pay it forward");
                 } else {
+                    // special reactions if ap item is not from another glyphs world
                     possibleReactions.Add($"whats a {itemInfo.ItemName}?");
                     possibleReactions.Add($"never heard of {itemInfo.ItemGame}");
                     possibleReactions.Add($"how did that get here?");
                 }
+                // reactions for ap items
                 possibleReactions.Add($"whos {itemInfo.Player.Name}?");
                 possibleReactions.Add("what is that?");
                 possibleReactions.Add("an item from another world? strange");
                 possibleReactions.Add("how do you even plan on getting it to them?");
                 possibleReactions.Add("i love archipelago");
                 if (itemInfo.Flags.HasFlag(ItemFlags.Advancement)) {
+                    // special reactions for advancement ap items
                     possibleReactions.Add("that seems important");
                     possibleReactions.Add($"{itemInfo.Player.Name} will surely want that");
                 }
@@ -176,5 +191,6 @@ namespace ApGlyphs {
         private BuildText displayText;
         private GameObject reactParent;
         private BuildText apItemReaction;
+        private List<GameObject> otherReactions = new List<GameObject>();
     }
 }
