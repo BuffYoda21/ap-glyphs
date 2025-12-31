@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
+using Il2Cpp;
 
 [assembly: MelonInfo(typeof(ApGlyphs.Main), "ApGlyphs", "0.1.0", "BuffYoda21")]
 [assembly: MelonGame("Vortex Bros.", "GLYPHS")]
@@ -20,6 +21,7 @@ namespace ApGlyphs {
             // class injection here
             ClassInjector.RegisterTypeInIl2Cpp<ApShopItem>();
             ClassInjector.RegisterTypeInIl2Cpp<ArchipelagoItem>();
+            ClassInjector.RegisterTypeInIl2Cpp<BetweenListener>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper.ConnectionIndicator>();
             ClassInjector.RegisterTypeInIl2Cpp<InventoryManager>();
@@ -27,6 +29,7 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<MainThreadDispatcher>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnEnable>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnDestroy>();
+            ClassInjector.RegisterTypeInIl2Cpp<SeedCounter>();
             ClassInjector.RegisterTypeInIl2Cpp<ShopPurchaseTrigger>();
             ClassInjector.RegisterTypeInIl2Cpp<WizardTriggerManager>();
 
@@ -47,6 +50,7 @@ namespace ApGlyphs {
             client = manager?.AddComponent<ClientWrapper>();
             inventory = manager?.AddComponent<InventoryManager>();
             gamestate = manager?.AddComponent<GamestateManager>();
+            betweenListener = manager?.AddComponent<BetweenListener>();
             itemCache = new ItemCache();
             itemCache.dispatcher = manager?.AddComponent<MainThreadDispatcher>();
             if (!client) MelonLogger.Error("Failed to create ClientWrapper");
@@ -64,6 +68,7 @@ namespace ApGlyphs {
         public static ItemCache itemCache;
         public static InventoryManager inventory;
         public static GamestateManager gamestate;
+        public static BetweenListener betweenListener;
         private static int lastSceneHandle;
         private bool isInitialized = false;
     }

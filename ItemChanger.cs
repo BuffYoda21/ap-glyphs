@@ -16,6 +16,7 @@ namespace ApGlyphs {
             lastSceneHandle = scene.handle;
 
             if (!gamestate) gamestate = GameObject.Find("Manager intro")?.GetComponent<GamestateManager>();
+            if (!client) client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
 
             if (scene.name == "Game")
                 PlaceItemsGame();
@@ -382,13 +383,12 @@ namespace ApGlyphs {
                 MelonLogger.Error("Failed to place 31_Water Room Pickup: " + ex.Message);
             }
 
-            // George rewards need a seperate script
             try {
                 GameObject loc32 = new GameObject("32_George Reward 1");
                 loc32.transform.SetParent(APItemParent);
                 loc32.transform.position = new Vector3(395f, 15f, 0f);
-                loc32.SetActive(false);
                 loc32.AddComponent<ArchipelagoItem>().locId = 32;
+                loc32.AddComponent<SeedCounter>().hiddenPosition = new Vector3(395f, 35f, 0f);
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 32_George Reward 1: " + ex.Message);
             }
@@ -397,8 +397,8 @@ namespace ApGlyphs {
                 GameObject loc33 = new GameObject("33_George Reward 2");
                 loc33.transform.SetParent(APItemParent);
                 loc33.transform.position = new Vector3(402f, 15f, 0f);
-                loc33.SetActive(false);
                 loc33.AddComponent<ArchipelagoItem>().locId = 33;
+                loc33.AddComponent<SeedCounter>().hiddenPosition = new Vector3(402f, 35f, 0f);
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 33_George Reward 2: " + ex.Message);
             }
@@ -662,7 +662,7 @@ namespace ApGlyphs {
 
             try {
                 GameObject seed5 = GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (5)");
-                GameObject loc56 = new GameObject("Long Parry Platforming Room Pickup");
+                GameObject loc56 = new GameObject("56_Long Parry Platforming Room Pickup");
                 loc56.transform.SetParent(APItemParent);
                 loc56.transform.position = new Vector3(seed5.transform.position.x + 2f, seed5.transform.position.y + 2f, seed5.transform.position.z);
                 seed5.SetActive(false);
@@ -762,7 +762,7 @@ namespace ApGlyphs {
 
             try {
                 GameObject partyHat = GameObject.Find("World/Smile Shop/Hat room/Pedestals/partyHat pickup");
-                GameObject loc64 = new GameObject("Dash Puzzle Reward");
+                GameObject loc64 = new GameObject("64_Dash Puzzle Reward");
                 loc64.transform.SetParent(APItemParent);
                 loc64.transform.position = partyHat.transform.position;
                 loc64.SetActive(false);
@@ -772,7 +772,53 @@ namespace ApGlyphs {
                 MelonLogger.Error("Failed to place 64_Dash Puzzle Reward: " + ex.Message);
             }
 
-            // between locations 65 - 70 are handled by seperate script
+            if (!betweenListener) betweenListener = GameObject.Find("Manager intro")?.GetComponent<BetweenListener>();
+
+            try {
+                GameObject loc65 = new GameObject("65_Between Construct");
+                loc65.transform.SetParent(APItemParent);
+                loc65.SetActive(false);
+                loc65.AddComponent<ArchipelagoItem>().locId = 65;
+                if (!betweenListener.apItems.ContainsKey("construct")) betweenListener.apItems.Add("construct", loc65);
+                else betweenListener.apItems["construct"] = loc65;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 65_Between Construct: " + ex.Message);
+            }
+
+            try {
+                GameObject loc66 = new GameObject("66_Between Serpent");
+                loc66.transform.SetParent(APItemParent);
+                loc66.SetActive(false);
+                loc66.AddComponent<ArchipelagoItem>().locId = 66;
+                if (!betweenListener.apItems.ContainsKey("serpent")) betweenListener.apItems.Add("serpent", loc66);
+                else betweenListener.apItems["serpent"] = loc66;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 66_Between Serpent: " + ex.Message);
+            }
+
+            try {
+                GameObject loc67 = new GameObject("67_Between Wizard");
+                loc67.transform.SetParent(APItemParent);
+                loc67.SetActive(false);
+                loc67.AddComponent<ArchipelagoItem>().locId = 67;
+                if (!betweenListener.apItems.ContainsKey("wizard")) betweenListener.apItems.Add("wizard", loc67);
+                else betweenListener.apItems["wizard"] = loc67;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 67_Between Wizard: " + ex.Message);
+            }
+
+            try {
+                GameObject loc68 = new GameObject("68_Hot Spring");
+                loc68.transform.SetParent(APItemParent);
+                loc68.SetActive(false);
+                loc68.AddComponent<ArchipelagoItem>().locId = 68;
+                if (!betweenListener.apItems.ContainsKey("fountain")) betweenListener.apItems.Add("fountain", loc68);
+                else betweenListener.apItems["fountain"] = loc68;
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 68_Hot Spring: " + ex.Message);
+            }
+
+            // locations 69 and 70 (between rewards) are cutscene rewards
         }
 
         private static void PlaceItemsMemory() {
@@ -807,10 +853,19 @@ namespace ApGlyphs {
                 case "TheVeryEnd":
                     gamestate.SaveFlag("EpilogueEnding");
                     break;
+                case "Escape":
+                    if (!client) return;
+                    if (!client.client.itemCache.checkedLocations.Contains(69))
+                        client.client.CollectItem(69);
+                    if (!client.client.itemCache.checkedLocations.Contains(70))
+                        client.client.CollectItem(70);
+                    break;
             }
         }
 
         private static int lastSceneHandle = -1;
         private static GamestateManager gamestate;
+        private static BetweenListener betweenListener;
+        private static ClientWrapper client;
     }
 }

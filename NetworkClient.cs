@@ -192,8 +192,12 @@ namespace ApGlyphs {
         }
 
         public void CollectItem(ArchipelagoItem apItem) {
+            CollectItem(apItem.locId);
+        }
+
+        public void CollectItem(long locId) {
             long[] locationArray = new long[1];
-            locationArray[0] = apItem.locId;
+            locationArray[0] = locId;
             session.Locations.CompleteLocationChecks(locationArray);
         }
 
@@ -306,10 +310,10 @@ namespace ApGlyphs {
         public bool isConnected = false;
         private float lastConnectAttempt = -15f;
         public ArchipelagoSession session;
-        private readonly Version ArchipelagoProtocolVersion = new Version(0, 6, 0);
+        private readonly Version ArchipelagoProtocolVersion = new Version(0, 6, 5);
         public string WebHostUrl = "archipelago.gg";
         public int WebHostPort = 0;
-        public string SlotName = "Player1";
+        public string SlotName = "player 1";
         public int SlotId = 0;
         public string password = null;
         public Dictionary<string, object> slotData;
