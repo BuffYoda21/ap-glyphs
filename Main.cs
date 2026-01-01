@@ -22,6 +22,7 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<ApShopItem>();
             ClassInjector.RegisterTypeInIl2Cpp<ArchipelagoItem>();
             ClassInjector.RegisterTypeInIl2Cpp<BetweenListener>();
+            ClassInjector.RegisterTypeInIl2Cpp<BombHatPickupReplacer>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper.ConnectionIndicator>();
             ClassInjector.RegisterTypeInIl2Cpp<InventoryManager>();

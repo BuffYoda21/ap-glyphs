@@ -820,6 +820,17 @@ namespace ApGlyphs {
             }
 
             // locations 69 and 70 (between rewards) are cutscene rewards
+
+            try {
+                GameObject loc71 = new GameObject("71_Escape Normal Sequence Pickup");
+                loc71.transform.SetParent(APItemParent);
+                loc71.SetActive(false);
+                loc71.AddComponent<ArchipelagoItem>().locId = 71;
+                collapseController.AddComponent<BombHatPickupReplacer>().replacement = loc71;
+
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to place 71_Escape Normal Sequence Pickup: " + ex.Message);
+            }
         }
 
         private static void PlaceItemsMemory() {
