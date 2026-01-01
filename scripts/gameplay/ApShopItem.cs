@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using Archipelago.MultiClient.Net.Enums;
 using Il2Cpp;
-using MelonLoader;
 using UnityEngine;
 
 namespace ApGlyphs {

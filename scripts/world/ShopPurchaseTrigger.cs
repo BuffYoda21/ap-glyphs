@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Il2Cpp;
 using UnityEngine;
 
 namespace ApGlyphs {
