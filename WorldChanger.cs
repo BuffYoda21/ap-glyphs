@@ -64,6 +64,18 @@ namespace ApGlyphs {
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to add WizardTriggerManager: " + ex.Message);
             }
+
+            try {
+                GameObject.Find("World/Smile Shop").AddComponent<ShopCounter>();
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to add ShopCounter: " + ex.Message);
+            }
+
+            try {
+                GameObject.Find("World/Smile Shop/Hat room/Pedestals").AddComponent<HatRoomManager>();
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to add HatRoomManager: " + ex.Message);
+            }
         }
 
         private static void EditWorldMemory() {

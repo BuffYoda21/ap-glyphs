@@ -25,12 +25,14 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<BombHatPickupReplacer>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper>();
             ClassInjector.RegisterTypeInIl2Cpp<ClientWrapper.ConnectionIndicator>();
+            ClassInjector.RegisterTypeInIl2Cpp<HatRoomManager>();
             ClassInjector.RegisterTypeInIl2Cpp<InventoryManager>();
             ClassInjector.RegisterTypeInIl2Cpp<GamestateManager>();
             ClassInjector.RegisterTypeInIl2Cpp<MainThreadDispatcher>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnEnable>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnDestroy>();
             ClassInjector.RegisterTypeInIl2Cpp<SeedCounter>();
+            ClassInjector.RegisterTypeInIl2Cpp<ShopCounter>();
             ClassInjector.RegisterTypeInIl2Cpp<ShopPurchaseTrigger>();
             ClassInjector.RegisterTypeInIl2Cpp<WizardTriggerManager>();
 
