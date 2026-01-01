@@ -388,7 +388,7 @@ namespace ApGlyphs {
                 loc32.transform.SetParent(APItemParent);
                 loc32.transform.position = new Vector3(395f, 15f, 0f);
                 loc32.AddComponent<ArchipelagoItem>().locId = 32;
-                loc32.AddComponent<SeedCounter>().hiddenPosition = new Vector3(395f, 35f, 0f);
+                loc32.AddComponent<SeedCounter>().hiddenPosition = new Vector3(395f, 50f, 0f);
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 32_George Reward 1: " + ex.Message);
             }
@@ -398,7 +398,7 @@ namespace ApGlyphs {
                 loc33.transform.SetParent(APItemParent);
                 loc33.transform.position = new Vector3(402f, 15f, 0f);
                 loc33.AddComponent<ArchipelagoItem>().locId = 33;
-                loc33.AddComponent<SeedCounter>().hiddenPosition = new Vector3(402f, 35f, 0f);
+                loc33.AddComponent<SeedCounter>().hiddenPosition = new Vector3(402f, 50f, 0f);
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 33_George Reward 2: " + ex.Message);
             }
@@ -421,6 +421,7 @@ namespace ApGlyphs {
                 loc35.transform.position = cube1.transform.position;
                 cube1.SetActive(false);
                 loc35.AddComponent<ArchipelagoItem>().locId = 35;
+                cube1.AddComponent<ReplaceOnEnable>().replacement = loc35;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to place 35_Master Puzzle 1: " + ex.Message);
             }
