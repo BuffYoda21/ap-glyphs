@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using HarmonyLib;
 using Il2Cpp;
@@ -17,6 +18,7 @@ namespace ApGlyphs {
             if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
             if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             inventory.scene = scene;
+            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
             UpdatePlayer();
         }
 #pragma warning restore IDE0060 // Restore unused parameter warning
@@ -27,6 +29,7 @@ namespace ApGlyphs {
             if ((scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") || !inventory || !inventory.inventoryLoaded || !sm) return;
             if (!player) player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
             if (!player) return;
+            if (wraithRequirement == WraithRequirement.Undefined) GetWraithRequirement();
 
             //PlayerPrefs.SetString("Unlocked-map", "true");    // doesn't work for some reason. ItemChanger.cs moves map to player on load now as a workaround
             player.mapDisabled = true;
@@ -43,7 +46,6 @@ namespace ApGlyphs {
             player.maxHp = 100;
             player.goldfragments = 0;
 
-            // other collectables will be handled by a scene setup script that is to be implemented
             foreach (KeyValuePair<string, int> kv in inventory.items) {
                 switch (kv.Key) {
                     case "Map":
@@ -98,15 +100,65 @@ namespace ApGlyphs {
                         break;
                 }
             }
+
+            if (HasMetWraithRequirement()) {
+                if (sm.playerHPBeforeCutscene < 150)
+                    sm.playerHPBeforeCutscene = 150;
+            } else {
+                if (sm.playerHPBeforeCutscene >= 150)
+                    sm.playerHPBeforeCutscene = 149;
+            }
+
             sm.Save();
+        }
+
+        private static void GetWraithRequirement() {
+            wraithRequirement = (WraithRequirement)Convert.ToInt32(client.client.options["WraithRequirements"]);
+            switch (wraithRequirement) {
+                case WraithRequirement.Vanilla: wraithRequirement = WraithRequirement.SilverShard; wraithRequirementCount = 15; break;
+                case WraithRequirement.SilverShard: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithSilverCount"]); break;
+                case WraithRequirement.GoldShard: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithGoldCount"]); break;
+                case WraithRequirement.SmileToken: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithSmileCount"]); break;
+                case WraithRequirement.RuneCube: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithRuneCount"]); break;
+                case WraithRequirement.GlyphStone: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithGlyphstoneCount"]); break;
+            }
+        }
+
+        private static bool HasMetWraithRequirement() {
+            int itemCount = 0;
+            switch (wraithRequirement) {
+                case WraithRequirement.Undefined: return false;
+                case WraithRequirement.None: return true;
+                case WraithRequirement.Intended: return inventory.items.TryGetValue("Silver Shard", out itemCount) && itemCount >= 15 && inventory.items.TryGetValue("Glyphstone", out itemCount) && itemCount >= 3;
+                case WraithRequirement.SilverShard: return inventory.items.TryGetValue("Silver Shard", out itemCount) && itemCount >= wraithRequirementCount;
+                case WraithRequirement.GoldShard: return inventory.items.TryGetValue("Gold Shard", out itemCount) && itemCount >= wraithRequirementCount;
+                case WraithRequirement.SmileToken: return inventory.items.TryGetValue("Smile Token", out itemCount) && itemCount >= wraithRequirementCount;
+                case WraithRequirement.RuneCube: return inventory.items.TryGetValue("Rune Cube", out itemCount) && itemCount >= wraithRequirementCount;
+                case WraithRequirement.GlyphStone: return inventory.items.TryGetValue("Glyphstone", out itemCount) && itemCount >= wraithRequirementCount;
+                default: return false;
+            }
         }
 
         private static SaveManager sm;
         private static InventoryManager inventory;
+        private static ClientWrapper client;
         private static PlayerController player;
         private static Scene scene;
         private static int lastSceneHandle = -1;
         private static GameObject shopItem3Square;
         private static GameObject shopItem4Square;
+        private static WraithRequirement wraithRequirement = WraithRequirement.Undefined;
+        private static int wraithRequirementCount = 0;
+        private enum WraithRequirement : int {
+            Undefined = -1,
+            None = 0,
+            Vanilla = 1,
+            Intended = 2,
+            SilverShard = 3,
+            GoldShard = 4,
+            SmileToken = 5,
+            RuneCube = 6,
+            GlyphStone = 7,
+        }
     }
 }

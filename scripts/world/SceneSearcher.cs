@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using HarmonyLib;
+using MelonLoader;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,6 +15,7 @@ namespace ApGlyphs {
                 if (cached == null) {
                     loggedTransforms.Remove(path);
                 } else {
+                    //MelonLogger.Msg($"Cache hit for {path}");
                     return cached;
                 }
             }
@@ -52,6 +54,7 @@ namespace ApGlyphs {
                 Transform found = ancestorTransform.Find(relativePath);
                 if (found != null) {
                     CacheTransformChain(found);
+                    //MelonLogger.Msg($"Used shortcut lookup for {path} starting from {ancestorPath}");
                     return found;
                 }
             }
@@ -60,9 +63,11 @@ namespace ApGlyphs {
             GameObject obj = GameObject.Find(path);
             if (obj != null) {
                 CacheTransformChain(obj.transform);
+                //MelonLogger.Msg("Used fallback lookup for " + path);
                 return obj.transform;
             }
 
+            //MelonLogger.Msg("Failed to find " + path);
             return null;
         }
 
