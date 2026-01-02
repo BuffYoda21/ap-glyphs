@@ -15,7 +15,7 @@ namespace ApGlyphs {
             displayText = transform.Find("nametext").GetComponent<BuildText>();
             displayText.text = "";
             displayText.normaltext = true;
-            reactParent = GameObject.Find("World/Smile Shop/reacttext");
+            reactParent = SceneSearcher.Find("World/Smile Shop/reacttext")?.gameObject;
             if (!reactParent) return;
             for (int i = 0; i < reactParent.transform.childCount; i++) {
                 Transform child = reactParent.transform.GetChild(i);
@@ -27,7 +27,7 @@ namespace ApGlyphs {
 
         public new void Update() {
             base.Update();
-            if (!gamestate) gamestate = GameObject.Find("Manager intro")?.GetComponent<GamestateManager>();
+            if (!gamestate) gamestate = SceneSearcher.Find("Manager intro")?.GetComponent<GamestateManager>();
             if (!vanillaItem) return;
             if (vanillaItem.startpos != transform.position) {
                 if (!apItemReaction.gameObject.activeSelf) apItemReaction.gameObject.SetActive(true);

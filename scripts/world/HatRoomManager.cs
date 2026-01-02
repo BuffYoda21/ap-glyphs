@@ -5,7 +5,7 @@ namespace ApGlyphs {
     // attach to "Pedestals" GameObject
     public class HatRoomManager : MonoBehaviour {
         public void Start() {
-            inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
+            inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             hats.Add("Pink Bow", transform.Find("pinkBow")?.gameObject);
             hats.Add("Propeller Hat", transform.Find("propeller hat")?.gameObject);
             hats.Add("Traffic Cone", transform.Find("cone hat")?.gameObject);

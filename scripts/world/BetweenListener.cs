@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 namespace ApGlyphs {
     public class BetweenListener : MonoBehaviour {
         public void Start() {
-            if (!bbm) bbm = GameObject.Find("Canvas/Bossbars")?.GetComponent<BossBarManager>();
+            if (!bbm) bbm = SceneSearcher.Find("Canvas/Bossbars")?.GetComponent<BossBarManager>();
         }
 
         public void Update() {
@@ -69,16 +69,16 @@ namespace ApGlyphs {
         public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
-            if (!betweenListener) betweenListener = GameObject.Find("Manager intro")?.GetComponent<BetweenListener>();
+            if (!betweenListener) betweenListener = SceneSearcher.Find("Manager intro")?.GetComponent<BetweenListener>();
             if (betweenListener) betweenListener.Start();
         }
 
         [HarmonyPatch(typeof(BetweenManager), "GenerateFountainRoom")]
         [HarmonyPostfix]
         public static void GenerateFountainRoom(BetweenManager __instance) {
-            if (!betweenListener) betweenListener = GameObject.Find("Manager intro")?.GetComponent<BetweenListener>();
+            if (!betweenListener) betweenListener = SceneSearcher.Find("Manager intro")?.GetComponent<BetweenListener>();
             if (!betweenListener) return;
-            betweenListener.PlaceFountainRoomItem(GameObject.Find("Fountain(Clone)"));
+            betweenListener.PlaceFountainRoomItem(SceneSearcher.Find("Fountain(Clone)")?.gameObject);
         }
 
         private static BetweenListener betweenListener;

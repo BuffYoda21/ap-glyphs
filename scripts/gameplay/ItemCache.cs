@@ -18,7 +18,7 @@ namespace ApGlyphs {
             ReadOnlyCollection<ItemInfo> receivedItems = new List<ItemInfo>(session.Items.AllItemsReceived).AsReadOnly();
             checkedLocations = session.Locations.AllLocationsChecked;
             MainThreadDispatcher.Enqueue(() => {
-                if (!inventoryManager) inventoryManager = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
+                if (!inventoryManager) inventoryManager = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
                 if (inventoryManager) inventoryManager.ImportInventoryFromServer(receivedItems);
                 itemsReady = true;
             });

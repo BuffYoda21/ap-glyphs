@@ -18,7 +18,7 @@ namespace ApGlyphs {
 
         public void Update() {
             if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
-            if (!player) player = GameObject.Find("Player")?.GetComponent<PlayerController>();
+            if (!player) player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
             if (!player) return;
             if (!player.hasGeorge && items.Keys.Contains("Progressive Essence of George") && items["Progressive Essence of George"] > 0)
                 player.hasGeorge = true;

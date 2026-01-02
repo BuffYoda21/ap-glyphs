@@ -15,17 +15,17 @@ namespace ApGlyphs {
             lastSceneHandle = scene.handle;
             AbilityManager.scene = scene;
             if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
-            if (!inventory) inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
+            if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             inventory.scene = scene;
             UpdatePlayer();
         }
 #pragma warning restore IDE0060 // Restore unused parameter warning
 
         public static void UpdatePlayer() {
-            if (!sm) sm = GameObject.Find("Manager intro")?.GetComponent<SaveManager>();
-            if (!inventory) inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
+            if (!sm) sm = SceneSearcher.Find("Manager intro")?.GetComponent<SaveManager>();
+            if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             if ((scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") || !inventory || !inventory.inventoryLoaded || !sm) return;
-            if (!player) player = GameObject.Find("Player")?.GetComponent<PlayerController>();
+            if (!player) player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
             if (!player) return;
 
             //PlayerPrefs.SetString("Unlocked-map", "true");    // doesn't work for some reason. ItemChanger.cs moves map to player on load now as a workaround
@@ -61,7 +61,7 @@ namespace ApGlyphs {
                         if (kv.Value >= 2) {
                             player.dashAttack = true;
                             player.dashAttackChargeMax = 1f;
-                            if (!shopItem3Square) shopItem3Square = GameObject.Find("World/Smile Shop/Dissappear on Save");
+                            if (!shopItem3Square) shopItem3Square = SceneSearcher.Find("World/Smile Shop/Dissappear on Save")?.gameObject;
                             if (shopItem3Square) shopItem3Square.SetActive(false);
                         }
                         if (kv.Value >= 3) {
@@ -74,7 +74,7 @@ namespace ApGlyphs {
                     case "Progressive Parry":
                         if (kv.Value >= 1)
                             player.hasParry = true;
-                        if (!shopItem4Square) shopItem4Square = GameObject.Find("World/Smile Shop/Dissappear on Save (1)");
+                        if (!shopItem4Square) shopItem4Square = SceneSearcher.Find("World/Smile Shop/Dissappear on Save (1)")?.gameObject;
                         if (shopItem4Square) shopItem4Square.SetActive(false);
                         if (kv.Value >= 2)
                             player.parryCD = 1f;

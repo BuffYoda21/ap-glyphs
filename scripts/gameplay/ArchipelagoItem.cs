@@ -7,12 +7,12 @@ using UnityEngine;
 namespace ApGlyphs {
     public class ArchipelagoItem : MonoBehaviour {
         public void Start() {
-            player = GameObject.Find("Player")?.GetComponent<PlayerController>();
+            player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
             col = GetComponent<BoxCollider2D>();
             if (!col) col = gameObject.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
-            client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
-            inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
+            client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
+            inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             itemCache = client.client.itemCache;
         }
 

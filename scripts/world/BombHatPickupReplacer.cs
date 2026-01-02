@@ -8,7 +8,7 @@ namespace ApGlyphs {
 
         public void Update() {
             if (destroyTarget) return;
-            if (!destroyTarget) destroyTarget = GameObject.Find("World/Escape Sequence/bombHat");
+            if (!destroyTarget) destroyTarget = SceneSearcher.Find("World/Escape Sequence/bombHat")?.gameObject;
             if (destroyTarget) replacement.transform.position = destroyTarget.transform.position;
             if (!destroyTarget) return;
             base.OnEnable();

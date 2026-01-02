@@ -8,7 +8,7 @@ using UnityEngine;
 namespace ApGlyphs {
     public class GamestateManager : MonoBehaviour {
         public void Start() {
-            if (!client) client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
+            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
             if (itemCache == null) itemCache = itemCache = client.client.itemCache;
             LoadGamestateFromFile();
             if (!stateLoaded || itemCache == null) return;
@@ -45,7 +45,7 @@ namespace ApGlyphs {
         }
 
         private void FetchGoal() {
-            if (!client) client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
+            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
             if (!client) return;
             try {
                 switch ((int)client.client.options["Goal"]) {

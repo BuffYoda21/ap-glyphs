@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ApGlyphs {
     public class SeedCounter : MonoBehaviour {
         public void Start() {
-            inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
+            inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             unhiddenPosition = transform.position;
         }
 

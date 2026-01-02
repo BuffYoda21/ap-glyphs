@@ -14,7 +14,7 @@ namespace ApGlyphs {
         public void Start() {
             client = new NetworkClient();
             client.itemCache = itemCache;
-            client.inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
+            client.inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
 
             // retreive network info from json
             string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");

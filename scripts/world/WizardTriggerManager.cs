@@ -6,9 +6,9 @@ namespace ApGlyphs {
     // to be put on "(R7D)>(R9F) The False Primary Glyph" GameObject
     public class WizardTriggerManager : MonoBehaviour {
         public void Start() {
-            if (!inventory) inventory = GameObject.Find("Manager intro")?.GetComponent<InventoryManager>();
-            if (!client) client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
-            trigger = transform.Find("Cutscene Conditional 1/Cutscene Conditional 2/Cutscene Conditional 3/CutsceneTrigger").gameObject;
+            if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
+            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
+            trigger = transform.Find("Cutscene Conditional 1/Cutscene Conditional 2/Cutscene Conditional 3/CutsceneTrigger")?.gameObject;
             try {
                 wizGlyphstones = Convert.ToInt32(client.client.options["WizardRequirements"]);
             } catch (Exception ex) {

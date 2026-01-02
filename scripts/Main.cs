@@ -48,7 +48,7 @@ namespace ApGlyphs {
             if (scene.name != "Intro" || client) return;  // only run on Intro scene when NetworkClient is not initialized
 
             // create required class instances
-            GameObject manager = GameObject.Find("Manager intro");
+            GameObject manager = SceneSearcher.Find("Manager intro")?.gameObject;
             client = manager?.AddComponent<ClientWrapper>();
             inventory = manager?.AddComponent<InventoryManager>();
             gamestate = manager?.AddComponent<GamestateManager>();

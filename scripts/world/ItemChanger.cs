@@ -15,8 +15,8 @@ namespace ApGlyphs {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
 
-            if (!gamestate) gamestate = GameObject.Find("Manager intro")?.GetComponent<GamestateManager>();
-            if (!client) client = GameObject.Find("Manager intro")?.GetComponent<ClientWrapper>();
+            if (!gamestate) gamestate = SceneSearcher.Find("Manager intro")?.GetComponent<GamestateManager>();
+            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
 
             if (scene.name == "Game")
                 PlaceItemsGame();
@@ -36,12 +36,12 @@ namespace ApGlyphs {
 
             // Region 1
             PlaceItem(1, "Starting Item", null, Vector3.zero);
-            PlaceItem(2, "Sword Pedestal", GameObject.Find("World/Region1/(R3D)(sword)/Sword").transform, Vector3.zero);
+            PlaceItem(2, "Sword Pedestal", SceneSearcher.Find("World/Region1/(R3D)(sword)/Sword"), Vector3.zero);
 
             locId = 3;
             name = "Runic Construct Reward";
             try {
-                GameObject dashOrb = GameObject.Find("World/Region1/Runic Construct(R3E)/Dash Orb");
+                GameObject dashOrb = SceneSearcher.Find("World/Region1/Runic Construct(R3E)/Dash Orb")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = dashOrb.transform.position;
@@ -56,7 +56,7 @@ namespace ApGlyphs {
             locId = 4;
             name = "Map Pedestal";
             try {
-                GameObject map = GameObject.Find("World/Region1/(R2B)(Map)/Map");
+                GameObject map = SceneSearcher.Find("World/Region1/(R2B)(Map)/Map")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = map.transform.position;
@@ -66,17 +66,17 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            PlaceItem(5, "Silver Shard Puzzle 1", GameObject.Find("World/Region1/(R0B) (Fragment1)/Fragment 1").transform, Vector3.zero);
-            PlaceItem(6, "Silver Shard Puzzle 2", GameObject.Find("World/Region1/(R6-A) (Fragment2)/Fragment 2").transform, Vector3.zero);
-            PlaceItem(7, "Silver Shard Puzzle 3", GameObject.Find("World/Region1/(R8B) (Fragment3)/Fragment 3").transform, Vector3.zero);
-            PlaceItem(8, "Smile Token Puzzle 1", GameObject.Find("World/Region1/(R4C) (MegaPuzzle2)/SMILE I").transform, Vector3.zero);
-            PlaceItem(9, "Smile Token Puzzle 9", GameObject.Find("World/Region1/(SMILE IX)/SMILE I").transform, Vector3.zero); // not a typo
-            PlaceItem(10, "Color Cypher Room Pickup", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed").transform, Vector3.zero);
+            PlaceItem(5, "Silver Shard Puzzle 1", SceneSearcher.Find("World/Region1/(R0B) (Fragment1)/Fragment 1"), Vector3.zero);
+            PlaceItem(6, "Silver Shard Puzzle 2", SceneSearcher.Find("World/Region1/(R6-A) (Fragment2)/Fragment 2"), Vector3.zero);
+            PlaceItem(7, "Silver Shard Puzzle 3", SceneSearcher.Find("World/Region1/(R8B) (Fragment3)/Fragment 3"), Vector3.zero);
+            PlaceItem(8, "Smile Token Puzzle 1", SceneSearcher.Find("World/Region1/(R4C) (MegaPuzzle2)/SMILE I"), Vector3.zero);
+            PlaceItem(9, "Smile Token Puzzle 9", SceneSearcher.Find("World/Region1/(SMILE IX)/SMILE I"), Vector3.zero); // not a typo
+            PlaceItem(10, "Color Cypher Room Pickup", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed"), Vector3.zero);
 
             locId = 11;
             name = "Master Puzzle 2";
             try {
-                GameObject cube2 = GameObject.Find("World/Region1/(R4C) (MegaPuzzle2)/Cube II");
+                GameObject cube2 = SceneSearcher.Find("World/Region1/(R4C) (MegaPuzzle2)/Cube II")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = cube2.transform.position;
@@ -89,16 +89,16 @@ namespace ApGlyphs {
             }
 
             // Region 2
-            PlaceItem(12, "Silver Shard Puzzle 4", GameObject.Find("World/Region2/Sector 1/(R1-E) (Fragment4)/Fragment 4").transform, Vector3.zero);
-            PlaceItem(13, "Silver Shard Puzzle 5", GameObject.Find("World/Region2/(R7-A) (Fragment 5)/Fragment 5").transform, Vector3.zero);
-            PlaceItem(14, "Silver Shard Puzzle 6", GameObject.Find("World/Region2/(R5B) (Fragment 6)/Fragment 6").transform, Vector3.zero);
-            PlaceItem(15, "Silver Shard Puzzle 7", GameObject.Find("World/Region2/Sector 2/(R10-D)>(R11-D) (Fragment 7)/Fragment 7").transform, Vector3.zero);
-            PlaceItem(16, "Silver Shard Puzzle 8", GameObject.Find("World/Region2/(R7E) (Fragment8)/Fragment 8").transform, Vector3.zero);
+            PlaceItem(12, "Silver Shard Puzzle 4", SceneSearcher.Find("World/Region2/Sector 1/(R1-E) (Fragment4)/Fragment 4"), Vector3.zero);
+            PlaceItem(13, "Silver Shard Puzzle 5", SceneSearcher.Find("World/Region2/(R7-A) (Fragment 5)/Fragment 5"), Vector3.zero);
+            PlaceItem(14, "Silver Shard Puzzle 6", SceneSearcher.Find("World/Region2/(R5B) (Fragment 6)/Fragment 6"), Vector3.zero);
+            PlaceItem(15, "Silver Shard Puzzle 7", SceneSearcher.Find("World/Region2/Sector 2/(R10-D)>(R11-D) (Fragment 7)/Fragment 7"), Vector3.zero);
+            PlaceItem(16, "Silver Shard Puzzle 8", SceneSearcher.Find("World/Region2/(R7E) (Fragment8)/Fragment 8"), Vector3.zero);
 
             locId = 17;
             name = "Silver Shard Puzzle 9";
             try {
-                GameObject shard9 = GameObject.Find("World/Region2/(R7F) (Fragment9)/Fragment  9");
+                GameObject shard9 = SceneSearcher.Find("World/Region2/(R7F) (Fragment9)/Fragment  9")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = shard9.transform.position;
@@ -110,18 +110,18 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            PlaceItem(18, "Silver Shard Puzzle 15", GameObject.Find("World/Region2/(R12B) (Fragment 15)/Fragment 15").transform, Vector3.zero);
-            PlaceItem(19, "Smile Token Puzzle 3", GameObject.Find("World/Region2/Sector 2/(R7-F)(Secret)/SMIlE III").transform, Vector3.zero);
-            PlaceItem(20, "Smile Token Puzzle 6", GameObject.Find("World/Region2/(R10-A)(SMILE VI)/SMIlE VI").transform, Vector3.zero);
-            PlaceItem(21, "Smile Token Puzzle 8", GameObject.Find("World/Region2/Sector 1/(SMILE VIII)/SMIlE VIII").transform, Vector3.zero);
-            PlaceItem(22, "Flower Puzzle Reward", GameObject.Find("World/Region2/Sector 2/(R11-E)>(R20-E)  (Shadow Rush)/SMILE X ROOM/SMIlE X").transform, Vector3.zero);
-            PlaceItem(23, "Gilded Serpent Reward", GameObject.Find("World/Region2/(R10A) (Boss2)/Grapple Worm").transform, Vector3.zero);
-            PlaceItem(24, "Cameo Room Pickup", GameObject.Find("World/Region2/Sector 1/(R5-D) (Cameo Room)/propellerHat").transform, Vector3.zero);
+            PlaceItem(18, "Silver Shard Puzzle 15", SceneSearcher.Find("World/Region2/(R12B) (Fragment 15)/Fragment 15"), Vector3.zero);
+            PlaceItem(19, "Smile Token Puzzle 3", SceneSearcher.Find("World/Region2/Sector 2/(R7-F)(Secret)/SMIlE III"), Vector3.zero);
+            PlaceItem(20, "Smile Token Puzzle 6", SceneSearcher.Find("World/Region2/(R10-A)(SMILE VI)/SMIlE VI"), Vector3.zero);
+            PlaceItem(21, "Smile Token Puzzle 8", SceneSearcher.Find("World/Region2/Sector 1/(SMILE VIII)/SMIlE VIII"), Vector3.zero);
+            PlaceItem(22, "Flower Puzzle Reward", SceneSearcher.Find("World/Region2/Sector 2/(R11-E)>(R20-E)  (Shadow Rush)/SMILE X ROOM/SMIlE X"), Vector3.zero);
+            PlaceItem(23, "Gilded Serpent Reward", SceneSearcher.Find("World/Region2/(R10A) (Boss2)/Grapple Worm"), Vector3.zero);
+            PlaceItem(24, "Cameo Room Pickup", SceneSearcher.Find("World/Region2/Sector 1/(R5-D) (Cameo Room)/propellerHat"), Vector3.zero);
 
             locId = 25;
             name = "Car Hall Pickup";
             try {
-                GameObject coneHat = GameObject.Find("World/Region2/Sector 2/(R7-F)(Secret)/Car grouping/coneHat");
+                GameObject coneHat = SceneSearcher.Find("World/Region2/Sector 2/(R7-F)(Secret)/Car grouping/coneHat")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = coneHat.transform.position;
@@ -135,12 +135,12 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            PlaceItem(26, "Near Shooters Pickup", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (6)").transform, new Vector3(-2f, 0f, 0f));
-            PlaceItem(27, "Collapsed Tunnel Pickup", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (7)").transform, Vector3.zero);
-            PlaceItem(28, "Nest Room Pickup", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (9)").transform, Vector3.zero);
-            PlaceItem(29, "Serpent Boss Room Pickup", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (10)").transform, Vector3.zero);
-            PlaceItem(30, "Shadow Chase Reward", GameObject.Find("World/Region2/Sector 2/(R11-E)>(R20-E)  (Shadow Rush)/Dash Attack Orb").transform, Vector3.zero);
-            PlaceItem(31, "Water Room Pickup", GameObject.Find("World/Region2/Sector 4/(WATER ROOM)/topHat").transform, Vector3.zero);
+            PlaceItem(26, "Near Shooters Pickup", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed (6)"), new Vector3(-2f, 0f, 0f));
+            PlaceItem(27, "Collapsed Tunnel Pickup", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed (7)"), Vector3.zero);
+            PlaceItem(28, "Nest Room Pickup", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed (9)"), Vector3.zero);
+            PlaceItem(29, "Serpent Boss Room Pickup", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed (10)"), Vector3.zero);
+            PlaceItem(30, "Shadow Chase Reward", SceneSearcher.Find("World/Region2/Sector 2/(R11-E)>(R20-E)  (Shadow Rush)/Dash Attack Orb"), Vector3.zero);
+            PlaceItem(31, "Water Room Pickup", SceneSearcher.Find("World/Region2/Sector 4/(WATER ROOM)/topHat"), Vector3.zero);
 
             locId = 32;
             name = "George Reward 1";
@@ -166,12 +166,12 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            PlaceItem(34, "Shadow Chase Pickup", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (8)").transform, Vector3.zero);
+            PlaceItem(34, "Shadow Chase Pickup", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed (8)"), Vector3.zero);
 
             locId = 35;
             name = "Master Puzzle 1";
             try {
-                GameObject cube1 = GameObject.Find("World/Region2/Sector 2/R10-C (Map Room)/Cube");
+                GameObject cube1 = SceneSearcher.Find("World/Region2/Sector 2/R10-C (Map Room)/Cube")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = cube1.transform.position;
@@ -183,12 +183,12 @@ namespace ApGlyphs {
             }
 
             // Region 3
-            PlaceItem(36, "Green Stone Trial", GameObject.Find("World/Region3/Green/(R4G)>(R3F) (GLYPHSTONE)/GlyphStone").transform, Vector3.zero);
+            PlaceItem(36, "Green Stone Trial", SceneSearcher.Find("World/Region3/Green/(R4G)>(R3F) (GLYPHSTONE)/GlyphStone"), Vector3.zero);
 
             locId = 37;
             name = "Blue Stone Trial";
             try {
-                GameObject blueStone = GameObject.Find("World/Region3/Blue/(R12G)>(R13F) (GLYPHSTONE)/GlyphStone");
+                GameObject blueStone = SceneSearcher.Find("World/Region3/Blue/(R12G)>(R13F) (GLYPHSTONE)/GlyphStone")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = blueStone.transform.position;
@@ -202,7 +202,7 @@ namespace ApGlyphs {
             locId = 38;
             name = "Red Stone Trial";
             try {
-                GameObject redStone = GameObject.Find("World/Region3/Red/(R7K)>(R9K) (GLYPHSTONE)/GlyphStone");
+                GameObject redStone = SceneSearcher.Find("World/Region3/Red/(R7K)>(R9K) (GLYPHSTONE)/GlyphStone")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = redStone.transform.position;
@@ -213,13 +213,13 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            PlaceItem(39, "Silver Shard Puzzle 10", GameObject.Find("World/Region3/Blue/(R14A) (Fragment 10)/Fragment 10").transform, Vector3.zero);
-            PlaceItem(40, "Silver Shard Puzzle 11", GameObject.Find("World/Region3/Green/(R2C) (Fragment 11)/Fragment 11").transform, Vector3.zero);
+            PlaceItem(39, "Silver Shard Puzzle 10", SceneSearcher.Find("World/Region3/Blue/(R14A) (Fragment 10)/Fragment 10"), Vector3.zero);
+            PlaceItem(40, "Silver Shard Puzzle 11", SceneSearcher.Find("World/Region3/Green/(R2C) (Fragment 11)/Fragment 11"), Vector3.zero);
 
             locId = 41;
             name = "Silver Shard Puzzle 12";
             try {
-                GameObject shard12 = GameObject.Find("World/Region3/Black/(R9C) (Fragment 12)/Fragment 12");
+                GameObject shard12 = SceneSearcher.Find("World/Region3/Black/(R9C) (Fragment 12)/Fragment 12")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = shard12.transform.position;
@@ -231,14 +231,14 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            PlaceItem(42, "Silver Shard Puzzle 13", GameObject.Find("World/Region3/Red/(R9G) (Fragment 13)/Fragment 13").transform, Vector3.zero);
-            PlaceItem(43, "Silver Shard Puzzle 14", GameObject.Find("World/Region3/Blue/(R14E) (Fragment 14)/Fragment 14").transform, Vector3.zero);
-            PlaceItem(44, "Smile Token Puzzle 2", GameObject.Find("World/Region3/Black/(R6D) (SMILE II)/SMILE II").transform, Vector3.zero);
+            PlaceItem(42, "Silver Shard Puzzle 13", SceneSearcher.Find("World/Region3/Red/(R9G) (Fragment 13)/Fragment 13"), Vector3.zero);
+            PlaceItem(43, "Silver Shard Puzzle 14", SceneSearcher.Find("World/Region3/Blue/(R14E) (Fragment 14)/Fragment 14"), Vector3.zero);
+            PlaceItem(44, "Smile Token Puzzle 2", SceneSearcher.Find("World/Region3/Black/(R6D) (SMILE II)/SMILE II"), Vector3.zero);
 
             locId = 45;
             name = "Smile Token Puzzle 7";
             try {
-                GameObject token7 = GameObject.Find("World/Region3/Blue/(SMILE VII)/SMILE VII");
+                GameObject token7 = SceneSearcher.Find("World/Region3/Blue/(SMILE VII)/SMILE VII")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(token7.transform);    // used to follow token positon but at the cost of not appearing with other AP items in heiarchy tree
                 apItem.transform.position = token7.transform.position;
@@ -249,7 +249,7 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            GameObject collapseController = GameObject.Find("World/Region3/Black/(R7D)>(R9F) The False Primary Glyph/Collapse Sequence Controller");
+            GameObject collapseController = SceneSearcher.Find("World/Region3/Black/(R7D)>(R9F) The False Primary Glyph/Collapse Sequence Controller")?.gameObject;
             if (!collapseController) MelonLogger.Msg("Collapse controller not found");
 
             locId = 46;
@@ -266,16 +266,16 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            PlaceItem(47, "Room Below Wizard Pickup", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (2)").transform, new Vector3(-2f, 2f, 0f));
-            PlaceItem(48, "Master Puzzle 3", GameObject.Find("World/Region3/Red/(R11J) (CUBE III)/Cube III").transform, Vector3.zero);
+            PlaceItem(47, "Room Below Wizard Pickup", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed (2)"), new Vector3(-2f, 2f, 0f));
+            PlaceItem(48, "Master Puzzle 3", SceneSearcher.Find("World/Region3/Red/(R11J) (CUBE III)/Cube III"), Vector3.zero);
 
             // Region 4
-            PlaceItem(49, "Spearman Reward", GameObject.Find("World/Region2/Sector 3/(R1E) (Parry)/Parry").transform, Vector3.zero);
+            PlaceItem(49, "Spearman Reward", SceneSearcher.Find("World/Region2/Sector 3/(R1E) (Parry)/Parry"), Vector3.zero);
 
             locId = 50;
             name = "Multipary Gold Shard Puzzle";
             try {
-                GameObject gold2 = GameObject.Find("World/Region2/Sector 3/(R-1H) (GOLDEN FRAGMENT II)/Gold Fragment II");
+                GameObject gold2 = SceneSearcher.Find("World/Region2/Sector 3/(R-1H) (GOLDEN FRAGMENT II)/Gold Fragment II")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = gold2.transform.position;
@@ -287,12 +287,12 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            PlaceItem(51, "Platforming Gold Shard Room", GameObject.Find("World/Region2/Sector 3/(R-4F) (GOLD FRAGMENT I)/Gold Fragment").transform, Vector3.zero);
+            PlaceItem(51, "Platforming Gold Shard Room", SceneSearcher.Find("World/Region2/Sector 3/(R-4F) (GOLD FRAGMENT I)/Gold Fragment"), Vector3.zero);
 
             locId = 52;
             name = "Flower Puzzle Reward";
             try {
-                GameObject gold3 = GameObject.Find("World/Region2/Sector 3/(R-4H)(Flower)/Gold Fragment III");
+                GameObject gold3 = SceneSearcher.Find("World/Region2/Sector 3/(R-4H)(Flower)/Gold Fragment III")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = gold3.transform.position;
@@ -304,19 +304,19 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            PlaceItem(53, "Smile Token Puzzle 4", GameObject.Find("World/Region2/Sector 3/(R-4C) (SMILE IV)/SMIlE IV").transform, Vector3.zero);
-            PlaceItem(54, "Smile Token Puzzle 5", GameObject.Find("World/Region2/Sector 3/(R2D) (Smile V)/SMIlE V").transform, Vector3.zero);
-            PlaceItem(55, "On top of the Rosetta Stone Pickup", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (4)").transform, new Vector3(-1f, -1f, 0f));
-            PlaceItem(56, "Long Parry Platforming Room Pickup", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (5)").transform, new Vector3(2f, 2f, 0f));
+            PlaceItem(53, "Smile Token Puzzle 4", SceneSearcher.Find("World/Region2/Sector 3/(R-4C) (SMILE IV)/SMIlE IV"), Vector3.zero);
+            PlaceItem(54, "Smile Token Puzzle 5", SceneSearcher.Find("World/Region2/Sector 3/(R2D) (Smile V)/SMIlE V"), Vector3.zero);
+            PlaceItem(55, "On top of the Rosetta Stone Pickup", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed (4)"), new Vector3(-1f, -1f, 0f));
+            PlaceItem(56, "Long Parry Platforming Room Pickup", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed (5)"), new Vector3(2f, 2f, 0f));
 
             // Dark Region
-            PlaceItem(57, "Secret Room Pickup", GameObject.Find("World/Region2/Lab/(R13i)>(R15G)/fezHat").transform, Vector3.zero);
-            PlaceItem(58, "Large Room Pickup in the Corner", GameObject.Find("World/Region2/(R5-b)/Seeds/Seed (3)").transform, new Vector3(2f, 2f, 0f));
+            PlaceItem(57, "Secret Room Pickup", SceneSearcher.Find("World/Region2/Lab/(R13i)>(R15G)/fezHat"), Vector3.zero);
+            PlaceItem(58, "Large Room Pickup in the Corner", SceneSearcher.Find("World/Region2/(R5-b)/Seeds/Seed (3)"), new Vector3(2f, 2f, 0f));
 
             locId = 59;
             name = "Null Reward";
             try {
-                GameObject nullBoss = GameObject.Find("World/Region2/Lab/(R17G) (Corrupted)/null");
+                GameObject nullBoss = SceneSearcher.Find("World/Region2/Lab/(R17G) (Corrupted)/null")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = new Vector3(741f, -96f, 0f);
@@ -328,14 +328,14 @@ namespace ApGlyphs {
             }
 
             // Smile Shop
-            GameObject purchaseTriggerObj = GameObject.Find("World/Smile Shop/OnHeld/Purchase");
+            GameObject purchaseTriggerObj = SceneSearcher.Find("World/Smile Shop/OnHeld/Purchase")?.gameObject;
             if (purchaseTriggerObj) purchaseTriggerObj.AddComponent<ShopPurchaseTrigger>();
             ShopPurchaseTrigger purchaseTrigger = purchaseTriggerObj?.GetComponent<ShopPurchaseTrigger>();
 
             locId = 60;
             name = "Smile Shop Item 1";
             try {
-                GameObject shopItem1 = GameObject.Find("World/Smile Shop/Sword ShopItem");
+                GameObject shopItem1 = SceneSearcher.Find("World/Smile Shop/Sword ShopItem")?.gameObject;
                 shopItem1.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem1.AddComponent<ApShopItem>();
                 shopItem.shopId = 1;
@@ -349,7 +349,7 @@ namespace ApGlyphs {
             locId = 61;
             name = "Smile Shop Item 2";
             try {
-                GameObject shopItem2 = GameObject.Find("World/Smile Shop/Shroud ShopItem");
+                GameObject shopItem2 = SceneSearcher.Find("World/Smile Shop/Shroud ShopItem")?.gameObject;
                 shopItem2.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem2.AddComponent<ApShopItem>();
                 shopItem.shopId = 2;
@@ -363,7 +363,7 @@ namespace ApGlyphs {
             locId = 62;
             name = "Smile Shop Item 3";
             try {
-                GameObject shopItem3 = GameObject.Find("World/Smile Shop/Magic Recharge ShopItem");
+                GameObject shopItem3 = SceneSearcher.Find("World/Smile Shop/Magic Recharge ShopItem")?.gameObject;
                 shopItem3.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem3.AddComponent<ApShopItem>();
                 shopItem.shopId = 3;
@@ -377,7 +377,7 @@ namespace ApGlyphs {
             locId = 63;
             name = "Smile Shop Item 4";
             try {
-                GameObject shopItem4 = GameObject.Find("World/Smile Shop/Parry Recharge ShopItem");
+                GameObject shopItem4 = SceneSearcher.Find("World/Smile Shop/Parry Recharge ShopItem")?.gameObject;
                 shopItem4.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem4.AddComponent<ApShopItem>();
                 shopItem.shopId = 4;
@@ -391,7 +391,7 @@ namespace ApGlyphs {
             locId = 64;
             name = "Dash Puzzle Reward";
             try {
-                GameObject partyHat = GameObject.Find("World/Smile Shop/Hat room/Pedestals/partyHat pickup");
+                GameObject partyHat = SceneSearcher.Find("World/Smile Shop/Hat room/Pedestals/partyHat pickup")?.gameObject;
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = partyHat.transform.position;
@@ -402,7 +402,7 @@ namespace ApGlyphs {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
 
-            if (!betweenListener) betweenListener = GameObject.Find("Manager intro")?.GetComponent<BetweenListener>();
+            if (!betweenListener) betweenListener = SceneSearcher.Find("Manager intro")?.GetComponent<BetweenListener>();
 
             locId = 65;
             name = "Between Construct";
