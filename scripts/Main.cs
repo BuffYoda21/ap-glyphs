@@ -5,7 +5,7 @@ using UnityEngine;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
 
-[assembly: MelonInfo(typeof(ApGlyphs.Main), "ApGlyphs", "0.2.0", "BuffYoda21")]
+[assembly: MelonInfo(typeof(ApGlyphs.Main), "ApGlyphs", "0.2.1", "BuffYoda21")]
 [assembly: MelonGame("Vortex Bros.", "GLYPHS")]
 
 namespace ApGlyphs {
