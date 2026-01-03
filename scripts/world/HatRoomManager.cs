@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using MelonLoader;
 using UnityEngine;
 
 namespace ApGlyphs {
@@ -16,11 +18,14 @@ namespace ApGlyphs {
             hats.Add("Bomb Hat", transform.Find("bomb hat")?.gameObject);
             hats.Add("Crown", transform.Find("crown")?.gameObject);
             hats.Add("Progressive Chicken Hat", transform.Find("chicken")?.gameObject);
+            scheduledSafetyUpdate = Time.time + 0.25f;
         }
 
         public void Update() {
+            if (Time.time >= scheduledSafetyUpdate) preformSafetyUpdate = true;
             if (!inventory) return;
-            if (inventory.items.Count != lastInventoryCount) {
+            if (inventory.items.Count != lastInventoryCount || preformSafetyUpdate) {
+                preformSafetyUpdate = false;
                 lastInventoryCount = inventory.items.Count;
                 foreach (string hat in hats.Keys) {
                     if (inventory.items.ContainsKey(hat) && inventory.items[hat] > 0) {
@@ -43,6 +48,8 @@ namespace ApGlyphs {
 
         private Dictionary<string, GameObject> hats = new Dictionary<string, GameObject>();
         private InventoryManager inventory;
+        private float scheduledSafetyUpdate = 0f;
+        private bool preformSafetyUpdate = false;
         private int lastInventoryCount = -1;
     }
 }

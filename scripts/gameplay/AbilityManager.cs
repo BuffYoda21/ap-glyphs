@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using HarmonyLib;
 using Il2Cpp;
+using MelonLoader;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,9 +21,15 @@ namespace ApGlyphs {
             if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             inventory.scene = scene;
             if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
-            UpdatePlayer();
+            MelonCoroutines.Start(DelayedCall());
         }
 #pragma warning restore IDE0060 // Restore unused parameter warning
+
+        // fixes the issue where the player always starts from world spawn
+        private static IEnumerator DelayedCall() {
+            yield return new WaitForSeconds(0.25f);
+            UpdatePlayer();
+        }
 
         public static void UpdatePlayer() {
             if (!sm) sm = SceneSearcher.Find("Manager intro")?.GetComponent<SaveManager>();
@@ -104,9 +112,13 @@ namespace ApGlyphs {
             if (HasMetWraithRequirement()) {
                 if (sm.playerHPBeforeCutscene < 150)
                     sm.playerHPBeforeCutscene = 150;
+                if (!wraithTrigger) wraithTrigger = SceneSearcher.Find("World/Region2/Sector 3/Primary Glyph Room/CutsceneLoader")?.gameObject;
+                if (wraithTrigger && !wraithTrigger.activeSelf) wraithTrigger.SetActive(true);
             } else {
                 if (sm.playerHPBeforeCutscene >= 150)
                     sm.playerHPBeforeCutscene = 149;
+                if (!wraithTrigger) wraithTrigger = SceneSearcher.Find("World/Region2/Sector 3/Primary Glyph Room/CutsceneLoader")?.gameObject;
+                if (wraithTrigger && wraithTrigger.activeSelf) wraithTrigger.SetActive(false);
             }
 
             sm.Save();
@@ -149,6 +161,7 @@ namespace ApGlyphs {
         private static GameObject shopItem4Square;
         private static WraithRequirement wraithRequirement = WraithRequirement.Undefined;
         private static int wraithRequirementCount = 0;
+        private static GameObject wraithTrigger;
         private enum WraithRequirement : int {
             Undefined = -1,
             None = 0,

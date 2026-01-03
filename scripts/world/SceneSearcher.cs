@@ -89,7 +89,7 @@ namespace ApGlyphs {
         }
 
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
