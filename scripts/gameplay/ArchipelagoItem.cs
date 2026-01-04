@@ -14,6 +14,7 @@ namespace ApGlyphs {
             client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
             inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             itemCache = client.client.itemCache;
+            if (alertJohn) john = SceneSearcher.Find("Clarity Figure")?.GetComponent<ClarityFigure>();
         }
 
         public void Update() {
@@ -61,6 +62,14 @@ namespace ApGlyphs {
             client.client.CollectItem(this);
             if (itemInfo.Player.Slot == client.client.SlotId) {
                 inventory.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
+                if (alertJohn && john && john.isActiveAndEnabled)
+                    AbilityManager.UpdatePlayer(false);
+                else
+                    AbilityManager.UpdatePlayer(true);
+            }
+            if (alertJohn && john && john.isActiveAndEnabled) {
+                john.PlayerSighted();
+                player.hp = player.maxHp;
             }
             MelonLogger.Msg($"{client.client.SlotName} sent {itemInfo.ItemName} to {itemInfo.Player.Name} ({itemInfo.ItemGame})");
             Destroy(gameObject);
@@ -206,5 +215,7 @@ namespace ApGlyphs {
         public long locId;
         public ScoutedItemInfo itemInfo;
         protected bool isUsingConstructedModel = false;
+        public bool alertJohn;
+        private ClarityFigure john;
     }
 }

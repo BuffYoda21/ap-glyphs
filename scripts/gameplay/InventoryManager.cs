@@ -85,7 +85,6 @@ namespace ApGlyphs {
                 else
                     this.items.Add(item, 1);
             }
-            AbilityManager.UpdatePlayer();
             SaveInventoryToFile();
         }
 

@@ -477,7 +477,18 @@ namespace ApGlyphs {
         }
 
         private static void PlaceItemsOuterVoid() {
+            APItemParent = new GameObject("AP_Items").transform;
 
+            // for some reason, sometimes there is or isnt a space between "fragment" and the number... why?
+            PlaceItem(72, "Enter Void Reward", null, Vector3.zero);
+            PlaceItem(73, "Void Gate Shard Location 1", SceneSearcher.Find("WORLD/The Chasm/(R-1B)/Tiles/Fragment 1"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true;
+            PlaceItem(74, "Void Gate Shard Location 2", SceneSearcher.Find("WORLD/The Chasm/(R0G)/Fragment 2"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
+            PlaceItem(75, "Void Gate Shard Location 3", SceneSearcher.Find("WORLD/The Chasm/(R1M)/Fragment3"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
+            PlaceItem(76, "Void Gate Shard Location 4", SceneSearcher.Find("WORLD/The Chasm/(R6J) (orb)/Fragment4"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
+            PlaceItem(77, "Void Gate Shard Location 5", SceneSearcher.Find("WORLD/The Chasm/(R11G) (heal)/Fragment5"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
+            PlaceItem(78, "Void Gate Shard Location 6", SceneSearcher.Find("WORLD/The Chasm/(R12D)/Fragment 6"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
+            PlaceItem(79, "Void Gate Shard Location 7", SceneSearcher.Find("WORLD/The Chasm/(R8A)/Fragment7"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
+            PlaceItem(80, "John Room Pickup", SceneSearcher.Find("WORLD/The Chasm/(R-2L) (John Room)/johnHat"), Vector3.zero);
         }
 
         private static void CheckForCutsceneReward(string sceneName) {

@@ -31,7 +31,9 @@ namespace ApGlyphs {
             UpdatePlayer();
         }
 
-        public static void UpdatePlayer() {
+        public static void UpdatePlayer() => UpdatePlayer(true);
+
+        public static void UpdatePlayer(bool save) {
             if (!sm) sm = SceneSearcher.Find("Manager intro")?.GetComponent<SaveManager>();
             if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             if ((scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") || !inventory || !inventory.inventoryLoaded || !sm) return;
@@ -122,7 +124,7 @@ namespace ApGlyphs {
                 if (wraithTrigger && wraithTrigger.activeSelf) wraithTrigger.SetActive(false);
             }
 
-            sm.Save();
+            if (save) sm.Save();
         }
 
         private static void GetWraithRequirement() {

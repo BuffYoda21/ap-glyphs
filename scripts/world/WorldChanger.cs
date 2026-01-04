@@ -81,7 +81,11 @@ namespace ApGlyphs {
         }
 
         private static void EditWorldOuterVoid() {
-
+            try {
+                SceneSearcher.Find("WORLD/The Chasm/(Hub) (R5E)")?.gameObject.AddComponent<VoidGateManager>();
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to add VoidGateManager: " + ex.Message);
+            }
         }
 
         private static int lastSceneHandle = -1;
