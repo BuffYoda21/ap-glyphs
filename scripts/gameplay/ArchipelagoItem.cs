@@ -21,6 +21,7 @@ namespace ApGlyphs {
             if (locId == -1) { Destroy(gameObject); return; }  // AP items must have a location id defined on creation
             if (itemInfo == null) FetchItemInfo();
             if (itemInfo == null) return;
+            if (transform.parent.name == "Heal") transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 0, 0, 0); // for boss rush checks
             if (isUsingConstructedModel) return;
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
             sr.sprite = GetItemSprite();
@@ -56,6 +57,10 @@ namespace ApGlyphs {
         public void OnTriggerEnter2D(Collider2D other) {
             if (other.gameObject.name != "Player") return;
             Collect();
+        }
+
+        public void OnDestroy() {
+            if (transform.parent.name == "Heal") transform.parent.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255); // for boss rush checks
         }
 
         public void Collect() {

@@ -478,9 +478,12 @@ namespace ApGlyphs {
 
         private static void PlaceItemsOuterVoid() {
             APItemParent = new GameObject("AP_Items").transform;
+            long locId;
+            string name;
 
-            // for some reason, sometimes there is or isnt a space between "fragment" and the number... why?
+            // Act 1
             PlaceItem(72, "Enter Void Reward", null, Vector3.zero);
+            // for some reason, sometimes there is or isnt a space between "fragment" and the number... why?
             PlaceItem(73, "Void Gate Shard Location 1", SceneSearcher.Find("WORLD/The Chasm/(R-1B)/Tiles/Fragment 1"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true;
             PlaceItem(74, "Void Gate Shard Location 2", SceneSearcher.Find("WORLD/The Chasm/(R0G)/Fragment 2"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
             PlaceItem(75, "Void Gate Shard Location 3", SceneSearcher.Find("WORLD/The Chasm/(R1M)/Fragment3"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
@@ -489,6 +492,62 @@ namespace ApGlyphs {
             PlaceItem(78, "Void Gate Shard Location 6", SceneSearcher.Find("WORLD/The Chasm/(R12D)/Fragment 6"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
             PlaceItem(79, "Void Gate Shard Location 7", SceneSearcher.Find("WORLD/The Chasm/(R8A)/Fragment7"), Vector3.zero).GetComponent<ArchipelagoItem>().alertJohn = true; ;
             PlaceItem(80, "John Room Pickup", SceneSearcher.Find("WORLD/The Chasm/(R-2L) (John Room)/johnHat"), Vector3.zero);
+
+            // Act 2
+            PlaceItem(81, "Free Item", null, new Vector3(890f, -64.75f, 0f));
+
+            locId = 82;
+            name = "Boss Rush Heal 1";
+            try {
+                GameObject heal = SceneSearcher.Find("WORLD/Redemption/(Forsaken Arena) (R16-B)/Boss Rush/Captain Construct/Construct Reward Item + nextArena/Heal")?.gameObject;
+                GameObject apItem = new GameObject($"{locId}_{name}");
+                apItem.transform.SetParent(heal.transform);
+                apItem.transform.position = heal.transform.position;
+                apItem.AddComponent<ArchipelagoItem>().locId = locId;
+            } catch (Exception ex) {
+                MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
+            }
+
+            locId = 83;
+            name = "Boss Rush Heal 2";
+            try {
+                GameObject heal = SceneSearcher.Find("WORLD/Redemption/(Forsaken Arena) (R16-B)/Boss Rush/Champion Serpent/Serpent Reward Item/Heal")?.gameObject;
+                GameObject apItem = new GameObject($"{locId}_{name}");
+                apItem.transform.SetParent(heal.transform);
+                apItem.transform.position = heal.transform.position;
+                apItem.AddComponent<ArchipelagoItem>().locId = locId;
+            } catch (Exception ex) {
+                MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
+            }
+
+            locId = 84;
+            name = "Boss Rush Heal 3";
+            try {
+                GameObject heal = SceneSearcher.Find("WORLD/Redemption/(Forsaken Arena) (R16-B)/Boss Rush/Wizard/Wizard Reward Item + nextArena/Heal")?.gameObject;
+                GameObject apItem = new GameObject($"{locId}_{name}");
+                apItem.transform.SetParent(heal.transform);
+                apItem.transform.position = heal.transform.position;
+                apItem.AddComponent<ArchipelagoItem>().locId = locId;
+            } catch (Exception ex) {
+                MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
+            }
+
+            locId = 85;
+            name = "Boss Rush Heal 4";
+            try {
+                GameObject heal = SceneSearcher.Find("WORLD/Redemption/(Forsaken Arena) (R16-B)/Boss Rush/GlitchBoss/Glitch Boss Reward Item/Heal")?.gameObject;
+                GameObject apItem = new GameObject($"{locId}_{name}");
+                apItem.transform.SetParent(heal.transform);
+                apItem.transform.position = heal.transform.position;
+                apItem.AddComponent<ArchipelagoItem>().locId = locId;
+            } catch (Exception ex) {
+                MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
+            }
+
+            PlaceItem(86, "Pink Bow Pickup", null, new Vector3(865f, -66f, 0f));
+
+            // Act 3
+            PlaceItem(87, "Preminition Reward", null, new Vector3(1486f, -64.75f, 0f));
         }
 
         private static void CheckForCutsceneReward(string sceneName) {
