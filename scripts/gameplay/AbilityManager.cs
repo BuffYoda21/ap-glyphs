@@ -38,6 +38,7 @@ namespace ApGlyphs {
             if (!player) player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
             if (!player) return;
             if (wraithRequirement == WraithRequirement.Undefined) GetWraithRequirement();
+            ClarityAltarManager.CheckAltarActivation();
 
             //PlayerPrefs.SetString("Unlocked-map", "true");    // doesn't work for some reason. ItemChanger.cs moves map to player on load now as a workaround
             player.mapDisabled = true;
