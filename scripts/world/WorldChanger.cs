@@ -1,6 +1,10 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using HarmonyLib;
+using Il2Cpp;
 using MelonLoader;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,6 +17,8 @@ namespace ApGlyphs {
         public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
+
+            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
 
             if (scene.name == "Game")
                 EditWorldGame();
@@ -70,6 +76,24 @@ namespace ApGlyphs {
             }
 
             try {
+                Transform tileParent = SceneSearcher.Find("World/Smile Shop/Tiles");
+                List<Transform> pedestals = new List<Transform>();
+                for (int i = 0; i < tileParent.childCount; i++) {
+                    Transform child = tileParent.GetChild(i);
+                    if (child.name == "Pedestal") pedestals.Add(child);
+                }
+                pedestals.Sort((a, b) => a.transform.position.x.CompareTo(b.transform.position.x));
+                for (int i = 0; i < pedestals.Count; i++) {
+                    Transform pedestal = pedestals[i];
+                    BuildText bt = pedestal.GetChild(0).GetComponent<BuildText>();
+                    bt.text = "" + Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[i]);
+                    bt.placed = false;
+                }
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to update Smile Shop price display: " + ex.Message);
+            }
+
+            try {
                 SceneSearcher.Find("World/Smile Shop/Hat room/Pedestals")?.gameObject.AddComponent<HatRoomManager>();
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to add HatRoomManager: " + ex.Message);
@@ -94,6 +118,7 @@ namespace ApGlyphs {
             }
         }
 
+        private static ClientWrapper client;
         private static int lastSceneHandle = -1;
     }
 }

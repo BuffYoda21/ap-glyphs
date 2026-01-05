@@ -2,6 +2,7 @@ using System;
 using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -339,7 +340,7 @@ namespace ApGlyphs {
                 shopItem1.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem1.AddComponent<ApShopItem>();
                 shopItem.shopId = 1;
-                shopItem.price = 2;
+                shopItem.price = Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
             } catch (Exception ex) {
@@ -353,7 +354,7 @@ namespace ApGlyphs {
                 shopItem2.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem2.AddComponent<ApShopItem>();
                 shopItem.shopId = 2;
-                shopItem.price = 4;
+                shopItem.price = Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
             } catch (Exception ex) {
@@ -367,7 +368,7 @@ namespace ApGlyphs {
                 shopItem3.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem3.AddComponent<ApShopItem>();
                 shopItem.shopId = 3;
-                shopItem.price = 2;
+                shopItem.price = Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
             } catch (Exception ex) {
@@ -381,7 +382,7 @@ namespace ApGlyphs {
                 shopItem4.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem4.AddComponent<ApShopItem>();
                 shopItem.shopId = 4;
-                shopItem.price = 2;
+                shopItem.price = Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
             } catch (Exception ex) {

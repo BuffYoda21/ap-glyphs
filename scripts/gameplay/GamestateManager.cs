@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MelonLoader;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace ApGlyphs {
@@ -25,19 +26,18 @@ namespace ApGlyphs {
             spentTokens = 0;
             foreach (int itemId in purchasedItemIds) {
                 if (itemCache.checkedLocations.Contains(itemId + 59)) {
-                    // will need to change when price randomization is implemented
                     switch (itemId) {
                         case 1:
-                            spentTokens += 2;
+                            spentTokens += Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[itemId - 1]);
                             break;
                         case 2:
-                            spentTokens += 4;
+                            spentTokens += Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[itemId - 1]);
                             break;
                         case 3:
-                            spentTokens += 2;
+                            spentTokens += Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[itemId - 1]);
                             break;
                         case 4:
-                            spentTokens += 2;
+                            spentTokens += Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[itemId - 1]);
                             break;
                     }
                 }
