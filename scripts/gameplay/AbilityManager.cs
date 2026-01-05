@@ -125,6 +125,8 @@ namespace ApGlyphs {
             }
 
             if (save) sm.Save();
+
+            if (player.GetComponent<VesselEnemy>() && player.GetComponent<VesselEnemy>().enabled) player.hp = 0;
         }
 
         private static void GetWraithRequirement() {
