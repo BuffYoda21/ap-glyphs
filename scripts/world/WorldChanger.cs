@@ -74,6 +74,12 @@ namespace ApGlyphs {
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to add HatRoomManager: " + ex.Message);
             }
+
+            try {
+                SceneSearcher.Find("World/Smile Shop/Smilemask Room/Smile Mask")?.gameObject.AddComponent<ApSmileMask>();
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to add ApSmileMask: " + ex.Message);
+            }
         }
 
         private static void EditWorldMemory() {
