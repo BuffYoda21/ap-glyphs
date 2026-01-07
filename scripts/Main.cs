@@ -37,8 +37,6 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<VoidGateManager>();
             ClassInjector.RegisterTypeInIl2Cpp<WizardTriggerManager>();
 
-            SpriteCache.LoadSprites();
-
             isInitialized = true;
         }
 

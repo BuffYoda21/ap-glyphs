@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using MelonLoader;
+using MelonLoader.TinyJSON;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
     public static class SpriteCache {
@@ -45,16 +48,29 @@ namespace ApGlyphs {
         }
 
         public static Sprite GetSprite(string name) {
+            if (sprites == null || sprites.Count == 0) LoadSprites();
+
             if (name != null && sprites.ContainsKey(name)) return sprites[name];
             return null;
         }
 
         public static void ApplySprite(string name, SpriteRenderer sr) {
+            if (sprites == null || sprites.Count == 0) LoadSprites();
+
             if (name == null || !sprites.ContainsKey(name)) return;
             sr.sprite = sprites[name];
             if (name == "Gold Shard") sr.color = new Color32(255, 197, 0, 255);
         }
 
+        [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
+        [HarmonyPrefix]
+        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+            if (scene.handle == lastSceneHandle) return;
+            lastSceneHandle = scene.handle;
+            sprites.Clear();
+        }
+
         private static Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
+        private static int lastSceneHandle = -1;
     }
 }
