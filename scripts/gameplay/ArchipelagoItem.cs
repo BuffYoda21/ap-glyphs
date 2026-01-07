@@ -22,9 +22,17 @@ namespace ApGlyphs {
             if (itemInfo == null) FetchItemInfo();
             if (itemInfo == null) return;
             if (transform.parent.name == "Heal") transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 0, 0, 0); // for boss rush checks
-            if (isUsingConstructedModel) return;
+            if (isUsingConstructedModel || sr) return;
+            sr = gameObject.GetComponent<SpriteRenderer>();
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
-            sr.sprite = GetItemSprite();
+            string spriteName = itemInfo.ItemName;
+            if (spriteName.StartsWith("Progressive")) {
+                if (inventory.items.ContainsKey(itemInfo.ItemName))
+                    spriteName += "_" + inventory.items[itemInfo.ItemName];
+                else
+                    spriteName += "_1";
+            }
+            SpriteCache.ApplySprite(spriteName, sr);
             if (!sr.sprite)
                 if (itemInfo.Player.Slot != client.client.SlotId)
                     CreateAPLogo();

@@ -8,9 +8,6 @@ namespace ApGlyphs {
     public class ApShopItem : ArchipelagoItem {
         public new void Start() {
             base.Start();
-            sr = GetComponent<SpriteRenderer>();
-            if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
-            sr.sprite = null;
             vanillaItem = GetComponent<ShopItem>();
             displayText = transform.Find("nametext").GetComponent<BuildText>();
             displayText.text = "";
