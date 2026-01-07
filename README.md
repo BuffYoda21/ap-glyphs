@@ -1,10 +1,7 @@
 # GLYPHS Archipelago
 
 An archipelago implementation for GLYPHS by Vortex Bros.
-
-## Note
-
-This is currently an unfinished product. Expect bugs. Only locations in the main map (first two main endings) have been placed thus far. The only reachable endings at the moment are False Ending and Good Ending. Please report any bugs [here](https://github.com/BuffYoda21/ap-glyphs/issues)
+Please report any bugs [here](https://github.com/BuffYoda21/ap-glyphs/issues)
 
 ## Installation Instructions
 
