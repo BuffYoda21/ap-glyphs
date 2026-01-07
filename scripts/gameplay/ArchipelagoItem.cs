@@ -95,6 +95,8 @@ namespace ApGlyphs {
                 Destroy(gameObject);
         }
 
+        // deprecated
+        /*
         protected Sprite GetItemSprite() {
             if (itemInfo.Player.Slot != client.client.SlotId) return null;
             switch (itemInfo.ItemName) {
@@ -160,6 +162,7 @@ namespace ApGlyphs {
             }
             return null;
         }
+        */
 
         protected void CreateAPLogo() {
             const int orbCount = 6;
