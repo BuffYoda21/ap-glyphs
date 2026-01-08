@@ -32,7 +32,7 @@ namespace ApGlyphs {
                 else
                     spriteName += "_1";
             }
-            SpriteCache.ApplySprite(spriteName, sr);
+            if (itemInfo.Player.Slot == client.client.SlotId) SpriteCache.ApplySprite(spriteName, sr);
             if (!sr.sprite)
                 if (itemInfo.Player.Slot != client.client.SlotId)
                     CreateAPLogo();
