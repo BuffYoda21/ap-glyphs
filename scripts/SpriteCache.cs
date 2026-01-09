@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using MelonLoader;
-using MelonLoader.TinyJSON;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
+    [HarmonyPatch]
     public static class SpriteCache {
         public static void LoadSprites() {
             if (sprites != null && sprites.Count > 0) return;
