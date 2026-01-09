@@ -198,6 +198,23 @@ namespace ApGlyphs {
         public void CollectItem(long locId) {
             long[] locationArray = new long[1];
             locationArray[0] = locId;
+            itemCache.TryGetItem(locId, out var itemInfo);
+            string notifMsg;
+            Color notifColor;
+            if (itemInfo == null) {
+                notifMsg = "Found unknown item";
+                notifColor = Color.red;
+            } else {
+                if (itemInfo.Player.Slot == SlotId) {
+                    notifMsg = $"Found {itemInfo.ItemName}";
+                } else {
+                    notifMsg = $"Sent {itemInfo.ItemName} to {itemInfo.Player.Name}";
+                }
+                if (itemInfo.Flags.HasFlag(ItemFlags.Advancement)) notifColor = new Color32(255, 0, 163, 255); // clarity pink
+                else if (itemInfo.Flags.HasFlag(ItemFlags.Trap)) notifColor = Color.red;
+                else notifColor = Color.white;
+            }
+            NotificationManager.Notify(notifMsg, notifColor);
             session.Locations.CompleteLocationChecks(locationArray);
         }
 

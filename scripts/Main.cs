@@ -29,6 +29,7 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<InventoryManager>();
             ClassInjector.RegisterTypeInIl2Cpp<GamestateManager>();
             ClassInjector.RegisterTypeInIl2Cpp<MainThreadDispatcher>();
+            ClassInjector.RegisterTypeInIl2Cpp<NotificationManager.Notification>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnEnable>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnDestroy>();
             ClassInjector.RegisterTypeInIl2Cpp<SeedCounter>();
@@ -36,6 +37,8 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<ShopPurchaseTrigger>();
             ClassInjector.RegisterTypeInIl2Cpp<VoidGateManager>();
             ClassInjector.RegisterTypeInIl2Cpp<WizardTriggerManager>();
+
+            NotificationManager.Init();
 
             isInitialized = true;
         }
