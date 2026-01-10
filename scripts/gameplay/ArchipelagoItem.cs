@@ -28,7 +28,7 @@ namespace ApGlyphs {
             string spriteName = itemInfo.ItemName;
             if (spriteName.StartsWith("Progressive")) {
                 if (inventory.items.ContainsKey(itemInfo.ItemName))
-                    spriteName += "_" + inventory.items[itemInfo.ItemName];
+                    spriteName += "_" + (inventory.items[itemInfo.ItemName] + 1);
                 else
                     spriteName += "_1";
             }
@@ -231,7 +231,7 @@ namespace ApGlyphs {
         public long locId;
         public ScoutedItemInfo itemInfo;
         protected bool isUsingConstructedModel = false;
-        public bool alertJohn;
+        public bool alertJohn = false;
         private ClarityFigure john;
     }
 }
