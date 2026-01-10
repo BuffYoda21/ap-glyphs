@@ -7,6 +7,7 @@ using UnityEngine;
 namespace ApGlyphs {
     public class ApShopItem : ArchipelagoItem {
         public new void Start() {
+            Destroy(GetComponent<SpriteRenderer>()); // for base Ap Item class to handle sprites properly
             base.Start();
             vanillaItem = GetComponent<ShopItem>();
             displayText = transform.Find("nametext").GetComponent<BuildText>();
@@ -154,6 +155,10 @@ namespace ApGlyphs {
 
         public new void OnTriggerEnter2D(Collider2D other) {
             return;
+        }
+
+        public new void OnDestroy() {
+            apItemReaction.gameObject.SetActive(false);
         }
 
         public void Purchase() {
