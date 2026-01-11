@@ -124,9 +124,15 @@ namespace ApGlyphs {
                 if (wraithTrigger && wraithTrigger.activeSelf) wraithTrigger.SetActive(false);
             }
 
-            if (save) sm.Save();
+            if (save) FullHeal(); //sm.Save(); // Saving anywhere can break a bunch of stuff. Testing this alternative for now.
 
             if (player.GetComponent<VesselEnemy>() && player.GetComponent<VesselEnemy>().enabled) player.hp = 0;
+        }
+
+        private static void FullHeal() {
+            player.hp = player.maxHp;
+            player.shroudUsed = false;
+            player.georgeUsed = false;
         }
 
         private static void GetWraithRequirement() {
