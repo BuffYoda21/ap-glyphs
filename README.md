@@ -10,7 +10,7 @@ Please report any bugs [here](https://github.com/BuffYoda21/ap-glyphs/issues)
 3. Download the mod from the [releases](https://github.com/BuffYoda21/ap-glyphs/releases) page.
 4. Unzip ApGlyphs.zip and drop the contents in your game's `/Mods/` folder (this can be found by going to the game's settings in your steam library and selecting "Browse Local Files")
 5. Launch Glyphs and wait until it lets you skip the intro then close the game. The game may take a moment to launch if this is your first time playing Glyphs with MelonLoader installed since it needs to generate a ton of files for you. How long this takes is entirely determined by the strength of your CPU.
-6. In your `/UserData/` folder (next to your mods folder), there should now be a few new json files. Ignore `localInventory.json` as it is just to help the mod function. `Gamestate.json` keeps track of various events in your run and should be deleted when starting a new multiworld. Open `connectionConfig.json` and fill out all the neccesary information to connect to your archipelago room.
+6. In your `/UserData/` folder (next to your mods folder), there should now be a few new json files. `localInventory.json` and `Gamestate.json` store your run's data locally as you play and need to be deleted any time you start a new multiworld. You should not need to edit these directly in any way. Open `connectionConfig.json` and fill out all the neccesary information to connect to your archipelago room.
 7. Launch Glyphs again and the blue archipelago logo should light up with fancy colors indicating you are connected! If it does not then double check the information in your `connectionConfig.json` and try again.
 8. Create a new save file and enjoy!
 
