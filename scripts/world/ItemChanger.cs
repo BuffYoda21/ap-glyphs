@@ -176,7 +176,7 @@ namespace ApGlyphs {
                 GameObject apItem = new GameObject($"{locId}_{name}");
                 apItem.transform.SetParent(APItemParent);
                 apItem.transform.position = cube1.transform.position;
-                cube1.SetActive(false);
+                apItem.SetActive(false);
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 cube1.AddComponent<ReplaceOnEnable>().replacement = apItem;
             } catch (Exception ex) {
