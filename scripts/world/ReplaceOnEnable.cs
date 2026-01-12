@@ -1,8 +1,10 @@
+using MelonLoader;
 using UnityEngine;
 
 namespace ApGlyphs {
     public class ReplaceOnEnable : MonoBehaviour {
         public void OnEnable() {
+            if (!replacement) return;
             replacement.SetActive(true);
             if (doNotDestroy) return;
             if (!destroyTarget) Destroy(gameObject);
