@@ -329,7 +329,7 @@ namespace ApGlyphs {
         public ArchipelagoSession session;
         private readonly Version ArchipelagoProtocolVersion = new Version(0, 6, 5);
         public string WebHostUrl = "archipelago.gg";
-        public int WebHostPort = 0;
+        public int WebHostPort = 12345;
         public string SlotName = "player 1";
         public int SlotId = 0;
         public string password = null;
