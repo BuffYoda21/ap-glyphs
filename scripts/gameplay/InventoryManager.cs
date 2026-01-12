@@ -44,6 +44,10 @@ namespace ApGlyphs {
 
                     NotificationManager.Notify(notifMsg, notifColor);
                 }
+
+                if (itemInfo.ItemName.EndsWith("Trap")) { // itemInfo.Flags.HasFlag(ItemFlags.Trap) doesnt work for !getitem since that sends without flags
+                    TrapManager.SpawnTrap(itemInfo.ItemName);
+                }
             }
 
             if (hasNewNotifications) {
