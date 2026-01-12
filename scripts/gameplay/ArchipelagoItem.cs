@@ -168,7 +168,7 @@ namespace ApGlyphs {
             const int orbCount = 6;
             const float radius = .333f;
             const float orbSize = .6f;
-            Sprite orbSprite = CreateCircleSprite(64);
+            if (!orbSprite) orbSprite = CreateCircleSprite(64);
             List<Transform> transforms = new List<Transform>();
             for (int i = 0; i < orbCount; i++) {
                 float angleRad = Mathf.Deg2Rad * (i * 360f / orbCount + 360f / (orbCount * 2f));
@@ -233,5 +233,6 @@ namespace ApGlyphs {
         protected bool isUsingConstructedModel = false;
         public bool alertJohn = false;
         private ClarityFigure john;
+        protected static Sprite orbSprite;
     }
 }
