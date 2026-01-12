@@ -58,6 +58,12 @@ namespace ApGlyphs {
             }
 
             try {
+                SceneSearcher.Find("World/Region2/Sector 2/(R11-E)>(R20-E)  (Shadow Rush)/Tiles/Door (6)")?.gameObject.SetActive(false);
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to open post shadow chase door: " + ex.Message);
+            }
+
+            try {
                 UnityEngine.Object.Destroy(SceneSearcher.Find("World/Region3/Red/(R9J) (hidden)/Tiles/Fragment Door")?.gameObject);
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to destroy Master Puzzle 3 Door: " + ex.Message);
