@@ -184,6 +184,9 @@ namespace ApGlyphs {
 
             SlotId = session.ConnectionInfo.Slot;
 
+            if (options.ContainsKey("DeathLink") && Convert.ToBoolean(options["DeathLink"]))
+                DeathLinkManager.EnableDeathLink();
+
             await OnConnectionSuccess();
         }
 
