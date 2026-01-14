@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
@@ -57,7 +58,13 @@ namespace ApGlyphs {
         public static void ApplySprite(string name, SpriteRenderer sr) {
             if (sprites == null || sprites.Count == 0) LoadSprites();
 
-            if (name == null || !sprites.ContainsKey(name)) return;
+            if (name == null) return;
+            if (name.EndsWith("Trap")) {
+                List<Sprite> spriteList = sprites.Values.ToList();
+                sr.sprite = spriteList[UnityEngine.Random.Range(0, spriteList.Count)];
+                return;
+            }
+            if (!sprites.ContainsKey(name)) return;
             sr.sprite = sprites[name];
             if (name == "Gold Shard") sr.color = new Color32(255, 197, 0, 255);
         }

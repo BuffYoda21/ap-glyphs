@@ -147,6 +147,13 @@ namespace ApGlyphs {
                     possibleReactions.Add("that seems important");
                     possibleReactions.Add($"{itemInfo.Player.Name} will surely want that");
                 }
+                if (itemInfo.Flags.HasFlag(ItemFlags.Trap)) {
+                    // special reactions for trap ap items
+                    possibleReactions.Add("trolling again?");
+                }
+            }
+            if (itemInfo.Flags.HasFlag(ItemFlags.Trap)) {
+                possibleReactions.Add("i wouldn't do that if i were you");
             }
             apItemReaction.text = possibleReactions[UnityEngine.Random.Range(0, possibleReactions.Count)];
             apItemReaction.text = NormalizeText(apItemReaction.text);
