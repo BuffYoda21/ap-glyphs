@@ -22,6 +22,7 @@ namespace ApGlyphs {
             if (itemInfo == null) FetchItemInfo();
             if (itemInfo == null) return;
             if (transform.parent.name == "Heal") transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 0, 0, 0); // for boss rush checks
+            if (fallenBackToAPLogo) RecoverSprite();
             if (isUsingConstructedModel || sr) return;
             sr = gameObject.GetComponent<SpriteRenderer>();
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
@@ -164,7 +165,43 @@ namespace ApGlyphs {
         }
         */
 
+        protected void RecoverSprite() {
+            if (!fallenBackToAPLogo) return;
+            fallenBackToAPLogo = false;
+            if (itemInfo == null || itemInfo.Player.Slot != client.client.SlotId) return;
+
+            sr = gameObject.GetComponent<SpriteRenderer>();
+            if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
+            string spriteName = itemInfo.ItemName;
+            if (spriteName.StartsWith("Progressive")) {
+                if (inventory.items.ContainsKey(itemInfo.ItemName))
+                    spriteName += "_" + (inventory.items[itemInfo.ItemName] + 1);
+                else
+                    spriteName += "_1";
+            }
+            if (itemInfo.Player.Slot == client.client.SlotId) SpriteCache.ApplySprite(spriteName, sr);
+
+            if (!sr.sprite) {
+                switch (itemInfo.ItemName) {
+                    case "Grapple":
+                        GameObject grapple = Object.Instantiate(Resources.Load<GameObject>("prefabs/game/Grapple Worm"), transform);
+                        Destroy(grapple.GetComponent<Pickup>());
+                        break;
+                    case "Rune Cube":
+                        GameObject cube = Object.Instantiate(Resources.Load<GameObject>("prefabs/game/Cube"), transform);
+                        cube.transform.localPosition = Vector3.zero;
+                        Destroy(cube.GetComponent<Pickup>());
+                        break;
+                    default:
+                        fallenBackToAPLogo = true;
+                        break;
+                }
+                isUsingConstructedModel = true;
+            }
+        }
+
         protected void CreateAPLogo() {
+            if (itemInfo == null || itemInfo.Player.Slot == client.client.SlotId) fallenBackToAPLogo = true;
             const int orbCount = 6;
             const float radius = .333f;
             const float orbSize = .6f;
@@ -231,6 +268,7 @@ namespace ApGlyphs {
         public long locId;
         public ScoutedItemInfo itemInfo;
         protected bool isUsingConstructedModel = false;
+        protected bool fallenBackToAPLogo = false;
         public bool alertJohn = false;
         private ClarityFigure john;
         protected static Sprite orbSprite;
