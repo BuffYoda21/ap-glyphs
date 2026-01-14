@@ -1,3 +1,4 @@
+using System;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using HarmonyLib;
 using Il2Cpp;
@@ -33,8 +34,9 @@ namespace ApGlyphs {
             dl = null;
         }
 
-        [HarmonyPatch(typeof(SaveManager), "upCounter")]
-        [HarmonyPostfix]
+        [HarmonyPatch(typeof(SaveManager), "upCounter", new Type[] { typeof(string) })]
+        [HarmonyPatch(typeof(SaveManager), "upCounter", new Type[] { typeof(string), typeof(bool) })]
+        [HarmonyPrefix]
         public static void OnCounterUp(string id) {
             if (id != "TotalDeaths" || lastDeathSceneHandle == lastSceneHandle || dl == null) return;
             dl.SendDeathLink(new DeathLink(client.client.SlotName));
