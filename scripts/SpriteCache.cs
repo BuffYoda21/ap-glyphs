@@ -67,6 +67,13 @@ namespace ApGlyphs {
             if (!sprites.ContainsKey(name)) return;
             sr.sprite = sprites[name];
             if (name == "Gold Shard") sr.color = new Color32(255, 197, 0, 255);
+            if (name == "Glyphstone") {
+                switch (UnityEngine.Random.Range(0, 3)) {
+                    case 0: sr.color = new Color(0f, 1f, 0.0929f, 1f); break;
+                    case 1: sr.color = new Color(20f, 0.3467f, 1f, 1f); break;
+                    case 2: sr.color = new Color(1f, 0f, 0.0861f, 1f); break;
+                }
+            }
         }
 
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
