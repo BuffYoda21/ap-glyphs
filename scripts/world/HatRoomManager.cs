@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using HarmonyLib;
+using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace ApGlyphs {
     // attach to "Pedestals" GameObject
+    [HarmonyPatch]
     public class HatRoomManager : MonoBehaviour {
         public void Start() {
             inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
@@ -44,6 +48,13 @@ namespace ApGlyphs {
         private void ActivateHat(GameObject hat) {
             hat.GetComponent<SpriteRenderer>().enabled = true;
             hat.GetComponent<BoxCollider2D>().enabled = true;
+        }
+
+        [HarmonyPatch(typeof(HatSwap), "OnTriggerEnter2D")]
+        [HarmonyPostfix]
+        public static void OnHatSwap(Collider2D other) {
+            if (other.gameObject.name != "Player") return;
+            AbilityManager.UpdatePlayer();
         }
 
         private Dictionary<string, GameObject> hats = new Dictionary<string, GameObject>();
