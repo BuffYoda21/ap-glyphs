@@ -52,8 +52,8 @@ namespace ApGlyphs {
 
         [HarmonyPatch(typeof(HatSwap), "OnTriggerEnter2D")]
         [HarmonyPostfix]
-        public static void OnHatSwap(Collider2D other) {
-            if (other.gameObject.name != "Player") return;
+        public static void OnHatSwap(Collider2D col) {
+            if (col.gameObject.name != "Player") return;
             AbilityManager.UpdatePlayer();
         }
 
