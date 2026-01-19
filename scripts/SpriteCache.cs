@@ -66,13 +66,32 @@ namespace ApGlyphs {
             }
             if (!sprites.ContainsKey(name)) return;
             sr.sprite = sprites[name];
-            if (name == "Gold Shard") sr.color = new Color32(255, 197, 0, 255);
-            if (name == "Glyphstone") {
-                switch (UnityEngine.Random.Range(0, 3)) {
-                    case 0: sr.color = new Color(0f, 1f, 0.0929f, 1f); break;
-                    case 1: sr.color = new Color(20f, 0.3467f, 1f, 1f); break;
-                    case 2: sr.color = new Color(1f, 0f, 0.0861f, 1f); break;
-                }
+
+            switch (name) {
+                case "Gold Shard": sr.color = new Color32(255, 197, 0, 255); break;
+                case "Glyphstone":
+                    switch (UnityEngine.Random.Range(0, 3)) {
+                        case 0: sr.color = new Color(0f, 1f, 0.0929f, 1f); break;
+                        case 1: sr.color = new Color(20f, 0.3467f, 1f, 1f); break;
+                        case 2: sr.color = new Color(1f, 0f, 0.0861f, 1f); break;
+                    }
+                    break;
+                case "HP Refill":
+                    sr.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+                    break;
+                case "Smile Token":
+                    sr.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+                    if (sr.GetComponent<BoxCollider2D>())
+                        sr.GetComponent<BoxCollider2D>().size = new Vector2(2f, 2f);
+                    break;
+                case "Propeller Hat":
+                    sr.transform.localScale = new Vector3(10f, 10f, 1f);
+                    if (sr.GetComponent<BoxCollider2D>())
+                        sr.GetComponent<BoxCollider2D>().size = new Vector2(0.1f, 0.1f);
+                    break;
+                case "Void Gate Shard":
+                    sr.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
+                    break;
             }
         }
 
