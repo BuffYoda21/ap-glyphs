@@ -72,7 +72,7 @@ namespace ApGlyphs {
                 case "Glyphstone":
                     switch (UnityEngine.Random.Range(0, 3)) {
                         case 0: sr.color = new Color(0f, 1f, 0.0929f, 1f); break;
-                        case 1: sr.color = new Color(20f, 0.3467f, 1f, 1f); break;
+                        case 1: sr.color = new Color(0f, 0.3467f, 1f, 1f); break;
                         case 2: sr.color = new Color(1f, 0f, 0.0861f, 1f); break;
                     }
                     break;
