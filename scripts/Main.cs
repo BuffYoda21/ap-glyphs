@@ -5,7 +5,7 @@ using UnityEngine;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
 
-[assembly: MelonInfo(typeof(ApGlyphs.Main), "ApGlyphs", "1.1.2", "BuffYoda21")]
+[assembly: MelonInfo(typeof(ApGlyphs.Main), "ApGlyphs", "1.1.3-Beta", "BuffYoda21")]
 [assembly: MelonGame("Vortex Bros.", "GLYPHS")]
 
 namespace ApGlyphs {
@@ -15,9 +15,9 @@ namespace ApGlyphs {
         public override void OnApplicationStart() {
             if (isInitialized) return;
             var harmony = new HarmonyLib.Harmony("ApGlyphs.Patches");
-            harmony.PatchAll();
 
             // class injection here
+            ClassInjector.RegisterTypeInIl2Cpp<ApButton>();
             ClassInjector.RegisterTypeInIl2Cpp<ApShopItem>();
             ClassInjector.RegisterTypeInIl2Cpp<ApSmileMask>();
             ClassInjector.RegisterTypeInIl2Cpp<ArchipelagoItem>();
