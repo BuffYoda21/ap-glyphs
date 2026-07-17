@@ -32,6 +32,13 @@ namespace ApGlyphs {
 
             if (!randomizeColors) return false;
 
+            if (button.gameObject.GetComponent<ApButton>()) {
+                ApButton apb = button.gameObject.GetComponent<ApButton>();
+                loadedButtons.Add(apb);
+                MelonLogger.Msg($"Registed button at {apb.path} under {apb.id}.");
+                return true;
+            }
+
             string path = button.transform.name;
             Transform current = button.transform;
             while (current.parent) {
