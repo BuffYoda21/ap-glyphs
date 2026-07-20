@@ -76,6 +76,8 @@ namespace ApGlyphs {
                 MelonLogger.Msg($"Successfully unregistered button at {button.path}");
         }
 
+        public static ButtonColor GetButtonColor(int id) => colorKey[id];
+
         private static readonly Dictionary<string, int> paths = new Dictionary<string, int>() {
             {"World/Region1/(R3A)/Save Button (HDD)/Button", 0},
             {"World/Region1/(R1E)/Launcher/Button/Button", 1},
@@ -352,6 +354,7 @@ namespace ApGlyphs {
         private static bool randomizeColors = false;
         private static bool awaitingSlotData = true;
         public enum ButtonColor {
+            SAVE = -1,
             RED = 0,
             BLUE = 1,
             GREEN = 2,

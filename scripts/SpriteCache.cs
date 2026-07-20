@@ -31,6 +31,7 @@ namespace ApGlyphs {
                 {"Void Gate Shard", Resources.Load<Sprite>("sprites/items/GateFragment")},
                 {"Glyphstone", Resources.Load<Sprite>("sprites/depictions/glyphstone/GlyphStone 0")},
                 {"Seeds", Resources.Load<Sprite>("sprites/default/hats/chicken/seed")},
+                {"Button Shard", Resources.Load<Sprite>("sprites/items/SaveCrystal")},
                 {"Pink Bow", Resources.Load<Sprite>("sprites/default/hats/Pink Bow")},
                 {"Propeller Hat", Resources.Load<Sprite>("sprites/default/hats/PropellerHat")},
                 {"Traffic Cone", Resources.Load<Sprite>("sprites/default/hats/ConeHat")},
@@ -52,6 +53,8 @@ namespace ApGlyphs {
             if (sprites == null || sprites.Count == 0) LoadSprites();
 
             if (name != null && sprites.ContainsKey(name)) return sprites[name];
+
+            if (name.StartsWith("Button Shard")) return sprites["Button Shard"];
             return null;
         }
 
@@ -62,6 +65,11 @@ namespace ApGlyphs {
             if (name.EndsWith("Trap")) {
                 List<Sprite> spriteList = sprites.Values.ToList();
                 sr.sprite = spriteList[UnityEngine.Random.Range(0, spriteList.Count)];
+                return;
+            }
+            if (name.StartsWith("Button Shard")) {
+                sr.sprite = sprites["Button Shard"];
+                sr.color = ApButton.colorIndex[ButtonManager.GetButtonColor(int.Parse(name[14..]))];
                 return;
             }
             if (!sprites.ContainsKey(name)) return;

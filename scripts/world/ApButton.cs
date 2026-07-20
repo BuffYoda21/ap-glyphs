@@ -20,7 +20,8 @@ namespace ApGlyphs {
         public ButtonObj buttonObj;
         public string path = "";
 
-        private Dictionary<ButtonColor, Color> colorIndex = new Dictionary<ButtonColor, Color>() {
+        public static readonly Dictionary<ButtonColor, Color> colorIndex = new Dictionary<ButtonColor, Color>() {
+            {ButtonColor.SAVE, new Color(0.9986f, 1f, 0f, 1f)},
             {ButtonColor.RED, new Color(1f, 0f, 0f, 1f)},
             {ButtonColor.BLUE, new Color(0f, 0.6059f, 1f, 1f)},
             {ButtonColor.GREEN, new Color(0.0769f, 0.7642f, 0.0936f, 1f)},
@@ -30,6 +31,7 @@ namespace ApGlyphs {
         };
 
         private Dictionary<ButtonColor, string> typeIndex = new Dictionary<ButtonColor, string>() {
+            {ButtonColor.SAVE, ""},
             {ButtonColor.RED, ""},
             {ButtonColor.BLUE, "dash"},
             {ButtonColor.GREEN, "attack"},
