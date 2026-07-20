@@ -331,7 +331,7 @@ namespace ApGlyphs {
         public bool isConnected = false;
         private float lastConnectAttempt = -15f;
         public ArchipelagoSession session;
-        private readonly Version ArchipelagoProtocolVersion = new Version(0, 6, 5);
+        private readonly Version ArchipelagoProtocolVersion = new Version(0, 6, 7);
         public string WebHostUrl = "archipelago.gg";
         public int WebHostPort = 12345;
         public string SlotName = "player 1";
