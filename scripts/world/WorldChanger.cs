@@ -114,9 +114,13 @@ namespace ApGlyphs {
             try {
                 GameObject parryBulletRef = SceneSearcher.Find("World/Region2/Sector 3/(R3F)/ParryablePSpawner")?.GetComponent<ProjectileSpawner>()?.projectile;
                 SceneSearcher.Find("World/Region2/Sector 2/(R8-D)/ProjectileSpawner").GetComponent<ProjectileSpawner>().projectile = parryBulletRef;
+                SceneSearcher.Find("World/Region2/(R11E) < (R8E)/ProjectileSpawner").GetComponent<ProjectileSpawner>().projectile = parryBulletRef;
                 SceneSearcher.Find("World/Region3/Black/(R8C)/ProjectileSpawner").GetComponent<ProjectileSpawner>().projectile = parryBulletRef;
                 SceneSearcher.Find("World/Region3/Black/(R8C)/ProjectileSpawner (HDD)").GetComponent<ProjectileSpawner>().projectile = parryBulletRef;
                 SceneSearcher.Find("World/Region3/Black/(R8C)/ProjectileSpawner (2)").GetComponent<ProjectileSpawner>().projectile = parryBulletRef;
+                SceneSearcher.Find("World/Region3/Red/(R8G)>(R8I)/ProjectileSpawner (1)").GetComponent<ProjectileSpawner>().projectile = parryBulletRef;
+                SceneSearcher.Find("World/Region3/Red/(R8G)>(R8I)/ProjectileSpawner (2)").GetComponent<ProjectileSpawner>().projectile = parryBulletRef;
+                SceneSearcher.Find("World/Region3/Red/(R8G)>(R8I)/ProjectileSpawner (3)").GetComponent<ProjectileSpawner>().projectile = parryBulletRef;
                 SceneSearcher.Find("World/Region3/Blue/(R12E)>(R13E)/ProjectileSpawner").GetComponent<ProjectileSpawner>().projectile = parryBulletRef;
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to override bullet spawners: " + ex.Message);
