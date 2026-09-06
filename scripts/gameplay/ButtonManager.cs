@@ -27,6 +27,13 @@ namespace ApGlyphs {
                         }
                     }
                 }
+
+                if (client.slotData.TryGetValue("broken_buttons", out object rawBrokenButtonIds)) {
+                    foreach (int buttonId in ((JArray)rawBrokenButtonIds).ToObject<List<int>>()) {
+                        brokenButtonIds.Add(buttonId);
+                    }
+                }
+
                 awaitingSlotData = false;
             }
 
@@ -77,6 +84,32 @@ namespace ApGlyphs {
         }
 
         public static ButtonColor GetButtonColor(int id) => colorKey[id];
+
+        public static bool IsBroken(int id) => brokenButtonIds.Contains(id);
+
+        public static void CollectShard(int id) {
+            if (!IsBroken(id)) return;
+
+            brokenButtonIds.Remove(id);
+            foreach (ApButton button in loadedButtons) {
+                if (button.id == id) {
+                    button.Fix();
+                    break;
+                }
+            }
+        }
+
+        public static void UpdateButtons() {
+            if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
+            if (!inventory) return;
+            foreach (var (key, value) in inventory.items) {
+                MelonLogger.Msg($"{key}: {value}");
+                if (key.StartsWith("Button Shard")) {
+                    MelonLogger.Msg($"Found button shard {Convert.ToInt32(key.Split(' ')[2])}");
+                    CollectShard(Convert.ToInt32(key.Split(' ')[2]));
+                }
+            }
+        }
 
         private static readonly Dictionary<string, int> paths = new Dictionary<string, int>() {
             {"World/Region1/(R3A)/Save Button (HDD)/Button", 0},
@@ -350,7 +383,9 @@ namespace ApGlyphs {
 
         private static readonly List<ApButton> loadedButtons = new List<ApButton>();
         private static readonly Dictionary<int, ButtonColor> colorKey = new Dictionary<int, ButtonColor>();
+        private static readonly List<int> brokenButtonIds = new List<int>();
         public static NetworkClient client;
+        private static InventoryManager inventory;
         private static bool randomizeColors = false;
         private static bool awaitingSlotData = true;
         public enum ButtonColor {

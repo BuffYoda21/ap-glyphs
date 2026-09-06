@@ -34,6 +34,7 @@ namespace ApGlyphs {
         public static void UpdatePlayer() => UpdatePlayer(true);
 
         public static void UpdatePlayer(bool save) {
+            ButtonManager.UpdateButtons();
             if (!sm) sm = SceneSearcher.Find("Manager intro")?.GetComponent<SaveManager>();
             if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             if ((scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") || !inventory || !inventory.inventoryLoaded || !sm) return;

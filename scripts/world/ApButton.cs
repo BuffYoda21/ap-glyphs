@@ -6,17 +6,29 @@ using static ApGlyphs.ButtonManager;
 namespace ApGlyphs {
     public class ApButton : MonoBehaviour {
         void Start() {
-            gameObject.GetComponent<SpriteRenderer>().color = colorIndex[color];
+            isBroken = IsBroken(id);
+            SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
+            sr.color = colorIndex[color];
+            if (isBroken) sr.sprite = Resources.Load<Sprite>("sprites/platforming/Button Broken");
             if (!buttonObj) buttonObj = gameObject.GetComponent<ButtonObj>();
             if (buttonObj) buttonObj.type = typeIndex[color];
+            buttonObj.broken = isBroken;
         }
 
         void OnEnable() => Register(buttonObj);
 
         void OnDisable() => Unregister(this);
 
+        public void Fix() {
+            if (!isBroken) return;
+            isBroken = false;
+            buttonObj.broken = false;
+            gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("sprites/platforming/Button");
+        }
+
         public int id = -1;
         public ButtonColor color = ButtonColor.RED;
+        private bool isBroken = false;
         public ButtonObj buttonObj;
         public string path = "";
 
