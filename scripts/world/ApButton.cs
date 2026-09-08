@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using Il2Cpp;
+using MelonLoader;
 using UnityEngine;
 using static ApGlyphs.ButtonManager;
 
 namespace ApGlyphs {
+    [HarmonyPatch]
     public class ApButton : MonoBehaviour {
         void Start() {
             isBroken = IsBroken(id);
@@ -13,24 +16,106 @@ namespace ApGlyphs {
             if (!buttonObj) buttonObj = gameObject.GetComponent<ButtonObj>();
             if (buttonObj) buttonObj.type = typeIndex[color];
             buttonObj.broken = isBroken;
+            if (client == null) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>()?.client;
+            hasUncollectedItem = client.session.Locations.AllMissingLocations.Contains(id + 10000);
+
+            if (isBroken || hasUncollectedItem) {
+                GameObject tagObj = new GameObject("ID");
+                tagObj.transform.SetParent(gameObject.transform, false);
+                tagObj.transform.localPosition = new Vector3(0f, 1.5f, 0f);
+                tagObj.transform.rotation = Quaternion.identity;
+                idTag = tagObj.AddComponent<BuildText>();
+                idTag.text = id.ToString();
+                idTag.textsize = 0.5f;
+                idTag.center = true;
+                idTag.col = Color.white;
+                idTag.normaltext = true;
+            }
         }
 
         void OnEnable() => Register(buttonObj);
 
         void OnDisable() => Unregister(this);
 
+        [HarmonyPatch(typeof(ButtonObj), nameof(ButtonObj.OnTriggerEnter2D))]
+        [HarmonyPrefix]
+        public static void OnTriggerEnter2D(ButtonObj __instance, Collider2D other) {
+            if (!__instance || !other) return;
+            if (__instance.broken || __instance.pressed || Time.time < __instance.scenestarttime ||
+                (__instance.type == "" && !other.gameObject.GetComponent<PlayerController>()) ||
+                (__instance.type == "attack" && (!other.gameObject.GetComponent<AttackBox>() || other.gameObject.GetComponent<AttackBox>().attackType != "player")) ||
+                (__instance.type == "dash" && (!other.gameObject.GetComponent<PlayerController>() ||
+                !(Time.time < other.gameObject.GetComponent<PlayerController>().dashtimer))))
+                return;
+
+            if (__instance.type == "dashattack") {
+                PlayerController component = other.gameObject.GetComponent<PlayerController>();
+                if (!component || !(Time.time < component.dashtimer) || !(component.dashAttackHoldTime > component.dashAttackChargeMax))
+                    return;
+            }
+
+            if ((__instance.type == "enemy" && !other.gameObject.GetComponent<EnemyBase>()) ||
+                (__instance.type == "parry" && (!other.gameObject.GetComponent<Projectile>() ||
+                !other.gameObject.GetComponent<Projectile>().parryable)))
+                return;
+
+            __instance.gameObject.GetComponent<ApButton>()?.OnPress();
+        }
+
+        [HarmonyPatch(typeof(ButtonObj), nameof(ButtonObj.OnTriggerStay2D))]
+        [HarmonyPrefix]
+        public static void OnTriggerStay2D(ButtonObj __instance, Collider2D other) {
+            if (!__instance || !other) return;
+            if (!__instance.pressed && !(Time.time < __instance.scenestarttime) && __instance.type == "dashattack"
+                && (bool)other.gameObject.GetComponent<PlayerController>() && Time.time < other.gameObject.GetComponent<PlayerController>().dashtimer
+                && other.gameObject.GetComponent<PlayerController>().dashAttackHoldTime > 1f) {
+                __instance.gameObject.GetComponent<ApButton>()?.OnPress();
+            }
+        }
+
+        // Might not need this idk
+        /*
+        [HarmonyPatch(typeof(ButtonObj), nameof(ButtonObj.OnTriggerEnter2D))]
+        [HarmonyPostfix]
+        public static void OnTriggerEnter2D(ButtonObj __instance) {
+            if (__instance.broken || __instance.gameObject.GetComponent<ApButton>()?.hasUncollectedItem == true)
+                return;
+
+            Destroy(__instance.gameObject.GetComponent<ApButton>()?.idTag?.gameObject);
+        }
+
+        [HarmonyPatch(typeof(ButtonObj), nameof(ButtonObj.OnTriggerEnter2D))]
+        [HarmonyPostfix]
+        public static void OnTriggerStay2D(ButtonObj __instance) {
+            if (__instance.broken || __instance.gameObject.GetComponent<ApButton>()?.hasUncollectedItem == true)
+                return;
+
+            Destroy(__instance.gameObject.GetComponent<ApButton>()?.idTag?.gameObject);
+        }
+        */
+
+        private void OnPress() {
+            client.CollectItem(id + 10000); // CollectItem handlies invalid IDs and already collected locations but should probably rework this anyway
+            hasUncollectedItem = false;
+            if (idTag) Destroy(idTag.gameObject); // isBroken can be assumed false since that would have prevented the press
+        }
+
         public void Fix() {
             if (!isBroken) return;
             isBroken = false;
             buttonObj.broken = false;
             gameObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("sprites/platforming/Button");
+            if (!hasUncollectedItem) Destroy(idTag.gameObject);
         }
 
         public int id = -1;
         public ButtonColor color = ButtonColor.RED;
         private bool isBroken = false;
+        private bool hasUncollectedItem = false;
         public ButtonObj buttonObj;
         public string path = "";
+        private static NetworkClient client;
+        private BuildText idTag;
 
         public static readonly Dictionary<ButtonColor, Color> colorIndex = new Dictionary<ButtonColor, Color>() {
             {ButtonColor.SAVE, new Color(0.9986f, 1f, 0f, 1f)},
@@ -42,7 +127,7 @@ namespace ApGlyphs {
             {ButtonColor.BLACK, new Color(0.1604f, 0.1604f, 0.1604f, 1f)},
         };
 
-        private Dictionary<ButtonColor, string> typeIndex = new Dictionary<ButtonColor, string>() {
+        private static readonly Dictionary<ButtonColor, string> typeIndex = new Dictionary<ButtonColor, string>() {
             {ButtonColor.SAVE, ""},
             {ButtonColor.RED, ""},
             {ButtonColor.BLUE, "dash"},
