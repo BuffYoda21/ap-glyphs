@@ -200,6 +200,9 @@ namespace ApGlyphs {
         }
 
         public void CollectItem(long locId) {
+            if (!session.Locations.AllMissingLocations.Contains(locId)) // Already collected or invalid ID
+                return;
+
             long[] locationArray = new long[1];
             locationArray[0] = locId;
             itemCache.TryGetItem(locId, out var itemInfo);
