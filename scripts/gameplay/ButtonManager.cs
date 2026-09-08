@@ -42,7 +42,7 @@ namespace ApGlyphs {
             if (button.gameObject.GetComponent<ApButton>()) {
                 ApButton apb = button.gameObject.GetComponent<ApButton>();
                 loadedButtons.Add(apb);
-                MelonLogger.Msg($"Registed button at {apb.path} under {apb.id}.");
+                // MelonLogger.Msg($"Registed button at {apb.path} under {apb.id}.");
                 return true;
             }
 
@@ -64,7 +64,7 @@ namespace ApGlyphs {
                     }
                 }
             }
-            MelonLogger.Warning($"Failed to register button at {path}.");
+            // MelonLogger.Warning($"Failed to register button at {path}.");
             return false;
         }
 
@@ -75,12 +75,13 @@ namespace ApGlyphs {
             apButton.color = colorKey[id];
             apButton.path = path;
             loadedButtons.Add(apButton);
-            MelonLogger.Msg($"Registed button at {path} under {id}.");
+            // MelonLogger.Msg($"Registed button at {path} under {id}.");
         }
 
         public static void Unregister(ApButton button) {
-            if (loadedButtons.Remove(button))
-                MelonLogger.Msg($"Successfully unregistered button at {button.path}");
+            if (loadedButtons.Remove(button)) {
+                // MelonLogger.Msg($"Successfully unregistered button at {button.path}");
+            }
         }
 
         public static ButtonColor GetButtonColor(int id) => colorKey[id];
