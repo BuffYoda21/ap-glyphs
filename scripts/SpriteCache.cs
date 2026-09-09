@@ -12,7 +12,7 @@ namespace ApGlyphs {
             if (sprites != null && sprites.Count > 0) return;
 
             sprites = new Dictionary<string, Sprite>() {
-                {"Progressive Sword_1", Resources.Load<Sprite>("sprites/items/Sword Full")},
+                {"Progressive Sword_1", Resources.Load<Sprite>("sprites/items/SwordFull")},
                 {"Progressive Sword_2", Resources.Load<Sprite>("sprites/items/Sword Upgrade")},
                 {"Progressive Dash Orb_1", Resources.Load<Sprite>("sprites/items/dashorb/DashOrb")},
                 {"Progressive Dash Orb_2", Resources.Load<Sprite>("sprites/items/DashAttack")},
