@@ -104,9 +104,9 @@ namespace ApGlyphs {
             if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             if (!inventory) return;
             foreach (var (key, value) in inventory.items) {
-                MelonLogger.Msg($"{key}: {value}");
+                //MelonLogger.Msg($"{key}: {value}");
                 if (key.StartsWith("Button Shard")) {
-                    MelonLogger.Msg($"Found button shard {Convert.ToInt32(key.Split(' ')[2])}");
+                    //MelonLogger.Msg($"Found button shard {Convert.ToInt32(key.Split(' ')[2])}");
                     CollectShard(Convert.ToInt32(key.Split(' ')[2]));
                 }
             }
