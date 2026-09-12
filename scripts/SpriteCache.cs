@@ -70,6 +70,7 @@ namespace ApGlyphs {
             if (name.StartsWith("Button Shard")) {
                 sr.sprite = sprites["Button Shard"];
                 sr.color = ApButton.colorIndex[ButtonManager.GetButtonColor(int.Parse(name[14..]))];
+                sr.transform.localScale = new Vector3(0.25f, 0.25f, 1);
                 return;
             }
             if (!sprites.ContainsKey(name)) return;
