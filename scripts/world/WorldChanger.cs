@@ -31,6 +31,17 @@ namespace ApGlyphs {
 
         private static void EditWorldGame() {
             try {
+                GameObject movingPlatform = UnityEngine.Object.Instantiate(Resources.Load<GameObject>("prefabs/platforming/Platform"));
+                movingPlatform.transform.position = new Vector2(85f, -10f);
+                SlidingPlatform comp = movingPlatform.GetComponent<SlidingPlatform>();
+                comp.xv = 0f;
+                comp.yv = 1f;
+                movingPlatform.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f, 1f);
+            } catch (Exception ex) {
+                MelonLogger.Error("Failed to add moving platform: " + ex.Message);
+            }
+
+            try {
                 GameObject missedSwordTrigger = SceneSearcher.Find("World/Region1/(R3D)(sword)/SaveConditional")?.gameObject;
                 UnityEngine.Object.Destroy(missedSwordTrigger);
             } catch (Exception ex) {
