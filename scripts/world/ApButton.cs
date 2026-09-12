@@ -33,10 +33,17 @@ namespace ApGlyphs {
             }
         }
 
+        void Update() {
+            if (!hasUncollectedItem || !buttonObj || !buttonObj.pressed) return;
+            OnPress();
+        }
+
         void OnEnable() => Register(buttonObj);
 
         void OnDisable() => Unregister(this);
 
+        // Update method just does this better
+        /*
         [HarmonyPatch(typeof(ButtonObj), nameof(ButtonObj.OnTriggerEnter2D))]
         [HarmonyPrefix]
         public static void OnTriggerEnter2D(ButtonObj __instance, Collider2D other) {
@@ -72,6 +79,7 @@ namespace ApGlyphs {
                 __instance.gameObject.GetComponent<ApButton>()?.OnPress();
             }
         }
+        */
 
         // Might not need this idk
         /*
