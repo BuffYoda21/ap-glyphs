@@ -14,7 +14,6 @@ namespace ApGlyphs {
         [Obsolete]
         public override void OnApplicationStart() {
             if (isInitialized) return;
-            var harmony = new HarmonyLib.Harmony("ApGlyphs.Patches");
 
             // class injection here
             ClassInjector.RegisterTypeInIl2Cpp<ApButton>();
