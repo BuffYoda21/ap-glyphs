@@ -46,82 +46,88 @@ namespace ApGlyphs {
             List<string> possibleReactions = new List<string>();
             if (itemInfo.Player.Slot == client.client.SlotId) {
                 //reactions for vanilla items
-                switch (itemInfo.ItemName) {
-                    case "Progressive Sword":
-                        possibleReactions.Add("it is dangerous to go alone take this");
-                        break;
-                    case "Progressive Dash Orb":
-                        possibleReactions.Add("seems important");
-                        break;
-                    case "Map":
-                        possibleReactions.Add("it will let you know where you are going");
-                        break;
-                    case "Grapple":
-                        possibleReactions.Add("i promise i didn't kidnap him");
-                        break;
-                    case "Progressive Parry":
-                        possibleReactions.Add("good luck lol");
-                        break;
-                    case "Shroud":
-                        possibleReactions.Add("not a minecraft totem of undying");
-                        break;
-                    case "Progressive Essence of George":
-                        possibleReactions.Add("how did i get this? idk");
-                        break;
-                    case "Silver Shard":
-                        possibleReactions.Add("i hear that it will make you stronger");
-                        break;
-                    case "Gold Shard":
-                        possibleReactions.Add("that seems like a nice thing to have");
-                        break;
-                    case "Smile Token":
-                        possibleReactions.Add("it is not a scam i swear");
-                        break;
-                    case "Rune Cube":
-                        possibleReactions.Add("you spin me right round baby");
-                        break;
-                    case "Void Gate Shard":
-                        possibleReactions.Add("john sent this");
-                        break;
-                    case "Glyphstone":
-                        possibleReactions.Add("use its power wisely");
-                        break;
-                    case "Seeds":
-                        possibleReactions.Add("george certified");
-                        break;
-                    case "Pink Bow":
-                        possibleReactions.Add("pretty pink");
-                        break;
-                    case "Propeller Hat":
-                        possibleReactions.Add("that will not let you fly");
-                        break;
-                    case "Traffic Cone":
-                        possibleReactions.Add("why do you want that?");
-                        break;
-                    case "John Hat":
-                        possibleReactions.Add("mini john mini john");
-                        break;
-                    case "Top Hat":
-                        possibleReactions.Add("it will look great on you");
-                        break;
-                    case "Fez":
-                        possibleReactions.Add("i like fez");
-                        break;
-                    case "Party Hat":
-                        possibleReactions.Add("just make sure to clean up after yourself");
-                        break;
-                    case "Crown":
-                        possibleReactions.Add("oooh fancy");
-                        break;
-                    case "Bomb Hat":
-                        possibleReactions.Add("just don't wear it in here");
-                        break;
-                    case "Progressive Chicken Hat":
-                        possibleReactions.Add("hi george");
-                        break;
-                    case "HP Refill":
-                        possibleReactions.Add("worth it");
-                        break;
+                if (itemInfo.ItemName.StartsWith("Button Shard")) {
+                    possibleReactions.Add("i love cut content");
+                } else {
+                    switch (itemInfo.ItemName) {
+                        case "Progressive Sword":
+                            possibleReactions.Add("it is dangerous to go alone take this");
+                            break;
+                        case "Progressive Dash Orb":
+                            possibleReactions.Add("ok so now we are playing celeste huh");
+                            break;
+                        case "Map":
+                            possibleReactions.Add("if you are seeing this something has gone horribly wrong");
+                            break;
+                        case "Grapple":
+                            possibleReactions.Add("i promise i didn't kidnap him");
+                            break;
+                        case "Progressive Parry":
+                            possibleReactions.Add("every good game has a parry mechanic right?");
+                            break;
+                        case "Shroud":
+                            possibleReactions.Add("sourced from your local illager raid farm");
+                            break;
+                        case "Progressive Essence of George":
+                            possibleReactions.Add("how did i get this? idk");
+                            possibleReactions.Add("no chickens were harmed in the making of this");
+                            break;
+                        case "Silver Shard":
+                            possibleReactions.Add("knowledge is power");
+                            break;
+                        case "Gold Shard":
+                            possibleReactions.Add("knowledge but yellow");
+                            break;
+                        case "Smile Token":
+                            possibleReactions.Add("it is not a scam i swear");
+                            break;
+                        case "Rune Cube":
+                            possibleReactions.Add("you spin me right round baby");
+                            break;
+                        case "Void Gate Shard":
+                            possibleReactions.Add("john sent this");
+                            possibleReactions.Add("so what is the lore significance of this anyway?");
+                            break;
+                        case "Glyphstone":
+                            possibleReactions.Add("use its power wisely");
+                            break;
+                        case "Seeds":
+                            possibleReactions.Add("george certified");
+                            break;
+                        case "Pink Bow":
+                            possibleReactions.Add("pretty pink");
+                            break;
+                        case "Propeller Hat":
+                            possibleReactions.Add("that will not let you fly");
+                            break;
+                        case "Traffic Cone":
+                            possibleReactions.Add("why do you want that?");
+                            break;
+                        case "John Hat":
+                            possibleReactions.Add("mini john mini john");
+                            break;
+                        case "Top Hat":
+                            possibleReactions.Add("it will look great on you");
+                            break;
+                        case "Fez":
+                            possibleReactions.Add("i like fez");
+                            break;
+                        case "Party Hat":
+                            possibleReactions.Add("just make sure to clean up after yourself");
+                            break;
+                        case "Crown":
+                            possibleReactions.Add("oooh fancy");
+                            break;
+                        case "Bomb Hat":
+                            possibleReactions.Add("just don't wear it in here");
+                            break;
+                        case "Progressive Chicken Hat":
+                            possibleReactions.Add("hi george");
+                            break;
+                        case "HP Refill":
+                            possibleReactions.Add("worth it");
+                            break;
+                    }
                 }
             } else {
                 if (itemInfo.ItemGame == "GLYPHS") {
@@ -131,6 +137,10 @@ namespace ApGlyphs {
                     possibleReactions.Add("i think i recognize that one");
                     if (itemInfo.ItemName == "Smile Token") possibleReactions.Add("pay it forward");
                 } else {
+                    // feztale knighteste dread reference
+                    if (new List<string> { "fez", "undertale", "hollow knight", "celeste", "metroid dread" }.Contains(itemInfo.ItemGame.ToLower())) {
+                        possibleReactions.Add("i love feztale knighteste dread");
+                    }
                     // special reactions if ap item is not from another glyphs world
                     possibleReactions.Add($"whats a {itemInfo.ItemName}?");
                     possibleReactions.Add($"never heard of {itemInfo.ItemGame}");
