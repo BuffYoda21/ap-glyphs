@@ -9,8 +9,7 @@ using UnityEngine;
 namespace ApGlyphs {
     public class GamestateManager : MonoBehaviour {
         public void Start() {
-            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
-            if (itemCache == null) itemCache = itemCache = client.client.itemCache;
+            if (itemCache == null) itemCache = itemCache = NetworkClient.itemCache;
             LoadGamestateFromFile();
             if (!stateLoaded || itemCache == null) return;
             foreach (string flag in flags) {
@@ -28,16 +27,16 @@ namespace ApGlyphs {
                 if (itemCache.checkedLocations.Contains(itemId + 59)) {
                     switch (itemId) {
                         case 1:
-                            spentTokens += Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[itemId - 1]);
+                            spentTokens += Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[itemId - 1]);
                             break;
                         case 2:
-                            spentTokens += Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[itemId - 1]);
+                            spentTokens += Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[itemId - 1]);
                             break;
                         case 3:
-                            spentTokens += Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[itemId - 1]);
+                            spentTokens += Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[itemId - 1]);
                             break;
                         case 4:
-                            spentTokens += Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[itemId - 1]);
+                            spentTokens += Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[itemId - 1]);
                             break;
                     }
                 }
@@ -45,10 +44,8 @@ namespace ApGlyphs {
         }
 
         private void FetchGoal() {
-            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
-            if (!client) return;
             try {
-                switch ((int)client.client.options["Goal"]) {
+                switch ((int)NetworkClient.options["Goal"]) {
                     case (int)Goal.FalseEnding: goal = Goal.FalseEnding; break;
                     case (int)Goal.GoodEnding: goal = Goal.GoodEnding; break;
                     case (int)Goal.TrueEnding: goal = Goal.TrueEnding; break;
@@ -56,7 +53,7 @@ namespace ApGlyphs {
                     case (int)Goal.Epilogue: goal = Goal.Epilogue; break;
                     case (int)Goal.AllEndings: goal = Goal.AllEndings; break;
                     default:
-                        MelonLogger.Error("Failed to parse " + client.client.options["Goal"]);
+                        MelonLogger.Error("Failed to parse " + NetworkClient.options["Goal"]);
                         break;
                 }
             } catch (Exception ex) {
@@ -115,27 +112,27 @@ namespace ApGlyphs {
             switch (goal) {
                 case Goal.FalseEnding:
                     if (flags.Contains("FalseEnding"))
-                        client.client.ClearGoal();
+                        NetworkClient.ClearGoal();
                     break;
                 case Goal.GoodEnding:
                     if (flags.Contains("GoodEnding"))
-                        client.client.ClearGoal();
+                        NetworkClient.ClearGoal();
                     break;
                 case Goal.TrueEnding:
                     if (flags.Contains("TrueEnding"))
-                        client.client.ClearGoal();
+                        NetworkClient.ClearGoal();
                     break;
                 case Goal.AllStarEndings:
                     if (flags.Contains("SmilemaskEnding") && flags.Contains("PerfectClarity") && flags.Contains("OmnipotenceEnding"))
-                        client.client.ClearGoal();
+                        NetworkClient.ClearGoal();
                     break;
                 case Goal.Epilogue:
                     if (flags.Contains("EpilogueEnding"))
-                        client.client.ClearGoal();
+                        NetworkClient.ClearGoal();
                     break;
                 case Goal.AllEndings:
                     if (flags.Contains("FalseEnding") && flags.Contains("GoodEnding") && flags.Contains("TrueEnding") && flags.Contains("SmilemaskEnding") && flags.Contains("PerfectClarity") && flags.Contains("OmnipotenceEnding") && flags.Contains("EpilogueEnding"))
-                        client.client.ClearGoal();
+                        NetworkClient.ClearGoal();
                     break;
             }
         }
@@ -150,7 +147,6 @@ namespace ApGlyphs {
 
         private List<string> flags = new List<string>();
         public bool stateLoaded = false;
-        private ClientWrapper client;
         private Goal goal = Goal.None;
         private List<int> purchasedItemIds = new List<int>();
         public int spentTokens = -1;

@@ -10,12 +10,9 @@ using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 
 namespace ApGlyphs {
-    public class ClientWrapper : MonoBehaviour {
-        public void Start() {
-            client = new NetworkClient();
-            client.itemCache = itemCache;
-            client.inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-            ButtonManager.client = client;
+    public static class NetworkClient {
+        static NetworkClient() {
+            inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
 
             // retreive network info from json
             string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
@@ -26,10 +23,10 @@ namespace ApGlyphs {
             // create ConnectionConfig.json if it doesn't exist
             if (!File.Exists(settingsPath)) {
                 var defaultObj = new {
-                    WebHostUrl = client.WebHostUrl,
-                    WebHostPort = client.WebHostPort,
-                    SlotName = client.SlotName,
-                    password = client.password
+                    WebHostUrl = ConnectionInfo.WebHostUrl,
+                    WebHostPort = ConnectionInfo.WebHostPort,
+                    SlotName = ConnectionInfo.SlotName,
+                    password = ConnectionInfo.password
                 };
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(defaultObj, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(settingsPath, json);
@@ -39,66 +36,30 @@ namespace ApGlyphs {
             // read ConnectionConfig.json
             try {
                 string json = File.ReadAllText(settingsPath);
-                var root = Newtonsoft.Json.Linq.JObject.Parse(json);
-                client.WebHostUrl = root["WebHostUrl"] != null ? (string)root["WebHostUrl"] : client.WebHostUrl;
-                client.WebHostPort = root["WebHostPort"] != null ? (int)root["WebHostPort"] : client.WebHostPort;
-                client.SlotName = root["SlotName"] != null ? (string)root["SlotName"] : client.SlotName;
-                client.password = root["password"] != null ? (string)root["password"] : client.password;
+                JObject root = JObject.Parse(json);
+                ConnectionInfo.WebHostUrl = root["WebHostUrl"] != null ? (string)root["WebHostUrl"] : ConnectionInfo.WebHostUrl;
+                ConnectionInfo.WebHostPort = root["WebHostPort"] != null ? (int)root["WebHostPort"] : ConnectionInfo.WebHostPort;
+                ConnectionInfo.SlotName = root["SlotName"] != null ? (string)root["SlotName"] : ConnectionInfo.SlotName;
+                ConnectionInfo.password = root["password"] != null ? (string)root["password"] : ConnectionInfo.password;
                 MelonLogger.Msg($"Loaded ConnectionConfig.json from {settingsPath}");
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to read ConnectionConfig.json: {ex.Message}");
                 return;
             }
-
-            // start connecting to server
-            client.initialized = true;
         }
 
-        public void SetItemCacheRef(ItemCache cache) {
-            itemCache = cache;
-        }
-
-        public void Update() => client.Update();
-
-        public class ConnectionIndicator : MonoBehaviour {
-            public void SetConnectionState(bool connected) {
-                if (connected) {
-                    foreach (Image orb in this.GetComponentsInChildren<Image>()) {
-                        int id = int.Parse(orb.transform.name.Split('_')[1]);
-                        if (id == 0) orb.color = new Color32(117, 194, 117, 255);
-                        if (id == 1) orb.color = new Color32(201, 118, 130, 255);
-                        if (id == 2) orb.color = new Color32(238, 227, 145, 255);
-                        if (id == 3) orb.color = new Color32(118, 126, 189, 255);
-                        if (id == 4) orb.color = new Color32(217, 160, 125, 255);
-                        if (id == 5) orb.color = new Color32(202, 148, 194, 255);
-                    }
-                } else {
-                    foreach (Image orb in this.GetComponentsInChildren<Image>()) {
-                        orb.color = new Color32(49, 107, 132, 255);
-                    }
-                }
-            }
-        }
-
-        public NetworkClient client;
-        private ItemCache itemCache;
-    }
-
-    public class NetworkClient {
-        public void Update() {
-            if (!initialized) return;
-
+        public static void Update() {
             if (!indicator) CreateConnectionIndicator();
             if (indicator) indicator.SetConnectionState(isConnected);
 
-            if (!isConnected && !isConnecting && Time.time - lastConnectAttempt > 15) {
+            if (!isConnected && !isConnecting && Time.time - lastConnectAttempt > CONNECTION_RETRY_INTERVAL) {
                 lastConnectAttempt = Time.time;
                 isConnecting = true;
-                MelonLogger.Msg("Attempting to connect to server at " + WebHostUrl + ":" + WebHostPort);
+                MelonLogger.Msg("Attempting to connect to server at " + ConnectionInfo.WebHostUrl + ":" + ConnectionInfo.WebHostPort);
                 _ = ConnectAsync();
             } else if (isConnected) {
                 isConnected = session.Socket.Connected;
-                if (enablePeriodicSessionUpdates && !sessionUpdateInProgress && Time.time - lastSessionUpdate > SessionUpdateIntervalSeconds) {
+                if (!sessionUpdateInProgress && Time.time - lastSessionUpdate > SessionUpdateIntervalSeconds) {
                     lastSessionUpdate = Time.time;
                     sessionUpdateInProgress = true;
                     _ = RefreshSessionAsync();
@@ -106,7 +67,7 @@ namespace ApGlyphs {
             }
         }
 
-        private async Task RefreshSessionAsync() {
+        private static async Task RefreshSessionAsync() {
             try {
                 if (session == null || itemCache == null) return;
                 await itemCache.FetchItemPool(session, session.Locations.AllLocations);
@@ -117,16 +78,16 @@ namespace ApGlyphs {
             }
         }
 
-        private async Task ConnectAsync() {
-            session = ArchipelagoSessionFactory.CreateSession(WebHostUrl, WebHostPort);
+        private static async Task ConnectAsync() {
+            session = ArchipelagoSessionFactory.CreateSession(ConnectionInfo.WebHostUrl, ConnectionInfo.WebHostPort);
             LoginResult loginResult = session.TryConnectAndLogin(
                 "GLYPHS",
-                SlotName,
+                ConnectionInfo.SlotName,
                 ItemsHandlingFlags.AllItems,
-                ArchipelagoProtocolVersion,
+                AP_PROTOCOL_VERSION,
                 null,
                 null,
-                password,
+                ConnectionInfo.password,
                 true
             );
 
@@ -164,7 +125,6 @@ namespace ApGlyphs {
                 } catch (Exception ex) {
                     MelonLogger.Error($"Failed to parse slot options: {ex.Message}");
                 }
-
             }
 
             MelonLogger.Msg("Connected to Multiworld server");
@@ -183,7 +143,7 @@ namespace ApGlyphs {
             isConnected = true;
             isConnecting = false;
 
-            SlotId = session.ConnectionInfo.Slot;
+            ConnectionInfo.SlotId = session.ConnectionInfo.Slot;
 
             if (options.ContainsKey("DeathLink") && Convert.ToBoolean(options["DeathLink"]))
                 DeathLinkManager.EnableDeathLink();
@@ -191,15 +151,11 @@ namespace ApGlyphs {
             await OnConnectionSuccess();
         }
 
-        private async Task OnConnectionSuccess() {
-            await itemCache.FetchItemPool(session, session.Locations.AllLocations);
-        }
+        private static async Task OnConnectionSuccess() => await itemCache.FetchItemPool(session, session.Locations.AllLocations);
 
-        public void CollectItem(ArchipelagoItem apItem) {
-            CollectItem(apItem.locId);
-        }
+        public static void CollectItem(ArchipelagoItem apItem) => CollectItem(apItem.locId);
 
-        public void CollectItem(long locId) {
+        public static void CollectItem(long locId) {
             if (!session.Locations.AllMissingLocations.Contains(locId)) // Already collected or invalid ID
                 return;
 
@@ -212,7 +168,7 @@ namespace ApGlyphs {
                 notifMsg = "Found unknown item";
                 notifColor = Color.red;
             } else {
-                if (itemInfo.Player.Slot == SlotId) {
+                if (itemInfo.Player.Slot == ConnectionInfo.SlotId) {
                     notifMsg = $"Found {itemInfo.ItemName}";
                 } else {
                     notifMsg = $"Sent {itemInfo.ItemName} to {itemInfo.Player.Name}";
@@ -225,11 +181,9 @@ namespace ApGlyphs {
             session.Locations.CompleteLocationChecks(locationArray);
         }
 
-        public void ClearGoal() {
-            session.SetGoalAchieved();
-        }
+        public static void ClearGoal() => session.SetGoalAchieved();
 
-        private void CreateConnectionIndicator() {
+        private static void CreateConnectionIndicator() {
             GameObject canvasObj = new GameObject("AP Canvas");
             UnityEngine.Object.DontDestroyOnLoad(canvasObj);
             Canvas canvas = canvasObj.AddComponent<Canvas>();
@@ -272,7 +226,7 @@ namespace ApGlyphs {
             foreach (RectTransform rect in orbRects) {
                 rect.SetAsLastSibling();
             }
-            indicator = rootObj.AddComponent<ClientWrapper.ConnectionIndicator>();
+            indicator = rootObj.AddComponent<ConnectionIndicator>();
         }
 
         private static Sprite CreateCircleSprite(int diameter) {
@@ -296,14 +250,27 @@ namespace ApGlyphs {
             );
         }
 
-        /*
-        // that's not how that works bruh
-        public void DEBUG_get_roomstate() {
-            MelonLogger.Msg("DEBUG: " + session.RoomState.ToString());
+        public class ConnectionIndicator : MonoBehaviour {
+            public void SetConnectionState(bool connected) {
+                if (connected) {
+                    foreach (Image orb in GetComponentsInChildren<Image>()) {
+                        int id = int.Parse(orb.transform.name.Split('_')[1]);
+                        if (id == 0) orb.color = new Color32(117, 194, 117, 255);
+                        if (id == 1) orb.color = new Color32(201, 118, 130, 255);
+                        if (id == 2) orb.color = new Color32(238, 227, 145, 255);
+                        if (id == 3) orb.color = new Color32(118, 126, 189, 255);
+                        if (id == 4) orb.color = new Color32(217, 160, 125, 255);
+                        if (id == 5) orb.color = new Color32(202, 148, 194, 255);
+                    }
+                } else {
+                    foreach (Image orb in GetComponentsInChildren<Image>()) {
+                        orb.color = new Color32(49, 107, 132, 255);
+                    }
+                }
+            }
         }
-        */
 
-        public void DEBUG_get_unchecked_locations() {
+        public static void DEBUG_get_unchecked_locations() {
             MelonLogger.Msg("DEBUG:");
             MelonLogger.Msg("Unchecked locations:");
             foreach (var location in session.Locations.AllMissingLocations) {
@@ -311,7 +278,7 @@ namespace ApGlyphs {
             }
         }
 
-        public void DEBUG_get_checked_locations() {
+        public static void DEBUG_get_checked_locations() {
             MelonLogger.Msg("DEBUG:");
             MelonLogger.Msg("Checked locations:");
             foreach (var location in session.Locations.AllLocationsChecked) {
@@ -319,37 +286,39 @@ namespace ApGlyphs {
             }
         }
 
-        public void DEBUG_collect_location(string location) {
+        public static void DEBUG_collect_location(string location) {
             DEBUG_collect_location(session.Locations.GetLocationIdFromName("GLYPHS", location));
         }
 
-        public void DEBUG_collect_location(long location) {
+        public static void DEBUG_collect_location(long location) {
             long[] locationArray = new long[1];
             locationArray[0] = location;
             session.Locations.CompleteLocationChecks(locationArray);
         }
 
-        public bool initialized = false;
-        private bool isConnecting = false;
-        public bool isConnected = false;
-        private float lastConnectAttempt = -15f;
-        public ArchipelagoSession session;
-        private readonly Version ArchipelagoProtocolVersion = new Version(0, 6, 7);
-        public string WebHostUrl = "archipelago.gg";
-        public int WebHostPort = 12345;
-        public string SlotName = "player 1";
-        public int SlotId = 0;
-        public string password = null;
-        public Dictionary<string, object> slotData;
-        public Dictionary<string, object> options;
-        public ClientWrapper.ConnectionIndicator indicator;
-        public ItemCache itemCache;
-        public InventoryManager inventory;
+        private static bool isConnecting = false;
+        public static bool isConnected = false;
+        private static float lastConnectAttempt = -15f;
+        public static ArchipelagoSession session;
+        private static readonly Version AP_PROTOCOL_VERSION = new Version(0, 6, 8);
+        public static Dictionary<string, object> slotData;
+        public static Dictionary<string, object> options;
+        private static ConnectionIndicator indicator;
+        public static ItemCache itemCache = new ItemCache();
+        public static InventoryManager inventory;
+        private const float CONNECTION_RETRY_INTERVAL = 15f;
+
+        public struct ConnectionInfo {
+            public static string WebHostUrl = "archipelago.gg";
+            public static int WebHostPort = 12345;
+            public static string SlotName = "player 1";
+            public static int SlotId = 0;
+            public static string password = null;
+        }
 
         // Periodic session update control
-        private float lastSessionUpdate = -999f;
-        public float SessionUpdateIntervalSeconds = 5f;
-        private bool sessionUpdateInProgress = false;
-        public bool enablePeriodicSessionUpdates = true;
+        private static float lastSessionUpdate = -999f;
+        public static float SessionUpdateIntervalSeconds = 5f;
+        private static bool sessionUpdateInProgress = false;
     }
 }

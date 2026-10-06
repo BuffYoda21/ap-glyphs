@@ -7,10 +7,9 @@ namespace ApGlyphs {
     public class WizardTriggerManager : MonoBehaviour {
         public void Start() {
             if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
             trigger = transform.Find("Cutscene Conditional 1/Cutscene Conditional 2/Cutscene Conditional 3/CutsceneTrigger")?.gameObject;
             try {
-                wizGlyphstones = Convert.ToInt32(client.client.options["WizardRequirements"]);
+                wizGlyphstones = Convert.ToInt32(NetworkClient.options["WizardRequirements"]);
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to get WizardRequirements: " + ex.Message);
                 wizGlyphstones = 3;
@@ -32,6 +31,5 @@ namespace ApGlyphs {
         private GameObject falsePrimaryGlyph;
         private int wizGlyphstones;
         public InventoryManager inventory;
-        public ClientWrapper client;
     }
 }

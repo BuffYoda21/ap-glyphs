@@ -1,10 +1,6 @@
-using UnityEngine;
-
 namespace ApGlyphs {
     public class BombHatPickupReplacer : ReplaceOnEnable {
-        public new void OnEnable() {
-            return;
-        }
+        public new void OnEnable() { }
 
         public void Update() {
             if (destroyTarget) return;

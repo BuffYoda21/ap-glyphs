@@ -9,15 +9,13 @@ using UnityEngine.SceneManagement;
 namespace ApGlyphs {
     [HarmonyPatch]
     public class ItemChanger {
-#pragma warning disable IDE0060 // Remove unused parameter warning
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        public static void OnSceneLoaded(Scene scene) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
 
             if (!gamestate) gamestate = SceneSearcher.Find("Manager intro")?.GetComponent<GamestateManager>();
-            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
 
             if (scene.name == "Game")
                 PlaceItemsGame();
@@ -28,7 +26,6 @@ namespace ApGlyphs {
             else
                 CheckForCutsceneReward(scene.name);
         }
-#pragma warning restore IDE0060 // Restore unused parameter warning
 
         private static void PlaceItemsGame() {
             APItemParent = new GameObject("AP_Items").transform;
@@ -340,7 +337,7 @@ namespace ApGlyphs {
                 shopItem1.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem1.AddComponent<ApShopItem>();
                 shopItem.shopId = 1;
-                shopItem.price = Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
+                shopItem.price = Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
             } catch (Exception ex) {
@@ -354,7 +351,7 @@ namespace ApGlyphs {
                 shopItem2.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem2.AddComponent<ApShopItem>();
                 shopItem.shopId = 2;
-                shopItem.price = Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
+                shopItem.price = Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
             } catch (Exception ex) {
@@ -368,7 +365,7 @@ namespace ApGlyphs {
                 shopItem3.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem3.AddComponent<ApShopItem>();
                 shopItem.shopId = 3;
-                shopItem.price = Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
+                shopItem.price = Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
             } catch (Exception ex) {
@@ -382,7 +379,7 @@ namespace ApGlyphs {
                 shopItem4.name = $"{locId}_{name}";
                 ApShopItem shopItem = shopItem4.AddComponent<ApShopItem>();
                 shopItem.shopId = 4;
-                shopItem.price = Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
+                shopItem.price = Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
             } catch (Exception ex) {
@@ -576,11 +573,10 @@ namespace ApGlyphs {
                     gamestate.SaveFlag("EpilogueEnding");
                     break;
                 case "Escape":
-                    if (!client) return;
-                    if (!client.client.itemCache.checkedLocations.Contains(69))
-                        client.client.CollectItem(69);
-                    if (!client.client.itemCache.checkedLocations.Contains(70))
-                        client.client.CollectItem(70);
+                    if (!NetworkClient.itemCache.checkedLocations.Contains(69))
+                        NetworkClient.CollectItem(69);
+                    if (!NetworkClient.itemCache.checkedLocations.Contains(70))
+                        NetworkClient.CollectItem(70);
                     break;
             }
         }
@@ -605,7 +601,6 @@ namespace ApGlyphs {
         private static int lastSceneHandle = -1;
         private static GamestateManager gamestate;
         private static BetweenListener betweenListener;
-        private static ClientWrapper client;
         private static Transform APItemParent;
     }
 }

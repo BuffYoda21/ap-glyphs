@@ -106,7 +106,7 @@ namespace ApGlyphs {
 
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        public static void OnSceneLoaded(Scene scene) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
             sprites.Clear();

@@ -11,9 +11,8 @@ namespace ApGlyphs {
             col = GetComponent<BoxCollider2D>();
             if (!col) col = gameObject.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
-            client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
             inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-            itemCache = client.client.itemCache;
+            itemCache = NetworkClient.itemCache;
             if (alertJohn) john = SceneSearcher.Find("Clarity Figure")?.GetComponent<ClarityFigure>();
         }
 
@@ -33,9 +32,9 @@ namespace ApGlyphs {
                 else
                     spriteName += "_1";
             }
-            if (itemInfo.Player.Slot == client.client.SlotId) SpriteCache.ApplySprite(spriteName, sr);
+            if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) SpriteCache.ApplySprite(spriteName, sr);
             if (!sr.sprite)
-                if (itemInfo.Player.Slot != client.client.SlotId)
+                if (itemInfo.Player.Slot != NetworkClient.ConnectionInfo.SlotId)
                     CreateAPLogo();
                 else {
                     switch (itemInfo.ItemName) {
@@ -73,8 +72,8 @@ namespace ApGlyphs {
         }
 
         public void Collect() {
-            client.client.CollectItem(this);
-            if (itemInfo.Player.Slot == client.client.SlotId) {
+            NetworkClient.CollectItem(this);
+            if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) {
                 inventory.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
                 if (alertJohn && john && john.isActiveAndEnabled)
                     AbilityManager.UpdatePlayer(false);
@@ -85,7 +84,7 @@ namespace ApGlyphs {
                 john.PlayerSighted();
                 player.hp = player.maxHp;
             }
-            MelonLogger.Msg($"{client.client.SlotName} sent {itemInfo.ItemName} to {itemInfo.Player.Name} ({itemInfo.ItemGame})");
+            MelonLogger.Msg($"{NetworkClient.ConnectionInfo.SlotName} sent {itemInfo.ItemName} to {itemInfo.Player.Name} ({itemInfo.ItemGame})");
             Destroy(gameObject);
         }
 
@@ -96,79 +95,11 @@ namespace ApGlyphs {
                 Destroy(gameObject);
         }
 
-        // deprecated
-        /*
-        protected Sprite GetItemSprite() {
-            if (itemInfo.Player.Slot != client.client.SlotId) return null;
-            switch (itemInfo.ItemName) {
-                case "Progressive Sword":
-                    if (!player.hasWeapon) return Resources.Load<Sprite>("sprites/items/SwordFull");
-                    return Resources.Load<Sprite>("sprites/items/Sword Upgrade");
-                case "Progressive Dash Orb":
-                    if (player.midairJumpsMax == 0) return Resources.Load<Sprite>("sprites/items/dashorb/DashOrb");
-                    if (!player.dashAttack) return Resources.Load<Sprite>("sprites/items/DashAttack");
-                    return Resources.Load<Sprite>("sprites/items/DashAttackUpgrade");
-                case "Map":
-                    return Resources.Load<Sprite>("sprites/items/Map");
-                // constructed model bundled in prefabs
-                // case "Grapple":
-                //     return Resources.Load<Sprite>("sprites/items/Grapple");
-                case "Progressive Parry":
-                    if (!player.hasParry) return Resources.Load<Sprite>("sprites/items/parry/Parry");
-                    return Resources.Load<Sprite>("sprites/items/Parry Upgrade");
-                case "Shroud":
-                    return Resources.Load<Sprite>("sprites/items/Shroud");
-                case "Progressive Essence of George":
-                    return Resources.Load<Sprite>("sprites/default/hats/chicken/egg");
-                case "Silver Shard":
-                    return Resources.Load<Sprite>("sprites/items/Fragment");
-                case "Gold Shard":
-                    sr.color = new UnityEngine.Color32(255, 197, 0, 255);
-                    return Resources.Load<Sprite>("sprites/items/Fragment");
-                case "Smile Token":
-                    return Resources.Load<Sprite>("sprites/default/smile coin");
-                // constructed model bundled in prefabs
-                // case: "Rune Cube":
-                //    return Resources.Load<Sprite>("sprites/items/Rune Cube");
-                case "Void Gate Shard":
-                    return Resources.Load<Sprite>("sprites/items/GateFragment");
-                case "Glyphstone":
-                    return Resources.Load<Sprite>("sprites/depictions/glyphstone/GlyphStone 0");
-                case "Seeds":
-                    return Resources.Load<Sprite>("sprites/default/hats/chicken/seed");
-                case "Pink Bow":
-                    return Resources.Load<Sprite>("sprites/default/hats/Pink Bow");
-                case "Propeller Hat":
-                    return Resources.Load<Sprite>("sprites/default/hats/PropellerHat");
-                case "Traffic Cone":
-                    return Resources.Load<Sprite>("sprites/default/hats/ConeHat");
-                case "John Hat":
-                    return Resources.Load<Sprite>("sprites/default/hats/JohnHat");
-                case "Top Hat":
-                    return Resources.Load<Sprite>("sprites/default/hats/Top Hat");
-                case "Fez":
-                    return Resources.Load<Sprite>("sprites/default/hats/Fez");
-                case "Party Hat":
-                    return Resources.Load<Sprite>("sprites/default/hats/PartyHat");
-                case "Bomb Hat":
-                    return Resources.Load<Sprite>("sprites/default/hats/bombHat");
-                case "Progressive Chicken Hat":
-                    if (!inventory.items.ContainsKey("Progressive Chicken Hat") || inventory.items["Progressive Chicken Hat"] == 0)
-                        return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken");
-                    return Resources.Load<Sprite>("sprites/default/hats/chicken/chicken 1");
-                case "Crown":
-                    return Resources.Load<Sprite>("sprites/default/hats/crown");
-                case "HP Refill":
-                    return Resources.Load<Sprite>("sprites/items/Heal");
-            }
-            return null;
-        }
-        */
-
+        // I don't think this is used anymore. Was an attempt to fix a bug that didn't work iirc but keeping it around for now.
         protected void RecoverSprite() {
             if (!fallenBackToAPLogo) return;
             fallenBackToAPLogo = false;
-            if (itemInfo == null || itemInfo.Player.Slot != client.client.SlotId) return;
+            if (itemInfo == null || itemInfo.Player.Slot != NetworkClient.ConnectionInfo.SlotId) return;
 
             sr = gameObject.GetComponent<SpriteRenderer>();
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
@@ -179,16 +110,16 @@ namespace ApGlyphs {
                 else
                     spriteName += "_1";
             }
-            if (itemInfo.Player.Slot == client.client.SlotId) SpriteCache.ApplySprite(spriteName, sr);
+            if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) SpriteCache.ApplySprite(spriteName, sr);
 
             if (!sr.sprite) {
                 switch (itemInfo.ItemName) {
                     case "Grapple":
-                        GameObject grapple = Object.Instantiate(Resources.Load<GameObject>("prefabs/game/Grapple Worm"), transform);
+                        GameObject grapple = Instantiate(Resources.Load<GameObject>("prefabs/game/Grapple Worm"), transform);
                         Destroy(grapple.GetComponent<Pickup>());
                         break;
                     case "Rune Cube":
-                        GameObject cube = Object.Instantiate(Resources.Load<GameObject>("prefabs/game/Cube"), transform);
+                        GameObject cube = Instantiate(Resources.Load<GameObject>("prefabs/game/Cube"), transform);
                         cube.transform.localPosition = Vector3.zero;
                         Destroy(cube.GetComponent<Pickup>());
                         break;
@@ -201,7 +132,7 @@ namespace ApGlyphs {
         }
 
         protected void CreateAPLogo() {
-            if (itemInfo == null || itemInfo.Player.Slot == client.client.SlotId) fallenBackToAPLogo = true;
+            if (itemInfo == null || itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) fallenBackToAPLogo = true;
             const int orbCount = 6;
             const float radius = .333f;
             const float orbSize = .6f;
@@ -262,7 +193,6 @@ namespace ApGlyphs {
         protected PlayerController player;
         protected BoxCollider2D col;
         protected SpriteRenderer sr;
-        protected ClientWrapper client;
         protected ItemCache itemCache;
         protected InventoryManager inventory;
         public long locId;

@@ -1,4 +1,3 @@
-using Il2Cpp;
 using UnityEngine;
 
 namespace ApGlyphs {

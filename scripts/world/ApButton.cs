@@ -16,8 +16,7 @@ namespace ApGlyphs {
             if (!buttonObj) buttonObj = gameObject.GetComponent<ButtonObj>();
             if (buttonObj) buttonObj.type = typeIndex[color];
             buttonObj.broken = isBroken;
-            if (client == null) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>()?.client;
-            hasUncollectedItem = client.session.Locations.AllMissingLocations.Contains(id + 10000);
+            hasUncollectedItem = NetworkClient.session.Locations.AllMissingLocations.Contains(id + 10000);
 
             if (isBroken || hasUncollectedItem) {
                 GameObject tagObj = new GameObject("ID");
@@ -103,7 +102,7 @@ namespace ApGlyphs {
         */
 
         private void OnPress() {
-            client.CollectItem(id + 10000); // CollectItem handlies invalid IDs and already collected locations but should probably rework this anyway
+            NetworkClient.CollectItem(id + 10000); // CollectItem handlies invalid IDs and already collected locations but should probably rework this anyway
             hasUncollectedItem = false;
             if (idTag) Destroy(idTag.gameObject); // isBroken can be assumed false since that would have prevented the press
         }
@@ -122,7 +121,6 @@ namespace ApGlyphs {
         private bool hasUncollectedItem = false;
         public ButtonObj buttonObj;
         public string path = "";
-        private static NetworkClient client;
         private BuildText idTag;
 
         public static readonly Dictionary<ButtonColor, Color> colorIndex = new Dictionary<ButtonColor, Color>() {

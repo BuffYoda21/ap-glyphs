@@ -17,9 +17,7 @@ namespace ApGlyphs {
         }
 
         public static void EnableDeathLink() {
-            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
-            if (!client) return;
-            dl = client.client.session.CreateDeathLinkService();
+            dl = NetworkClient.session.CreateDeathLinkService();
             dl.OnDeathLinkReceived += (deathLinkObject) => {
                 if (!player) return;
                 lastDeathSceneHandle = lastSceneHandle; // prevents firing deathlink again when receiving deathlink
@@ -39,13 +37,12 @@ namespace ApGlyphs {
         [HarmonyPrefix]
         public static void OnCounterUp(string id) {
             if (id != "TotalDeaths" || lastDeathSceneHandle == lastSceneHandle || dl == null) return;
-            dl.SendDeathLink(new DeathLink(client.client.SlotName));
+            dl.SendDeathLink(new DeathLink(NetworkClient.ConnectionInfo.SlotName));
         }
 
 
         private static int lastSceneHandle = -1;
         private static int lastDeathSceneHandle = -1;
-        private static ClientWrapper client;
         private static PlayerController player;
         private static DeathLinkService dl;
     }

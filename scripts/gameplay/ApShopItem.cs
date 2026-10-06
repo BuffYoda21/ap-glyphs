@@ -38,13 +38,13 @@ namespace ApGlyphs {
                 itemHeld = false;
             }
             if (itemInfo == null || displayText.text != "") return;
-            if (itemInfo.Player.Slot != client.client.SlotId)
+            if (itemInfo.Player.Slot != NetworkClient.ConnectionInfo.SlotId)
                 displayText.text = itemInfo.Player.Name + "s ";
             displayText.text += itemInfo.ItemName;
             displayText.text = NormalizeText(displayText.text);
             if (apItemReaction.text != "") return;
             List<string> possibleReactions = new List<string>();
-            if (itemInfo.Player.Slot == client.client.SlotId) {
+            if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) {
                 //reactions for vanilla items
                 if (itemInfo.ItemName.StartsWith("Button Shard")) {
                     possibleReactions.Add("i love cut content");

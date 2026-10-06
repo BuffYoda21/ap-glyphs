@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 namespace ApGlyphs {
     // attach to "Pedestals" GameObject

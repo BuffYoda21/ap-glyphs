@@ -20,7 +20,6 @@ namespace ApGlyphs {
             if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
             if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             inventory.scene = scene;
-            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
             MelonCoroutines.Start(DelayedCall());
         }
 #pragma warning restore IDE0060 // Restore unused parameter warning
@@ -137,14 +136,14 @@ namespace ApGlyphs {
         }
 
         private static void GetWraithRequirement() {
-            wraithRequirement = (WraithRequirement)Convert.ToInt32(client.client.options["WraithRequirements"]);
+            wraithRequirement = (WraithRequirement)Convert.ToInt32(NetworkClient.options["WraithRequirements"]);
             switch (wraithRequirement) {
                 case WraithRequirement.Vanilla: wraithRequirement = WraithRequirement.SilverShard; wraithRequirementCount = 15; break;
-                case WraithRequirement.SilverShard: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithSilverCount"]); break;
-                case WraithRequirement.GoldShard: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithGoldCount"]); break;
-                case WraithRequirement.SmileToken: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithSmileCount"]); break;
-                case WraithRequirement.RuneCube: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithRuneCount"]); break;
-                case WraithRequirement.GlyphStone: wraithRequirementCount = Convert.ToInt32(client.client.options["WraithGlyphstoneCount"]); break;
+                case WraithRequirement.SilverShard: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithSilverCount"]); break;
+                case WraithRequirement.GoldShard: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithGoldCount"]); break;
+                case WraithRequirement.SmileToken: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithSmileCount"]); break;
+                case WraithRequirement.RuneCube: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithRuneCount"]); break;
+                case WraithRequirement.GlyphStone: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithGlyphstoneCount"]); break;
             }
         }
 
@@ -165,7 +164,6 @@ namespace ApGlyphs {
 
         private static SaveManager sm;
         private static InventoryManager inventory;
-        private static ClientWrapper client;
         private static PlayerController player;
         private static Scene scene;
         private static int lastSceneHandle = -1;

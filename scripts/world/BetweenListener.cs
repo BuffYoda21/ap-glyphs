@@ -66,7 +66,7 @@ namespace ApGlyphs {
     public static class BetweenFountainRoomPatch {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        public static void OnSceneLoaded(Scene scene) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
             if (!betweenListener) betweenListener = SceneSearcher.Find("Manager intro")?.GetComponent<BetweenListener>();
@@ -75,7 +75,7 @@ namespace ApGlyphs {
 
         [HarmonyPatch(typeof(BetweenManager), "GenerateFountainRoom")]
         [HarmonyPostfix]
-        public static void GenerateFountainRoom(BetweenManager __instance) {
+        public static void GenerateFountainRoom() {
             if (!betweenListener) betweenListener = SceneSearcher.Find("Manager intro")?.GetComponent<BetweenListener>();
             if (!betweenListener) return;
             betweenListener.PlaceFountainRoomItem(SceneSearcher.Find("Fountain(Clone)")?.gameObject);

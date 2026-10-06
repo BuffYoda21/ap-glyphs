@@ -13,10 +13,7 @@ using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
     public class InventoryManager : MonoBehaviour {
-        public void Start() {
-            LoadInventoryFromFile();
-            client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
-        }
+        public void Start() => LoadInventoryFromFile();
 
         public void Update() {
             if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
@@ -34,7 +31,7 @@ namespace ApGlyphs {
                 ItemInfo itemInfo = importedItems[i];
                 hasNewNotifications = true;
 
-                if (itemInfo.Player.Slot != client.client.SlotId) {
+                if (itemInfo.Player.Slot != NetworkClient.ConnectionInfo.SlotId) {
                     string notifMsg = $"Received {itemInfo.ItemName} from {itemInfo.Player.Name}";
                     UnityEngine.Color notifColor;
 
@@ -148,7 +145,6 @@ namespace ApGlyphs {
         private PlayerController player;
         public Scene scene;
         private int lastNotifiedItemIndex = -1;
-        private ClientWrapper client;
 
         [Serializable]
         private class InventorySaveData {

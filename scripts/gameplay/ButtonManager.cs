@@ -17,9 +17,9 @@ namespace ApGlyphs {
             if (!button) return false;
 
             if (awaitingSlotData) {
-                randomizeColors = Convert.ToBoolean(client.options["ButtonColorsRandomized"]);
+                randomizeColors = Convert.ToBoolean(NetworkClient.options["ButtonColorsRandomized"]);
                 if (randomizeColors) {
-                    if (client.slotData.TryGetValue("button_colors", out object rawColors)) {
+                    if (NetworkClient.slotData.TryGetValue("button_colors", out object rawColors)) {
                         Dictionary<int, int> buttonColors = ((JObject)rawColors).ToObject<Dictionary<int, int>>();
                         foreach (var (key, value) in buttonColors) {
                             if (value < 0 || value > 5) continue;
@@ -28,7 +28,7 @@ namespace ApGlyphs {
                     }
                 }
 
-                if (client.slotData.TryGetValue("broken_buttons", out object rawBrokenButtonIds)) {
+                if (NetworkClient.slotData.TryGetValue("broken_buttons", out object rawBrokenButtonIds)) {
                     foreach (int buttonId in ((JArray)rawBrokenButtonIds).ToObject<List<int>>()) {
                         brokenButtonIds.Add(buttonId);
                     }
@@ -385,7 +385,6 @@ namespace ApGlyphs {
         private static readonly List<ApButton> loadedButtons = new List<ApButton>();
         private static readonly Dictionary<int, ButtonColor> colorKey = new Dictionary<int, ButtonColor>();
         private static readonly List<int> brokenButtonIds = new List<int>();
-        public static NetworkClient client;
         private static InventoryManager inventory;
         private static bool randomizeColors = false;
         private static bool awaitingSlotData = true;

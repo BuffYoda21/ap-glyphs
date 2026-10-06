@@ -18,8 +18,6 @@ namespace ApGlyphs {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
 
-            if (!client) client = SceneSearcher.Find("Manager intro")?.GetComponent<ClientWrapper>();
-
             if (scene.name == "Game")
                 EditWorldGame();
             else if (scene.name == "Memory")
@@ -103,7 +101,7 @@ namespace ApGlyphs {
                 for (int i = 0; i < pedestals.Count; i++) {
                     Transform pedestal = pedestals[i];
                     BuildText bt = pedestal.GetChild(0).GetComponent<BuildText>();
-                    bt.text = "" + Convert.ToInt32((client.client.slotData["shop_prices"] as JArray)[i]);
+                    bt.text = "" + Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[i]);
                     bt.placed = false;
                 }
             } catch (Exception ex) {
@@ -149,8 +147,6 @@ namespace ApGlyphs {
                 MelonLogger.Error("Failed to add VoidGateManager: " + ex.Message);
             }
         }
-
-        private static ClientWrapper client;
         private static int lastSceneHandle = -1;
     }
 }
