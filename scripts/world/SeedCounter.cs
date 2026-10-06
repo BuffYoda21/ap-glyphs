@@ -2,28 +2,26 @@ using UnityEngine;
 
 namespace ApGlyphs {
     public class SeedCounter : MonoBehaviour {
-        public void Start() => unhiddenPosition = transform.position;
+        public void Start() {
+            unhiddenPosition = transform.position;
+            transform.position = hiddenPosition;
+        }
 
         public void Update() {
-            if (isHidden) return;
+            if (Time.time < nextUpdate) return;
+            nextUpdate = Time.time + UPDATE_INTERVAL;
             if (InventoryManager.items.TryGetValue("Seeds", out int count) && count >= 10)
                 Appear();
-            else
-                Hide();
         }
 
         private void Appear() {
             transform.position = unhiddenPosition;
-            isHidden = false;
-        }
-
-        private void Hide() {
-            transform.position = hiddenPosition;
-            isHidden = true;
+            Destroy(this);
         }
 
         public Vector3 hiddenPosition;
         public Vector3 unhiddenPosition;
-        private bool isHidden = false;
+        private float nextUpdate = -1f;
+        private const float UPDATE_INTERVAL = 5f;
     }
 }

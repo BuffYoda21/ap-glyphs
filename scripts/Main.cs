@@ -27,10 +27,7 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnEnable>();
             ClassInjector.RegisterTypeInIl2Cpp<ReplaceOnDestroy>();
             ClassInjector.RegisterTypeInIl2Cpp<SeedCounter>();
-            ClassInjector.RegisterTypeInIl2Cpp<ShopCounter>();
             ClassInjector.RegisterTypeInIl2Cpp<ShopPurchaseTrigger>();
-            ClassInjector.RegisterTypeInIl2Cpp<VoidGateManager>();
-            ClassInjector.RegisterTypeInIl2Cpp<WizardTriggerManager>();
 
             NotificationManager.Init();
 

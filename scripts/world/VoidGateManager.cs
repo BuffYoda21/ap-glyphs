@@ -1,32 +1,46 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
-    // to be placed on WORLD/The Chasm/(Hub) (R5E)
-    public class VoidGateManager : MonoBehaviour {
-        public void Start() {
-            closedBg = transform.Find("R5E")?.gameObject;
-            gate = transform.Find("Tiles/Gate")?.gameObject;
-            openEffect = transform.Find("Light Ring")?.gameObject;
-            portal = transform.Find("Tiles/Portal")?.gameObject;
-            for (int i = 0; i < transform.childCount; i++) {
-                Transform child = transform.GetChild(i);
+    public static class VoidGateManager {
+        [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
+        [HarmonyPostfix]
+        public static void OnSceneLoaded(Scene scene) {
+            gateObjectsToDisable.Clear();
+            gateObjectsToEnable.Clear();
+            voidGate = null;
+            johnRoom = null;
+            if (scene.name != "Outer Void") return;
+
+            voidGate = SceneSearcher.Find(VOID_GATE_TRANSFORM_PATH);
+            johnRoom = SceneSearcher.Find(JOHN_ROOM_TRANSFORM_PATH);
+            gateObjectsToDisable = new List<GameObject>() {
+                voidGate.Find("R5E")?.gameObject,
+                voidGate.Find("Tiles/Gate")?.gameObject,
+                johnRoom.Find("R-2L")?.gameObject,
+                johnRoom.Find("Gate")?.gameObject,
+            };
+            gateObjectsToEnable = new List<GameObject>() {
+                voidGate.Find("Light Ring")?.gameObject,
+                voidGate.Find("Tiles/Portal")?.gameObject,
+                johnRoom.Find("CutsceneTrigger")?.gameObject,
+            };
+            for (int i = 0; i < voidGate.childCount; i++) {
+                Transform child = voidGate.GetChild(i);
                 if (child.name.StartsWith("GateIndicator")) gateIndicators.Add(child.gameObject);
             }
-            johnRoomParent = SceneSearcher.Find("WORLD/The Chasm/(R-2L) (John Room)");
-            johnRoomClosedBg = johnRoomParent.Find("R-2L")?.gameObject;
-            johnRoomGate = johnRoomParent.Find("Gate")?.gameObject;
-            johnRoomCustsceneTrigger = johnRoomParent.Find("CutsceneTrigger")?.gameObject;
-            gateIndicatorOnSprite = Resources.Load<Sprite>("sprites/depictions/gatefragment/GateFragmentON");
-            for (int i = 0; i < johnRoomParent.childCount; i++) {
-                Transform child = johnRoomParent.GetChild(i);
+            if (!gateIndicatorOnSprite)
+                gateIndicatorOnSprite = Resources.Load<Sprite>("sprites/depictions/gatefragment/GateFragmentON");
+            for (int i = 0; i < johnRoom.childCount; i++) {
+                Transform child = johnRoom.GetChild(i);
                 if (child.name.StartsWith("GateIndicator")) johnRoomGateIndicators.Add(child.gameObject);
             }
-            //if (gateIndicators.Count != 7 || johnRoomGateIndicators.Count != 7 || gateIndicatorOnSprite == null || portal == null || gate == null || openEffect == null || closedBg == null || johnRoomClosedBg == null || johnRoomGate == null || johnRoomCustsceneTrigger == null)
-            //    Destroy(this);
+            UpdateGate();
         }
 
-        public void Update() {
+        public static void UpdateGate() {
             if (InventoryManager.items.TryGetValue("Void Gate Shard", out int shardCount)) {
                 if (shardCount >= 1) {
                     gateIndicators[0].GetComponent<SpriteRenderer>().sprite = gateIndicatorOnSprite;
@@ -55,28 +69,24 @@ namespace ApGlyphs {
                 if (shardCount >= 7) {
                     gateIndicators[6].GetComponent<SpriteRenderer>().sprite = gateIndicatorOnSprite;
                     johnRoomGateIndicators[6].GetComponent<SpriteRenderer>().sprite = gateIndicatorOnSprite;
-                    portal.SetActive(true);
-                    openEffect.SetActive(true);
-                    closedBg.SetActive(false);
-                    gate.SetActive(false);
-                    johnRoomClosedBg.SetActive(false);
-                    johnRoomGate.SetActive(false);
-                    johnRoomCustsceneTrigger.SetActive(true);
-                    Destroy(this);
+                    foreach (GameObject gateObject in gateObjectsToEnable) {
+                        gateObject.SetActive(true);
+                    }
+                    foreach (GameObject gateObject in gateObjectsToDisable) {
+                        gateObject.SetActive(false);
+                    }
                 }
             }
         }
 
-        private GameObject closedBg;
-        private GameObject gate;
-        private GameObject openEffect;
-        private GameObject portal;
-        private List<GameObject> gateIndicators = new List<GameObject>();
-        private Transform johnRoomParent;
-        private GameObject johnRoomClosedBg;
-        private GameObject johnRoomGate;
-        private GameObject johnRoomCustsceneTrigger;
-        private List<GameObject> johnRoomGateIndicators = new List<GameObject>();
-        private Sprite gateIndicatorOnSprite;
+        private const string VOID_GATE_TRANSFORM_PATH = "WORLD/The Chasm/(Hub) (R5E)";
+        private const string JOHN_ROOM_TRANSFORM_PATH = "WORLD/The Chasm/(R-2L) (John Room)";
+        private static Transform voidGate;
+        private static Transform johnRoom;
+        private static List<GameObject> gateObjectsToDisable = new List<GameObject>();
+        private static List<GameObject> gateObjectsToEnable = new List<GameObject>();
+        private static List<GameObject> gateIndicators = new List<GameObject>();
+        private static List<GameObject> johnRoomGateIndicators = new List<GameObject>();
+        private static Sprite gateIndicatorOnSprite;
     }
 }

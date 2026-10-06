@@ -1,26 +1,32 @@
 using System.Collections.Generic;
+using HarmonyLib;
 using Il2Cpp;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
-    // attach to smile shop parent
-    public class ShopCounter : MonoBehaviour {
-        public void Start() {
-            counters.Add(transform.Find("Counter")?.GetComponent<BuildText>());
-            counters.Add(transform.Find("Refund Room!/Counter")?.GetComponent<BuildText>());
-            counters.Add(transform.Find("Hat room/Counter")?.GetComponent<BuildText>());
-            counters.Add(transform.Find("Smilemask Room/Counter")?.GetComponent<BuildText>());
+    public static class ShopCounter {
+        [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
+        [HarmonyPostfix]
+        public static void OnSceneLoaded(Scene scene) {
+            shopParent = null;
+            counters.Clear();
+            if (scene.name != "Game") return;
+            shopParent = SceneSearcher.Find(SHOP_TRANSFORM_PATH);
+            counters.Add(shopParent.Find("Counter")?.GetComponent<BuildText>());
+            counters.Add(shopParent.Find("Refund Room!/Counter")?.GetComponent<BuildText>());
+            counters.Add(shopParent.Find("Hat room/Counter")?.GetComponent<BuildText>());
+            counters.Add(shopParent.Find("Smilemask Room/Counter")?.GetComponent<BuildText>());
         }
 
-        public void Update() {
+        public static void UpdateCounters() {
             if (GamestateManager.spentTokens == -1) return;
-            if (!InventoryManager.items.ContainsKey("Smile Token")) unspentTokens = 0;
-            else unspentTokens = InventoryManager.items["Smile Token"] - GamestateManager.spentTokens;
+            unspentTokens = InventoryManager.items.TryGetValue("Smile Token", out int tokens) ? tokens : 0;
             foreach (BuildText counter in counters) {
-                if (counter == null) continue;
+                if (!counter) continue;
                 if (counter.text == "" + unspentTokens || counter.text == "0" + unspentTokens) continue;
                 for (int i = counter.transform.childCount - 1; i >= 0; i--) {
-                    Destroy(counter.transform.GetChild(i)?.gameObject);
+                    Object.Destroy(counter.transform.GetChild(i)?.gameObject);
                 }
                 counter.text = "" + unspentTokens;
                 if (counter.text.Length == 1) counter.text = "0" + counter.text;
@@ -29,7 +35,9 @@ namespace ApGlyphs {
             }
         }
 
-        private List<BuildText> counters = new List<BuildText>();
-        private int unspentTokens;
+        private const string SHOP_TRANSFORM_PATH = "World/Smile Shop";
+        private static Transform shopParent;
+        private static List<BuildText> counters = new List<BuildText>();
+        private static int unspentTokens;
     }
 }

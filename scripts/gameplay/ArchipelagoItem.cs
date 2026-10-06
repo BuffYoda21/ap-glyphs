@@ -13,13 +13,13 @@ namespace ApGlyphs {
             col.isTrigger = true;
             itemCache = NetworkClient.itemCache;
             if (alertJohn) john = SceneSearcher.Find("Clarity Figure")?.GetComponent<ClarityFigure>();
+            if (transform.parent.name == "Heal") transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 0, 0, 0); // for boss rush checks
         }
 
         public void Update() {
             if (locId == -1) { Destroy(gameObject); return; }  // AP items must have a location id defined on creation
             if (itemInfo == null) FetchItemInfo();
             if (itemInfo == null) return;
-            if (transform.parent.name == "Heal") transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 0, 0, 0); // for boss rush checks
             if (fallenBackToAPLogo) RecoverSprite();
             if (isUsingConstructedModel || sr) return;
             sr = gameObject.GetComponent<SpriteRenderer>();

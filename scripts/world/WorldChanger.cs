@@ -76,18 +76,6 @@ namespace ApGlyphs {
             }
 
             try {
-                SceneSearcher.Find("World/Region3/Black/(R7D)>(R9F) The False Primary Glyph")?.gameObject.AddComponent<WizardTriggerManager>();
-            } catch (Exception ex) {
-                MelonLogger.Error("Failed to add WizardTriggerManager: " + ex.Message);
-            }
-
-            try {
-                SceneSearcher.Find("World/Smile Shop")?.gameObject.AddComponent<ShopCounter>();
-            } catch (Exception ex) {
-                MelonLogger.Error("Failed to add ShopCounter: " + ex.Message);
-            }
-
-            try {
                 Transform tileParent = SceneSearcher.Find("World/Smile Shop/Tiles");
                 List<Transform> pedestals = new List<Transform>();
                 for (int i = 0; i < tileParent.childCount; i++) {
@@ -138,11 +126,7 @@ namespace ApGlyphs {
         }
 
         private static void EditWorldOuterVoid() {
-            try {
-                SceneSearcher.Find("WORLD/The Chasm/(Hub) (R5E)")?.gameObject.AddComponent<VoidGateManager>();
-            } catch (Exception ex) {
-                MelonLogger.Error("Failed to add VoidGateManager: " + ex.Message);
-            }
+
         }
         private static int lastSceneHandle = -1;
     }

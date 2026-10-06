@@ -1,33 +1,38 @@
 using System;
+using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
-    // to be put on "(R7D)>(R9F) The False Primary Glyph" GameObject
-    public class WizardTriggerManager : MonoBehaviour {
-        public void Start() {
-            trigger = transform.Find("Cutscene Conditional 1/Cutscene Conditional 2/Cutscene Conditional 3/CutsceneTrigger")?.gameObject;
+    public static class WizardTriggerManager {
+        [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
+        [HarmonyPostfix]
+        public static void OnSceneLoaded(Scene scene) {
+            triggerEnabled = false;
+            trigger = SceneSearcher.Find(TRIGGER_ENABLED_TRANSFORM_PATH + "/" + TRIGGER_DISABLED_TRANSFORM_RELATIVE_PATH)?.gameObject;
             try {
                 wizGlyphstones = Convert.ToInt32(NetworkClient.options["WizardRequirements"]);
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to get WizardRequirements: " + ex.Message);
                 wizGlyphstones = 3;
             }
-            falsePrimaryGlyph = transform.Find("Tiles/False Primary Glyph")?.gameObject;
-            if (falsePrimaryGlyph && falsePrimaryGlyph.activeSelf) return;
-            Destroy(trigger);
-            Destroy(this);
+            falsePrimaryGlyph = trigger.transform.Find("Tiles/False Primary Glyph")?.gameObject;
+            UpdateTrigger();
         }
 
-        public void Update() {
-            if (!falsePrimaryGlyph || !falsePrimaryGlyph.activeSelf) { Destroy(trigger); Destroy(this); return; }
-            if (!InventoryManager.items.TryGetValue("Glyphstone", out int glyphstones) || glyphstones < wizGlyphstones) return;
-            trigger.transform.SetParent(transform, true);
-            Destroy(this);
+        public static void UpdateTrigger() {
+            if (!falsePrimaryGlyph || !falsePrimaryGlyph.activeSelf) { UnityEngine.Object.Destroy(trigger); return; }
+            if (triggerEnabled || !InventoryManager.items.TryGetValue("Glyphstone", out int glyphstones) || glyphstones < wizGlyphstones) return;
+            trigger.transform.SetParent(SceneSearcher.Find(TRIGGER_ENABLED_TRANSFORM_PATH)?.transform, true);
+            triggerEnabled = true;
         }
 
-        private GameObject trigger;
-        private GameObject falsePrimaryGlyph;
-        private int wizGlyphstones;
+        private const string TRIGGER_ENABLED_TRANSFORM_PATH = "World/Region3/Black/(R7D)>(R9F) The False Primary Glyph";
+        private const string TRIGGER_DISABLED_TRANSFORM_RELATIVE_PATH = "Cutscene Conditional 1/Cutscene Conditional 2/Cutscene Conditional 3/CutsceneTrigger";
+        private static GameObject trigger;
+        private static GameObject falsePrimaryGlyph;
+        private static int wizGlyphstones;
+        private static bool triggerEnabled;
     }
 }

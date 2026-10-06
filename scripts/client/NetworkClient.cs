@@ -249,7 +249,9 @@ namespace ApGlyphs {
         }
 
         public class ConnectionIndicator : MonoBehaviour {
-            public void SetConnectionState(bool connected) {
+            public void SetConnectionState(bool status) {
+                if (status == connected) return;
+                connected = status;
                 if (connected) {
                     foreach (Image orb in GetComponentsInChildren<Image>()) {
                         int id = int.Parse(orb.transform.name.Split('_')[1]);
@@ -266,6 +268,8 @@ namespace ApGlyphs {
                     }
                 }
             }
+
+            private bool connected = false;
         }
 
         public static void DEBUG_get_unchecked_locations() {

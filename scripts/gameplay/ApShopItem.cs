@@ -39,8 +39,7 @@ namespace ApGlyphs {
             if (itemInfo == null || displayText.text != "") return;
             if (itemInfo.Player.Slot != NetworkClient.ConnectionInfo.SlotId)
                 displayText.text = itemInfo.Player.Name + "s ";
-            displayText.text += itemInfo.ItemName;
-            displayText.text = NormalizeText(displayText.text);
+            displayText.text = NormalizeText(displayText.text + itemInfo.ItemName);
             if (apItemReaction.text != "") return;
             List<string> possibleReactions = new List<string>();
             if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) {
@@ -179,6 +178,7 @@ namespace ApGlyphs {
                 GamestateManager.SaveFlag($"purchased item {shopId}");
                 GamestateManager.spentTokens += price;
                 GamestateManager.UpdateTokens();
+                ShopCounter.UpdateCounters();
                 base.Collect();
                 Destroy(gameObject);
             }

@@ -29,12 +29,15 @@ namespace ApGlyphs {
         public static void UpdatePlayer() => UpdatePlayer(true);
 
         public static void UpdatePlayer(bool save) {
-            ButtonManager.UpdateButtons();
             if (!sm) sm = SceneSearcher.Find("Manager intro")?.GetComponent<SaveManager>();
             if ((scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") || !InventoryManager.inventoryLoaded || !sm) return;
             if (!player) player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
             if (!player) return;
             if (wraithRequirement == WraithRequirement.Undefined) GetWraithRequirement();
+
+            ButtonManager.UpdateButtons();
+            VoidGateManager.UpdateGate();
+            WizardTriggerManager.UpdateTrigger();
             ClarityAltarManager.CheckAltarActivation();
 
             //PlayerPrefs.SetString("Unlocked-map", "true");    // doesn't work for some reason. ItemChanger.cs moves map to player on load now as a workaround
