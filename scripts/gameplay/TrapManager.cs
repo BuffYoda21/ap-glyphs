@@ -39,7 +39,7 @@ namespace ApGlyphs {
 
         private static void MomentumTrap() {
             if (!rb) return;
-            rb.AddForce(new Vector2(UnityEngine.Random.Range(-30f, 30f), UnityEngine.Random.Range(-30f, 30f)), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(Random.Range(-30f, 30f), Random.Range(-30f, 30f)), ForceMode2D.Impulse);
         }
 
         // call on mod start
@@ -123,7 +123,7 @@ namespace ApGlyphs {
 
         private static void ScreenFlipTrap() {
             if (!camera) return;
-            float z = (float)UnityEngine.Random.Range(-100, 100) / 100f;
+            float z = Random.Range(-100, 100) / 100f;
             float w = 1f - z;
             camera.localRotation = new Quaternion(0f, 0f, z, w);
             TimerManager.StartTimer(30f);
@@ -160,7 +160,7 @@ namespace ApGlyphs {
 
         [HarmonyPatch(typeof(SceneManager), "Internal_ActiveSceneChanged")]
         [HarmonyPrefix]
-        public static void BeforeSceneChange(Scene previousActiveScene, Scene newActiveScene) {
+        public static void BeforeSceneChange() {
             if (!flickerScreens) return;
             flickerScreens.transform.SetParent(null);
             Object.DontDestroyOnLoad(flickerScreens);

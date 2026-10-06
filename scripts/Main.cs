@@ -1,6 +1,5 @@
 using MelonLoader;
 using Il2CppInterop.Runtime.Injection;
-using System;
 using UnityEngine;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
@@ -47,7 +46,7 @@ namespace ApGlyphs {
         public static void OnSceneLoaded(Scene scene) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
-            if (scene.name != "Intro") return;  // only run on Intro scene when NetworkClient is not initialized
+            if (scene.name != "Intro") return;  // only run on Intro scene
 
             // create required class instances
             GameObject manager = SceneSearcher.Find("Manager intro")?.gameObject;

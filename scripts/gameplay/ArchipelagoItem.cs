@@ -39,11 +39,11 @@ namespace ApGlyphs {
                 else {
                     switch (itemInfo.ItemName) {
                         case "Grapple":
-                            GameObject grapple = Object.Instantiate(Resources.Load<GameObject>("prefabs/game/Grapple Worm"), transform);
+                            GameObject grapple = Instantiate(Resources.Load<GameObject>("prefabs/game/Grapple Worm"), transform);
                             Destroy(grapple.GetComponent<Pickup>());
                             break;
                         case "Rune Cube":
-                            GameObject cube = Object.Instantiate(Resources.Load<GameObject>("prefabs/game/Cube"), transform);
+                            GameObject cube = Instantiate(Resources.Load<GameObject>("prefabs/game/Cube"), transform);
                             cube.transform.localPosition = Vector3.zero;
                             Destroy(cube.GetComponent<Pickup>());
                             break;
@@ -68,7 +68,8 @@ namespace ApGlyphs {
         }
 
         public void OnDestroy() {
-            if (transform.parent.name == "Heal") transform.parent.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255); // for boss rush checks
+            if (transform.parent.name == "Heal")
+                transform.parent.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255); // for boss rush checks
         }
 
         public void Collect() {
@@ -100,6 +101,8 @@ namespace ApGlyphs {
             if (!fallenBackToAPLogo) return;
             fallenBackToAPLogo = false;
             if (itemInfo == null || itemInfo.Player.Slot != NetworkClient.ConnectionInfo.SlotId) return;
+
+            MelonLogger.Warning($"DEBUG: Sprite Recovery processing for Location: {locId}");
 
             sr = gameObject.GetComponent<SpriteRenderer>();
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();

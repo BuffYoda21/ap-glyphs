@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using HarmonyLib;
 using Il2Cpp;
@@ -11,10 +10,9 @@ using UnityEngine.SceneManagement;
 namespace ApGlyphs {
     [HarmonyPatch]
     public class WorldChanger {
-#pragma warning disable IDE0060 // Remove unused parameter warning
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        public static void OnSceneLoaded(Scene scene) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
 
@@ -25,7 +23,6 @@ namespace ApGlyphs {
             else if (scene.name == "Outer Void")
                 EditWorldOuterVoid();
         }
-#pragma warning restore IDE0060 // Restore unused parameter warning
 
         private static void EditWorldGame() {
             try {

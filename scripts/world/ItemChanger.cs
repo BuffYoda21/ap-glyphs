@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
     [HarmonyPatch]
-    public class ItemChanger {
+    public static class ItemChanger {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
         public static void OnSceneLoaded(Scene scene) {

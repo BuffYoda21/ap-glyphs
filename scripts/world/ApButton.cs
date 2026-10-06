@@ -41,66 +41,6 @@ namespace ApGlyphs {
 
         void OnDisable() => Unregister(this);
 
-        // Update method just does this better
-        /*
-        [HarmonyPatch(typeof(ButtonObj), nameof(ButtonObj.OnTriggerEnter2D))]
-        [HarmonyPrefix]
-        public static void OnTriggerEnter2D(ButtonObj __instance, Collider2D other) {
-            if (!__instance || !other) return;
-            if (__instance.broken || __instance.pressed || Time.time < __instance.scenestarttime ||
-                (__instance.type == "" && !other.gameObject.GetComponent<PlayerController>()) ||
-                (__instance.type == "attack" && (!other.gameObject.GetComponent<AttackBox>() || other.gameObject.GetComponent<AttackBox>().attackType != "player")) ||
-                (__instance.type == "dash" && (!other.gameObject.GetComponent<PlayerController>() ||
-                !(Time.time < other.gameObject.GetComponent<PlayerController>().dashtimer))))
-                return;
-
-            if (__instance.type == "dashattack") {
-                PlayerController component = other.gameObject.GetComponent<PlayerController>();
-                if (!component || !(Time.time < component.dashtimer) || !(component.dashAttackHoldTime > component.dashAttackChargeMax))
-                    return;
-            }
-
-            if ((__instance.type == "enemy" && !other.gameObject.GetComponent<EnemyBase>()) ||
-                (__instance.type == "parry" && (!other.gameObject.GetComponent<Projectile>() ||
-                !other.gameObject.GetComponent<Projectile>().parryable)))
-                return;
-
-            __instance.gameObject.GetComponent<ApButton>()?.OnPress();
-        }
-
-        [HarmonyPatch(typeof(ButtonObj), nameof(ButtonObj.OnTriggerStay2D))]
-        [HarmonyPrefix]
-        public static void OnTriggerStay2D(ButtonObj __instance, Collider2D other) {
-            if (!__instance || !other) return;
-            if (!__instance.pressed && !(Time.time < __instance.scenestarttime) && __instance.type == "dashattack"
-                && (bool)other.gameObject.GetComponent<PlayerController>() && Time.time < other.gameObject.GetComponent<PlayerController>().dashtimer
-                && other.gameObject.GetComponent<PlayerController>().dashAttackHoldTime > 1f) {
-                __instance.gameObject.GetComponent<ApButton>()?.OnPress();
-            }
-        }
-        */
-
-        // Might not need this idk
-        /*
-        [HarmonyPatch(typeof(ButtonObj), nameof(ButtonObj.OnTriggerEnter2D))]
-        [HarmonyPostfix]
-        public static void OnTriggerEnter2D(ButtonObj __instance) {
-            if (__instance.broken || __instance.gameObject.GetComponent<ApButton>()?.hasUncollectedItem == true)
-                return;
-
-            Destroy(__instance.gameObject.GetComponent<ApButton>()?.idTag?.gameObject);
-        }
-
-        [HarmonyPatch(typeof(ButtonObj), nameof(ButtonObj.OnTriggerEnter2D))]
-        [HarmonyPostfix]
-        public static void OnTriggerStay2D(ButtonObj __instance) {
-            if (__instance.broken || __instance.gameObject.GetComponent<ApButton>()?.hasUncollectedItem == true)
-                return;
-
-            Destroy(__instance.gameObject.GetComponent<ApButton>()?.idTag?.gameObject);
-        }
-        */
-
         private void OnPress() {
             NetworkClient.CollectItem(id + 10000); // CollectItem handlies invalid IDs and already collected locations but should probably rework this anyway
             hasUncollectedItem = false;

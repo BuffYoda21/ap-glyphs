@@ -112,6 +112,7 @@ namespace ApGlyphs {
             }
         }
 
+        // Might end up moving this to a data file
         private static readonly Dictionary<string, int> paths = new Dictionary<string, int>() {
             {"World/Region1/(R3A)/Save Button (HDD)/Button", 0},
             {"World/Region1/(R1E)/Launcher/Button/Button", 1},

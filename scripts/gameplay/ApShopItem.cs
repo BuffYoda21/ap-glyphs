@@ -19,7 +19,7 @@ namespace ApGlyphs {
                 Transform child = reactParent.transform.GetChild(i);
                 otherReactions.Add(child.gameObject);
             }
-            apItemReaction = GameObject.Instantiate(reactParent.transform.Find("reaction (9)")?.gameObject, reactParent.transform)?.GetComponent<BuildText>();
+            apItemReaction = Instantiate(reactParent.transform.Find("reaction (9)")?.gameObject, reactParent.transform)?.GetComponent<BuildText>();
             if (apItemReaction) apItemReaction.text = "";
         }
 
@@ -170,13 +170,8 @@ namespace ApGlyphs {
             apItemReaction.transform.localPosition = new Vector3(13.2f - apItemReaction.text.Length * 0.4f, apItemReaction.transform.localPosition.y, apItemReaction.transform.localPosition.z);
         }
 
-        public new void OnTriggerEnter2D(Collider2D other) {
-            return;
-        }
-
-        public new void OnDestroy() {
-            apItemReaction.gameObject.SetActive(false);
-        }
+        public new void OnTriggerEnter2D(Collider2D other) { }
+        public new void OnDestroy() => apItemReaction.gameObject.SetActive(false);
 
         public void Purchase() {
             if (!vanillaItem || !gamestate) return;

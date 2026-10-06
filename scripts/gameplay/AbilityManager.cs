@@ -10,10 +10,9 @@ using UnityEngine.SceneManagement;
 namespace ApGlyphs {
     [HarmonyPatch]
     public static class AbilityManager {
-#pragma warning disable IDE0060 // Remove unused parameter warning
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        public static void OnSceneLoaded(Scene scene) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
             AbilityManager.scene = scene;
@@ -22,7 +21,6 @@ namespace ApGlyphs {
             inventory.scene = scene;
             MelonCoroutines.Start(DelayedCall());
         }
-#pragma warning restore IDE0060 // Restore unused parameter warning
 
         // fixes the issue where the player always starts from world spawn
         private static IEnumerator DelayedCall() {
@@ -148,7 +146,7 @@ namespace ApGlyphs {
         }
 
         private static bool HasMetWraithRequirement() {
-            int itemCount = 0;
+            int itemCount;
             switch (wraithRequirement) {
                 case WraithRequirement.Undefined: return false;
                 case WraithRequirement.None: return true;
