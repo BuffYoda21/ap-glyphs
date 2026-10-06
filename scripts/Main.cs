@@ -21,7 +21,6 @@ namespace ApGlyphs {
             ClassInjector.RegisterTypeInIl2Cpp<BetweenListener>();
             ClassInjector.RegisterTypeInIl2Cpp<BombHatPickupReplacer>();
             ClassInjector.RegisterTypeInIl2Cpp<HatRoomManager>();
-            ClassInjector.RegisterTypeInIl2Cpp<InventoryManager>();
             ClassInjector.RegisterTypeInIl2Cpp<MainThreadDispatcher>();
             ClassInjector.RegisterTypeInIl2Cpp<NetworkClient.ConnectionIndicator>();
             ClassInjector.RegisterTypeInIl2Cpp<NotificationManager.Notification>();
@@ -49,13 +48,10 @@ namespace ApGlyphs {
 
             // create required class instances
             GameObject manager = SceneSearcher.Find("Manager intro")?.gameObject;
-            inventory = manager?.AddComponent<InventoryManager>();
             betweenListener = manager?.AddComponent<BetweenListener>();
             NetworkClient.itemCache.dispatcher = manager?.AddComponent<MainThreadDispatcher>();
-            if (!inventory) MelonLogger.Error("Failed to create InventoryManager instance");
         }
 
-        public static InventoryManager inventory;
         public static BetweenListener betweenListener;
         private static int lastSceneHandle;
         private bool isInitialized = false;

@@ -175,7 +175,7 @@ namespace ApGlyphs {
         public void Purchase() {
             if (!vanillaItem) return;
             //MelonLogger.Msg($"Attempting to purchase {shopId} for {price} tokens. Have {inventory.items["Smile Token"] - gamestate.spentTokens} tokens.");
-            if (inventory.items.ContainsKey("Smile Token") && inventory.items["Smile Token"] - GamestateManager.spentTokens >= price) {
+            if (InventoryManager.items.ContainsKey("Smile Token") && InventoryManager.items["Smile Token"] - GamestateManager.spentTokens >= price) {
                 GamestateManager.SaveFlag($"purchased item {shopId}");
                 GamestateManager.spentTokens += price;
                 GamestateManager.UpdateTokens();

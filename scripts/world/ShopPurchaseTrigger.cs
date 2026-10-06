@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace ApGlyphs {
     public class ShopPurchaseTrigger : MonoBehaviour {
-        public void Start() {
-            stealTp = transform.parent.Find("FakeExit")?.gameObject;
-        }
+        public void Start() => stealTp = transform.parent.Find("FakeExit")?.gameObject;
 
         public void OnTriggerEnter2D(Collider2D other) {
             if (other.gameObject.name != "Player") return;

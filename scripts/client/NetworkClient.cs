@@ -12,8 +12,6 @@ using UnityEngine.UI;
 namespace ApGlyphs {
     public static class NetworkClient {
         static NetworkClient() {
-            inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-
             // retreive network info from json
             string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
             string settingsPath = Path.Combine(userDataDir, "ConnectionConfig.json");
@@ -305,7 +303,6 @@ namespace ApGlyphs {
         public static Dictionary<string, object> options;
         private static ConnectionIndicator indicator;
         public static ItemCache itemCache = new ItemCache();
-        public static InventoryManager inventory;
         private const float CONNECTION_RETRY_INTERVAL = 15f;
 
         public struct ConnectionInfo {

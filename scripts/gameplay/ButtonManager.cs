@@ -101,9 +101,7 @@ namespace ApGlyphs {
         }
 
         public static void UpdateButtons() {
-            if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-            if (!inventory) return;
-            foreach (var (key, value) in inventory.items) {
+            foreach (var (key, value) in InventoryManager.items) {
                 //MelonLogger.Msg($"{key}: {value}");
                 if (key.StartsWith("Button Shard")) {
                     //MelonLogger.Msg($"Found button shard {Convert.ToInt32(key.Split(' ')[2])}");
@@ -386,7 +384,6 @@ namespace ApGlyphs {
         private static readonly List<ApButton> loadedButtons = new List<ApButton>();
         private static readonly Dictionary<int, ButtonColor> colorKey = new Dictionary<int, ButtonColor>();
         private static readonly List<int> brokenButtonIds = new List<int>();
-        private static InventoryManager inventory;
         private static bool randomizeColors = false;
         private static bool awaitingSlotData = true;
         public enum ButtonColor {

@@ -11,7 +11,6 @@ namespace ApGlyphs {
             col = GetComponent<BoxCollider2D>();
             if (!col) col = gameObject.AddComponent<BoxCollider2D>();
             col.isTrigger = true;
-            inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             itemCache = NetworkClient.itemCache;
             if (alertJohn) john = SceneSearcher.Find("Clarity Figure")?.GetComponent<ClarityFigure>();
         }
@@ -27,8 +26,8 @@ namespace ApGlyphs {
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
             string spriteName = itemInfo.ItemName;
             if (spriteName.StartsWith("Progressive")) {
-                if (inventory.items.ContainsKey(itemInfo.ItemName))
-                    spriteName += "_" + (inventory.items[itemInfo.ItemName] + 1);
+                if (InventoryManager.items.ContainsKey(itemInfo.ItemName))
+                    spriteName += "_" + (InventoryManager.items[itemInfo.ItemName] + 1);
                 else
                     spriteName += "_1";
             }
@@ -75,7 +74,7 @@ namespace ApGlyphs {
         public void Collect() {
             NetworkClient.CollectItem(this);
             if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) {
-                inventory.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
+                InventoryManager.CollectAndSaveLocalInventory(new List<string> { itemInfo.ItemName });
                 if (alertJohn && john && john.isActiveAndEnabled)
                     AbilityManager.UpdatePlayer(false);
                 else
@@ -108,8 +107,8 @@ namespace ApGlyphs {
             if (!sr) sr = gameObject.AddComponent<SpriteRenderer>();
             string spriteName = itemInfo.ItemName;
             if (spriteName.StartsWith("Progressive")) {
-                if (inventory.items.ContainsKey(itemInfo.ItemName))
-                    spriteName += "_" + (inventory.items[itemInfo.ItemName] + 1);
+                if (InventoryManager.items.ContainsKey(itemInfo.ItemName))
+                    spriteName += "_" + (InventoryManager.items[itemInfo.ItemName] + 1);
                 else
                     spriteName += "_1";
             }
@@ -197,7 +196,6 @@ namespace ApGlyphs {
         protected BoxCollider2D col;
         protected SpriteRenderer sr;
         protected ItemCache itemCache;
-        protected InventoryManager inventory;
         public long locId;
         public ScoutedItemInfo itemInfo;
         protected bool isUsingConstructedModel = false;

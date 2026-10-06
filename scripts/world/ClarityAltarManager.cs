@@ -6,25 +6,24 @@ using UnityEngine;
 namespace ApGlyphs {
     public static class ClarityAltarManager {
         public static void CheckAltarActivation() {
-            if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-            if (!inventory) return;
             Transform roomParent = SceneSearcher.Find("World/Region2/Lab/(R18G) (Clarity Altar)");
             if (!roomParent) return;
 
             bool altarActivationSuccess = false;
+            int cubes;
             foreach (DisappearOnSave conditional in roomParent.GetComponentsInChildren<DisappearOnSave>(true)) {
                 switch (conditional.gameObject.name) {
                     case "Disappear on Save":
-                        if (inventory.items.ContainsKey("Rune Cube") && inventory.items["Rune Cube"] >= 1)
+                        if (InventoryManager.items.TryGetValue("Rune Cube", out cubes) && cubes >= 1)
                             conditional.booltargetval = true;
                         break;
                     case "Disappear on Save (1)":
-                        if (inventory.items.ContainsKey("Rune Cube") && inventory.items["Rune Cube"] >= 2)
+                        if (InventoryManager.items.TryGetValue("Rune Cube", out cubes) && cubes >= 2)
                             conditional.booltargetval = true;
                         break;
                     default:
                         if (!conditional.gameObject.name.Contains("Disappear on Save (2)") && !conditional.gameObject.name.Contains("cube")) continue;
-                        if (inventory.items.ContainsKey("Rune Cube") && inventory.items["Rune Cube"] >= 3) {
+                        if (InventoryManager.items.TryGetValue("Rune Cube", out cubes) && cubes >= 3) {
                             conditional.booltargetval = true;
                             if (conditional.transform.name == "cube1?") altarActivationSuccess = true;
                             if (conditional.transform.GetChild(0)?.name == "R18G ACTIVE")
@@ -34,7 +33,7 @@ namespace ApGlyphs {
                 }
             }
 
-            if (!altarActivationSuccess && inventory.items.ContainsKey("Rune Cube") && inventory.items["Rune Cube"] >= 3) {
+            if (!altarActivationSuccess && InventoryManager.items.TryGetValue("Rune Cube", out cubes) && cubes >= 3) {
                 MelonCoroutines.Start(ScheduleCheck());
             } else if (altarActivationSuccess) {
                 MelonCoroutines.Start(SafetyCheck());
@@ -54,6 +53,5 @@ namespace ApGlyphs {
         }
 
         private static GameObject lights;
-        private static InventoryManager inventory;
     }
 }

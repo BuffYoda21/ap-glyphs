@@ -2,16 +2,13 @@ using UnityEngine;
 
 namespace ApGlyphs {
     public class SeedCounter : MonoBehaviour {
-        public void Start() {
-            inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-            unhiddenPosition = transform.position;
-        }
+        public void Start() => unhiddenPosition = transform.position;
 
         public void Update() {
-            if (!inventory) return;
-            if (inventory.items.ContainsKey("Seeds") && inventory.items["Seeds"] >= 10 && isHidden)
+            if (isHidden) return;
+            if (InventoryManager.items.TryGetValue("Seeds", out int count) && count >= 10)
                 Appear();
-            else if (!inventory.items.ContainsKey("Seeds") || inventory.items["Seeds"] < 10 && !isHidden)
+            else
                 Hide();
         }
 
@@ -25,7 +22,6 @@ namespace ApGlyphs {
             isHidden = true;
         }
 
-        private InventoryManager inventory;
         public Vector3 hiddenPosition;
         public Vector3 unhiddenPosition;
         private bool isHidden = false;

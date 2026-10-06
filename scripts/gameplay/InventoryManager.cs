@@ -5,25 +5,15 @@ using System.IO;
 using System.Linq;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
-using Il2Cpp;
 using MelonLoader;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
-    public class InventoryManager : MonoBehaviour {
-        public void Start() => LoadInventoryFromFile();
+    public static class InventoryManager {
+        static InventoryManager() => LoadInventoryFromFile();
 
-        public void Update() {
-            if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
-            if (!player) player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
-            if (!player) return;
-            if (!player.hasGeorge && items.Keys.Contains("Progressive Essence of George") && items["Progressive Essence of George"] > 0)
-                player.hasGeorge = true;
-        }
-
-        public void ImportInventoryFromServer(ReadOnlyCollection<ItemInfo> importedItems) {
+        public static void ImportInventoryFromServer(ReadOnlyCollection<ItemInfo> importedItems) {
             if (importedItems.Count <= lastNotifiedItemIndex) lastNotifiedItemIndex = importedItems.Count - 1;
 
             bool hasNewNotifications = false;
@@ -69,7 +59,7 @@ namespace ApGlyphs {
             }
         }
 
-        public bool LoadInventoryFromFile() {
+        private static bool LoadInventoryFromFile() {
             string inventoryPath = GetInventoryPath();
 
             try {
@@ -101,7 +91,7 @@ namespace ApGlyphs {
             }
         }
 
-        public bool SaveInventoryToFile() {
+        public static bool SaveInventoryToFile() {
             string inventoryPath = GetInventoryPath();
             try {
                 InventorySaveData saveData = new InventorySaveData {
@@ -122,17 +112,17 @@ namespace ApGlyphs {
             }
         }
 
-        public void CollectAndSaveLocalInventory(List<string> items) {
-            foreach (string item in items) {
-                if (this.items.ContainsKey(item))
-                    this.items[item]++;
+        public static void CollectAndSaveLocalInventory(List<string> incomingItems) {
+            foreach (string item in incomingItems) {
+                if (items.ContainsKey(item))
+                    items[item]++;
                 else
-                    this.items.Add(item, 1);
+                    items.Add(item, 1);
             }
             SaveInventoryToFile();
         }
 
-        private string GetInventoryPath() {
+        private static string GetInventoryPath() {
             string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
             if (!Directory.Exists(userDataDir))
                 Directory.CreateDirectory(userDataDir);
@@ -140,11 +130,9 @@ namespace ApGlyphs {
             return inventoryPath;
         }
 
-        public Dictionary<string, int> items = new Dictionary<string, int>(); // <name, count>
-        public bool inventoryLoaded = false;
-        private PlayerController player;
-        public Scene scene;
-        private int lastNotifiedItemIndex = -1;
+        public static Dictionary<string, int> items = new Dictionary<string, int>(); // <name, count>
+        public static bool inventoryLoaded = false;
+        private static int lastNotifiedItemIndex = -1;
 
         [Serializable]
         private class InventorySaveData {

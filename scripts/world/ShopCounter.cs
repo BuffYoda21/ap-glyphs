@@ -6,7 +6,6 @@ namespace ApGlyphs {
     // attach to smile shop parent
     public class ShopCounter : MonoBehaviour {
         public void Start() {
-            inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             counters.Add(transform.Find("Counter")?.GetComponent<BuildText>());
             counters.Add(transform.Find("Refund Room!/Counter")?.GetComponent<BuildText>());
             counters.Add(transform.Find("Hat room/Counter")?.GetComponent<BuildText>());
@@ -14,9 +13,9 @@ namespace ApGlyphs {
         }
 
         public void Update() {
-            if (!inventory || GamestateManager.spentTokens == -1) return;
-            if (!inventory.items.ContainsKey("Smile Token")) unspentTokens = 0;
-            else unspentTokens = inventory.items["Smile Token"] - GamestateManager.spentTokens;
+            if (GamestateManager.spentTokens == -1) return;
+            if (!InventoryManager.items.ContainsKey("Smile Token")) unspentTokens = 0;
+            else unspentTokens = InventoryManager.items["Smile Token"] - GamestateManager.spentTokens;
             foreach (BuildText counter in counters) {
                 if (counter == null) continue;
                 if (counter.text == "" + unspentTokens || counter.text == "0" + unspentTokens) continue;
@@ -30,7 +29,6 @@ namespace ApGlyphs {
             }
         }
 
-        private InventoryManager inventory;
         private List<BuildText> counters = new List<BuildText>();
         private int unspentTokens;
     }

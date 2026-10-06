@@ -18,8 +18,7 @@ namespace ApGlyphs {
             ReadOnlyCollection<ItemInfo> receivedItems = new List<ItemInfo>(session.Items.AllItemsReceived).AsReadOnly();
             checkedLocations = session.Locations.AllLocationsChecked;
             MainThreadDispatcher.Enqueue(() => {
-                if (!inventoryManager) inventoryManager = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-                if (inventoryManager) inventoryManager.ImportInventoryFromServer(receivedItems);
+                InventoryManager.ImportInventoryFromServer(receivedItems);
                 itemsReady = true;
             });
         }
@@ -31,7 +30,6 @@ namespace ApGlyphs {
 
         private readonly Dictionary<long, ScoutedItemInfo> itemPool = new Dictionary<long, ScoutedItemInfo>();
         public ReadOnlyCollection<long> checkedLocations;
-        private InventoryManager inventoryManager;
         public MainThreadDispatcher dispatcher;
         public bool itemsReady;
     }

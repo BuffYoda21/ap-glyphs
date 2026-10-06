@@ -17,8 +17,6 @@ namespace ApGlyphs {
             lastSceneHandle = scene.handle;
             AbilityManager.scene = scene;
             if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
-            if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-            inventory.scene = scene;
             MelonCoroutines.Start(DelayedCall());
         }
 
@@ -33,8 +31,7 @@ namespace ApGlyphs {
         public static void UpdatePlayer(bool save) {
             ButtonManager.UpdateButtons();
             if (!sm) sm = SceneSearcher.Find("Manager intro")?.GetComponent<SaveManager>();
-            if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-            if ((scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") || !inventory || !inventory.inventoryLoaded || !sm) return;
+            if ((scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") || !InventoryManager.inventoryLoaded || !sm) return;
             if (!player) player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
             if (!player) return;
             if (wraithRequirement == WraithRequirement.Undefined) GetWraithRequirement();
@@ -55,7 +52,7 @@ namespace ApGlyphs {
             player.maxHp = 100;
             player.goldfragments = 0;
 
-            foreach (KeyValuePair<string, int> kv in inventory.items) {
+            foreach (KeyValuePair<string, int> kv in InventoryManager.items) {
                 switch (kv.Key) {
                     case "Map":
                         player.mapDisabled = false;
@@ -150,18 +147,17 @@ namespace ApGlyphs {
             switch (wraithRequirement) {
                 case WraithRequirement.Undefined: return false;
                 case WraithRequirement.None: return true;
-                case WraithRequirement.Intended: return inventory.items.TryGetValue("Silver Shard", out itemCount) && itemCount >= 15 && inventory.items.TryGetValue("Glyphstone", out itemCount) && itemCount >= 3;
-                case WraithRequirement.SilverShard: return inventory.items.TryGetValue("Silver Shard", out itemCount) && itemCount >= wraithRequirementCount;
-                case WraithRequirement.GoldShard: return inventory.items.TryGetValue("Gold Shard", out itemCount) && itemCount >= wraithRequirementCount;
-                case WraithRequirement.SmileToken: return inventory.items.TryGetValue("Smile Token", out itemCount) && itemCount >= wraithRequirementCount;
-                case WraithRequirement.RuneCube: return inventory.items.TryGetValue("Rune Cube", out itemCount) && itemCount >= wraithRequirementCount;
-                case WraithRequirement.GlyphStone: return inventory.items.TryGetValue("Glyphstone", out itemCount) && itemCount >= wraithRequirementCount;
+                case WraithRequirement.Intended: return InventoryManager.items.TryGetValue("Silver Shard", out itemCount) && itemCount >= 15 && InventoryManager.items.TryGetValue("Glyphstone", out itemCount) && itemCount >= 3;
+                case WraithRequirement.SilverShard: return InventoryManager.items.TryGetValue("Silver Shard", out itemCount) && itemCount >= wraithRequirementCount;
+                case WraithRequirement.GoldShard: return InventoryManager.items.TryGetValue("Gold Shard", out itemCount) && itemCount >= wraithRequirementCount;
+                case WraithRequirement.SmileToken: return InventoryManager.items.TryGetValue("Smile Token", out itemCount) && itemCount >= wraithRequirementCount;
+                case WraithRequirement.RuneCube: return InventoryManager.items.TryGetValue("Rune Cube", out itemCount) && itemCount >= wraithRequirementCount;
+                case WraithRequirement.GlyphStone: return InventoryManager.items.TryGetValue("Glyphstone", out itemCount) && itemCount >= wraithRequirementCount;
                 default: return false;
             }
         }
 
         private static SaveManager sm;
-        private static InventoryManager inventory;
         private static PlayerController player;
         private static Scene scene;
         private static int lastSceneHandle = -1;

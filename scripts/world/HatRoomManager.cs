@@ -9,7 +9,6 @@ namespace ApGlyphs {
     [HarmonyPatch]
     public class HatRoomManager : MonoBehaviour {
         public void Start() {
-            inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
             hats.Add("Pink Bow", transform.Find("pinkBow")?.gameObject);
             hats.Add("Propeller Hat", transform.Find("propeller hat")?.gameObject);
             hats.Add("Traffic Cone", transform.Find("cone hat")?.gameObject);
@@ -25,15 +24,14 @@ namespace ApGlyphs {
 
         public void Update() {
             if (Time.time >= scheduledSafetyUpdate) preformSafetyUpdate = true;
-            if (!inventory) return;
-            if (inventory.items.Count != lastInventoryCount || preformSafetyUpdate) {
+            if (InventoryManager.items.Count != lastInventoryCount || preformSafetyUpdate) {
                 preformSafetyUpdate = false;
-                lastInventoryCount = inventory.items.Count;
+                lastInventoryCount = InventoryManager.items.Count;
                 foreach (string hat in hats.Keys) {
-                    if (inventory.items.ContainsKey(hat) && inventory.items[hat] > 0) {
+                    if (InventoryManager.items.TryGetValue(hat, out int count) && count > 0) {
                         ActivateHat(hats[hat]);
                         if (hat == "Progressive Chicken Hat") {
-                            if (inventory.items[hat] == 1)
+                            if (InventoryManager.items[hat] == 1)
                                 hats["Progressive Chicken Hat"].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("sprites/default/hats/chicken/chicken");
                             else
                                 hats["Progressive Chicken Hat"].GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("sprites/default/hats/chicken/chicken 1");
@@ -56,7 +54,6 @@ namespace ApGlyphs {
         }
 
         private Dictionary<string, GameObject> hats = new Dictionary<string, GameObject>();
-        private InventoryManager inventory;
         private float scheduledSafetyUpdate = 0f;
         private bool preformSafetyUpdate = false;
         private int lastInventoryCount = -1;

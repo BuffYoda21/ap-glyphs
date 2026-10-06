@@ -5,8 +5,6 @@ namespace ApGlyphs {
     // to be placed on WORLD/The Chasm/(Hub) (R5E)
     public class VoidGateManager : MonoBehaviour {
         public void Start() {
-            if (!inventory) inventory = SceneSearcher.Find("Manager intro")?.GetComponent<InventoryManager>();
-            if (!inventory) Destroy(this);
             closedBg = transform.Find("R5E")?.gameObject;
             gate = transform.Find("Tiles/Gate")?.gameObject;
             openEffect = transform.Find("Light Ring")?.gameObject;
@@ -29,9 +27,7 @@ namespace ApGlyphs {
         }
 
         public void Update() {
-            if (!inventory) return;
-            if (inventory.items.ContainsKey("Void Gate Shard")) {
-                int shardCount = inventory.items["Void Gate Shard"];
+            if (InventoryManager.items.TryGetValue("Void Gate Shard", out int shardCount)) {
                 if (shardCount >= 1) {
                     gateIndicators[0].GetComponent<SpriteRenderer>().sprite = gateIndicatorOnSprite;
                     johnRoomGateIndicators[0].GetComponent<SpriteRenderer>().sprite = gateIndicatorOnSprite;
@@ -71,7 +67,6 @@ namespace ApGlyphs {
             }
         }
 
-        private InventoryManager inventory;
         private GameObject closedBg;
         private GameObject gate;
         private GameObject openEffect;
