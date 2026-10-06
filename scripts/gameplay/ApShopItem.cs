@@ -25,7 +25,6 @@ namespace ApGlyphs {
 
         public new void Update() {
             base.Update();
-            if (!gamestate) gamestate = SceneSearcher.Find("Manager intro")?.GetComponent<GamestateManager>();
             if (!vanillaItem) return;
             if (vanillaItem.startpos != transform.position) {
                 if (!apItemReaction.gameObject.activeSelf) apItemReaction.gameObject.SetActive(true);
@@ -174,11 +173,12 @@ namespace ApGlyphs {
         public new void OnDestroy() => apItemReaction.gameObject.SetActive(false);
 
         public void Purchase() {
-            if (!vanillaItem || !gamestate) return;
+            if (!vanillaItem) return;
             //MelonLogger.Msg($"Attempting to purchase {shopId} for {price} tokens. Have {inventory.items["Smile Token"] - gamestate.spentTokens} tokens.");
-            if (inventory.items.ContainsKey("Smile Token") && inventory.items["Smile Token"] - gamestate.spentTokens >= price) {
-                gamestate.SaveFlag($"purchased item {shopId}");
-                gamestate.spentTokens += price;
+            if (inventory.items.ContainsKey("Smile Token") && inventory.items["Smile Token"] - GamestateManager.spentTokens >= price) {
+                GamestateManager.SaveFlag($"purchased item {shopId}");
+                GamestateManager.spentTokens += price;
+                GamestateManager.UpdateTokens();
                 base.Collect();
                 Destroy(gameObject);
             }
@@ -199,7 +199,6 @@ namespace ApGlyphs {
         public int price = 2;
         public int shopId = -1;
         private ShopItem vanillaItem;
-        private GamestateManager gamestate;
         private BuildText displayText;
         private GameObject reactParent;
         private BuildText apItemReaction;

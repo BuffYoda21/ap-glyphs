@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using HarmonyLib;
 using MelonLoader;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
-    public class GamestateManager : MonoBehaviour {
-        public void Start() {
+    public static class GamestateManager {
+        static GamestateManager() {
             if (itemCache == null) itemCache = itemCache = NetworkClient.itemCache;
             LoadGamestateFromFile();
             if (!stateLoaded || itemCache == null) return;
@@ -20,7 +21,14 @@ namespace ApGlyphs {
             }
         }
 
-        public void Update() {
+        [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
+        [HarmonyPostfix]
+        public static void OnSceneLoaded(Scene scene) {
+            if (scene.name != "Game") return;
+            UpdateTokens();
+        }
+
+        public static void UpdateTokens() {
             if (itemCache == null || !itemCache.itemsReady || spentTokens != -1) return;
             spentTokens = 0;
             foreach (int itemId in purchasedItemIds) {
@@ -43,7 +51,7 @@ namespace ApGlyphs {
             }
         }
 
-        private void FetchGoal() {
+        private static void FetchGoal() {
             try {
                 switch ((int)NetworkClient.options["Goal"]) {
                     case (int)Goal.FalseEnding: goal = Goal.FalseEnding; break;
@@ -61,7 +69,7 @@ namespace ApGlyphs {
             }
         }
 
-        public bool LoadGamestateFromFile() {
+        public static bool LoadGamestateFromFile() {
             string statePath = GetStatePath();
 
             try {
@@ -83,7 +91,7 @@ namespace ApGlyphs {
             }
         }
 
-        public bool SaveStateToFile() {
+        public static bool SaveStateToFile() {
             string statePath = GetStatePath();
             try {
                 string json = JsonConvert.SerializeObject(
@@ -99,14 +107,14 @@ namespace ApGlyphs {
             }
         }
 
-        public void SaveFlag(string flag) {
+        public static void SaveFlag(string flag) {
             if (flags.Contains(flag)) return;
             flags.Add(flag);
             CheckForGameCompletion();
             SaveStateToFile();
         }
 
-        public void CheckForGameCompletion() {
+        public static void CheckForGameCompletion() {
             if (goal == Goal.None) FetchGoal();
             if (goal == Goal.None) return;
             switch (goal) {
@@ -137,7 +145,7 @@ namespace ApGlyphs {
             }
         }
 
-        private string GetStatePath() {
+        private static string GetStatePath() {
             string userDataDir = Path.Combine(Environment.CurrentDirectory, "UserData");
             if (!Directory.Exists(userDataDir))
                 Directory.CreateDirectory(userDataDir);
@@ -145,12 +153,12 @@ namespace ApGlyphs {
             return statePath;
         }
 
-        private List<string> flags = new List<string>();
-        public bool stateLoaded = false;
-        private Goal goal = Goal.None;
-        private List<int> purchasedItemIds = new List<int>();
-        public int spentTokens = -1;
-        private ItemCache itemCache;
+        private static List<string> flags = new List<string>();
+        public static bool stateLoaded = false;
+        private static Goal goal = Goal.None;
+        private static List<int> purchasedItemIds = new List<int>();
+        public static int spentTokens = -1;
+        private static ItemCache itemCache;
         private enum Goal : int {
             None = 0,
             FalseEnding = 1,

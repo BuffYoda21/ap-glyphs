@@ -15,8 +15,6 @@ namespace ApGlyphs {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
 
-            if (!gamestate) gamestate = SceneSearcher.Find("Manager intro")?.GetComponent<GamestateManager>();
-
             if (scene.name == "Game")
                 PlaceItemsGame();
             else if (scene.name == "Memory")
@@ -549,28 +547,27 @@ namespace ApGlyphs {
         }
 
         private static void CheckForCutsceneReward(string sceneName) {
-            if (!gamestate) return;
             switch (sceneName) {
                 case "TheFalseEnding":
-                    gamestate.SaveFlag("FalseEnding");
+                    GamestateManager.SaveFlag("FalseEnding");
                     break;
                 case "TheGoodEnding":
-                    gamestate.SaveFlag("GoodEnding");
+                    GamestateManager.SaveFlag("GoodEnding");
                     break;
                 case "TheTrueEnding":
-                    gamestate.SaveFlag("TrueEnding");
+                    GamestateManager.SaveFlag("TrueEnding");
                     break;
                 case "Smilemask":
-                    gamestate.SaveFlag("SmilemaskEnding");
+                    GamestateManager.SaveFlag("SmilemaskEnding");
                     break;
                 case "PerfectClarity":
-                    gamestate.SaveFlag("PerfectClarity");
+                    GamestateManager.SaveFlag("PerfectClarity");
                     break;
                 case "Omnipotence":
-                    gamestate.SaveFlag("OmnipotenceEnding");
+                    GamestateManager.SaveFlag("OmnipotenceEnding");
                     break;
                 case "TheVeryEnd":
-                    gamestate.SaveFlag("EpilogueEnding");
+                    GamestateManager.SaveFlag("EpilogueEnding");
                     break;
                 case "Escape":
                     if (!NetworkClient.itemCache.checkedLocations.Contains(69))
@@ -599,7 +596,6 @@ namespace ApGlyphs {
         }
 
         private static int lastSceneHandle = -1;
-        private static GamestateManager gamestate;
         private static BetweenListener betweenListener;
         private static Transform APItemParent;
     }
