@@ -45,11 +45,12 @@ namespace ApGlyphs {
         // call on mod start
         public static void PrepareJohnTrap() {
             if (johnTrapSetUp) return;
-            SceneManager.LoadScene("Outer Void", LoadSceneMode.Single);
-            MelonCoroutines.Start(WaitForVoidSetup());
+            asyncLoadScene = SceneManager.LoadSceneAsync("Outer Void", LoadSceneMode.Additive);
         }
 
-        private static IEnumerator WaitForVoidSetup() {
+        private static IEnumerator WaitForVoidSetup(Scene voidScene) {
+            if (voidScene.name != "Outer Void") yield break;
+            // while (!asyncLoadScene.isDone) yield return null; // Assembly stripping makes this throw an exception. SCREW YOU IL2CPP
             do {
                 vgm = GameObject.Find("Void [Game Manager]");
                 john = GameObject.Find("Clarity Figure"); ;
@@ -67,7 +68,7 @@ namespace ApGlyphs {
             flickerScreens.transform.SetParent(null);
             Object.DontDestroyOnLoad(flickerScreens);
             johnTrapSetUp = true;
-            SceneManager.LoadScene("Title", LoadSceneMode.Single);
+            SceneManager.UnloadSceneAsync(voidScene);
         }
 
         private static void JohnTrap() {
@@ -155,7 +156,10 @@ namespace ApGlyphs {
             lastSceneHandle = scene.handle;
             if (scene.name == "Title") PrepareJohnTrap();
             if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
-            Init();
+            if (scene.name == "Outer Void" && mode == LoadSceneMode.Additive) // this is just to catch our additive load from PrepareJohnTrap()
+                MelonCoroutines.Start(WaitForVoidSetup(scene));
+            else
+                Init();
         }
 
         [HarmonyPatch(typeof(SceneManager), "Internal_ActiveSceneChanged")]
@@ -166,6 +170,7 @@ namespace ApGlyphs {
             Object.DontDestroyOnLoad(flickerScreens);
         }
 
+        private static AsyncOperation asyncLoadScene;
         private static PlayerController player;
         private static Rigidbody2D rb;
         private static Transform camera;
