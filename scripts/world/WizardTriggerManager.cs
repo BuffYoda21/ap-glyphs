@@ -10,6 +10,7 @@ namespace ApGlyphs {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
         public static void OnSceneLoaded(Scene scene) {
+            if (scene.name != "Game") return;
             triggerEnabled = false;
             trigger = SceneSearcher.Find(TRIGGER_ENABLED_TRANSFORM_PATH + "/" + TRIGGER_DISABLED_TRANSFORM_RELATIVE_PATH)?.gameObject;
             try {
