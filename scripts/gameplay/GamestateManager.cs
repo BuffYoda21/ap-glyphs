@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using HarmonyLib;
 using MelonLoader;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
     public static class GamestateManager {
@@ -21,15 +19,8 @@ namespace ApGlyphs {
             }
         }
 
-        [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
-        [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene) {
-            if (scene.name != "Game") return;
-            UpdateTokens();
-        }
-
         public static void UpdateTokens() {
-            if (itemCache == null || !itemCache.itemsReady || spentTokens != -1) return;
+            if (itemCache == null || !itemCache.itemsReady) return;
             spentTokens = 0;
             foreach (int itemId in purchasedItemIds) {
                 if (itemCache.checkedLocations.Contains(itemId + 59)) {

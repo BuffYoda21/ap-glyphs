@@ -39,6 +39,8 @@ namespace ApGlyphs {
             VoidGateManager.UpdateGate();
             WizardTriggerManager.UpdateTrigger();
             ClarityAltarManager.CheckAltarActivation();
+            GamestateManager.UpdateTokens();
+            ShopCounter.UpdateCounters();
 
             //PlayerPrefs.SetString("Unlocked-map", "true");    // doesn't work for some reason. ItemChanger.cs moves map to player on load now as a workaround
             player.mapDisabled = true;

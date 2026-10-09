@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
+    [HarmonyPatch]
     public static class VoidGateManager {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
@@ -41,6 +42,7 @@ namespace ApGlyphs {
         }
 
         public static void UpdateGate() {
+            if (SceneManager.GetActiveScene().name != "Outer Void") return;
             if (InventoryManager.items.TryGetValue("Void Gate Shard", out int shardCount)) {
                 if (shardCount >= 1) {
                     gateIndicators[0].GetComponent<SpriteRenderer>().sprite = gateIndicatorOnSprite;

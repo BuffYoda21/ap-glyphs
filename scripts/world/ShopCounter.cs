@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using Il2Cpp;
+using MelonLoader;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace ApGlyphs {
+    [HarmonyPatch]
     public static class ShopCounter {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]

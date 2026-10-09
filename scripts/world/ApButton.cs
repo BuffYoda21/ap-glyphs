@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using HarmonyLib;
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
 using static ApGlyphs.ButtonManager;
 
 namespace ApGlyphs {
-    [HarmonyPatch]
     public class ApButton : MonoBehaviour {
         void Start() {
             isBroken = IsBroken(id);
