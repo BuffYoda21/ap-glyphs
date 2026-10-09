@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using MelonLoader;
+using StbImageSharp;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -44,9 +47,17 @@ namespace ApGlyphs {
                 {"Progressive Chicken Hat_2", Resources.Load<Sprite>("sprites/default/hats/chicken/chicken 1")},
                 {"Crown", Resources.Load<Sprite>("sprites/default/hats/crown")},
                 {"HP Refill", Resources.Load<Sprite>("sprites/items/Heal")},
+                {"AP Logo Color", LoadSpriteFromResources("archipelago.logo-color.png", new Vector2(0.5f, 0.5f), 1628)},
+                {"AP Logo Blue", LoadSpriteFromResources("archipelago.logo-blue.png", new Vector2(0.5f, 0.5f), 1628)},
             };
 
-            MelonLogger.Msg("Loaded " + sprites.Count + " sprites");
+            int count = 0;
+            foreach (KeyValuePair<string, Sprite> kv in sprites) {
+                if (kv.Value != null)
+                    count++;
+            }
+
+            MelonLogger.Msg("Loaded " + count + " sprites");
         }
 
         public static Sprite GetSprite(string name) {
@@ -102,6 +113,46 @@ namespace ApGlyphs {
                     sr.transform.localScale = new Vector3(0.5f, 0.5f, 1f);
                     break;
             }
+        }
+
+        private static Sprite LoadSpriteFromResources(string path, Vector2 pivot = new Vector2(), int ppu = 8) {
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ApGlyphs.sprites." + path);
+            if (stream == null) return null;
+            ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
+
+            Texture2D texture = new Texture2D(
+                image.Width,
+                image.Height,
+                TextureFormat.RGBA32,
+                false
+            );
+
+            var colors = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Color>(image.Width * image.Height);
+
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    int sourceY = image.Height - 1 - y;
+                    int sourceOffset = (sourceY * image.Width + x) * 4;
+                    int destinationOffset = y * image.Width + x;
+
+                    colors[destinationOffset] = new Color(
+                        image.Data[sourceOffset] / 255f,
+                        image.Data[sourceOffset + 1] / 255f,
+                        image.Data[sourceOffset + 2] / 255f,
+                        image.Data[sourceOffset + 3] / 255f
+                    );
+                }
+            }
+
+            texture.SetPixels(colors);
+            texture.Apply(false, false);
+
+            return Sprite.Create(
+                texture,
+                new Rect(0, 0, image.Width, image.Height),
+                pivot,
+                ppu
+            );
         }
 
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]

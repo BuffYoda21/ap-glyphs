@@ -197,33 +197,6 @@ namespace ApGlyphs {
             rootRect.pivot = new Vector2(1f, 0f);
             rootRect.anchoredPosition = new Vector2(-50f, 50f);
             rootRect.sizeDelta = new Vector2(96f, 96f);
-            const int orbCount = 6;
-            const float radius = 27f;
-            const float orbSize = 32f;
-            Sprite orbSprite = CreateCircleSprite((int)orbSize);
-            List<RectTransform> orbRects = new List<RectTransform>();
-            for (int i = 0; i < orbCount; i++) {
-                float angleRad = Mathf.Deg2Rad * (i * 360f / orbCount + 360f / (orbCount * 2f));
-                GameObject orbObj = new GameObject($"Orb_{i}");
-                orbObj.transform.SetParent(rootObj.transform, false);
-                RectTransform rect = orbObj.AddComponent<RectTransform>();
-                orbRects.Add(rect);
-                rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-                rect.pivot = new Vector2(0.5f, 0.5f);
-                rect.anchoredPosition = new Vector2(
-                    Mathf.Cos(angleRad) * radius,
-                    Mathf.Sin(angleRad) * radius
-                );
-                rect.sizeDelta = new Vector2(orbSize, orbSize);
-                Image img = orbObj.AddComponent<Image>();
-                img.color = new Color32(49, 107, 132, 255);
-                img.sprite = orbSprite;
-            }
-            orbRects.Sort((a, b) =>
-                b.anchoredPosition.y.CompareTo(a.anchoredPosition.y));
-            foreach (RectTransform rect in orbRects) {
-                rect.SetAsLastSibling();
-            }
             indicator = rootObj.AddComponent<ConnectionIndicator>();
         }
 
@@ -249,27 +222,31 @@ namespace ApGlyphs {
         }
 
         public class ConnectionIndicator : MonoBehaviour {
+            void Start() {
+                img = gameObject.AddComponent<Image>();
+                disconnectedSprite = SpriteCache.GetSprite("AP Logo Blue");
+                connectedSprite = SpriteCache.GetSprite("AP Logo Color");
+                img.sprite = disconnectedSprite;
+            }
+
             public void SetConnectionState(bool status) {
                 if (status == connected) return;
                 connected = status;
                 if (connected) {
-                    foreach (Image orb in GetComponentsInChildren<Image>()) {
-                        int id = int.Parse(orb.transform.name.Split('_')[1]);
-                        if (id == 0) orb.color = new Color32(117, 194, 117, 255);
-                        if (id == 1) orb.color = new Color32(201, 118, 130, 255);
-                        if (id == 2) orb.color = new Color32(238, 227, 145, 255);
-                        if (id == 3) orb.color = new Color32(118, 126, 189, 255);
-                        if (id == 4) orb.color = new Color32(217, 160, 125, 255);
-                        if (id == 5) orb.color = new Color32(202, 148, 194, 255);
-                    }
+                    if (!connectedSprite)
+                        connectedSprite = SpriteCache.GetSprite("AP Logo Color");
+                    img.sprite = connectedSprite;
                 } else {
-                    foreach (Image orb in GetComponentsInChildren<Image>()) {
-                        orb.color = new Color32(49, 107, 132, 255);
-                    }
+                    if (!disconnectedSprite)
+                        disconnectedSprite = SpriteCache.GetSprite("AP Logo Blue");
+                    img.sprite = disconnectedSprite;
                 }
             }
 
             private bool connected = false;
+            private Image img;
+            private Sprite disconnectedSprite;
+            private Sprite connectedSprite;
         }
 
         public static void DEBUG_get_unchecked_locations() {

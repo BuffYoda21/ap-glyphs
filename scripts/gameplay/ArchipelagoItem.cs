@@ -33,9 +33,10 @@ namespace ApGlyphs {
             }
             if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) SpriteCache.ApplySprite(spriteName, sr);
             if (!sr.sprite)
-                if (itemInfo.Player.Slot != NetworkClient.ConnectionInfo.SlotId)
-                    CreateAPLogo();
-                else {
+                if (itemInfo.Player.Slot != NetworkClient.ConnectionInfo.SlotId) {
+                    fallenBackToAPLogo = true;
+                    sr.sprite = SpriteCache.GetSprite("AP Logo Color");
+                } else {
                     switch (itemInfo.ItemName) {
                         case "Grapple":
                             GameObject grapple = Instantiate(Resources.Load<GameObject>("prefabs/game/Grapple Worm"), transform);
@@ -133,6 +134,8 @@ namespace ApGlyphs {
             }
         }
 
+        // old method for creating AP logos
+        // keeping around for now as a fallback to know immediately if something is broken
         protected void CreateAPLogo() {
             if (itemInfo == null || itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) fallenBackToAPLogo = true;
             const int orbCount = 6;
