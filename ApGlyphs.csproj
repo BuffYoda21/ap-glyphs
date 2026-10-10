@@ -50,6 +50,12 @@
     </Reference>
   </ItemGroup>
 
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Archipelago.MultiClient.Net" Version="6.7.0" />
     <PackageReference Include="Archipelago.MultiClient.Net.Analyzers" Version="2.0.1">
