@@ -60,6 +60,7 @@ namespace ApGlyphs {
         public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
+            if (mode == LoadSceneMode.Additive) return;
             ready = false;
             notifications.Clear();
             if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;

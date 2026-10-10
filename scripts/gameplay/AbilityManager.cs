@@ -12,9 +12,10 @@ namespace ApGlyphs {
     public static class AbilityManager {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene) {
+        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
+            if (mode == LoadSceneMode.Additive) return;
             AbilityManager.scene = scene;
             if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
             MelonCoroutines.Start(DelayedCall());

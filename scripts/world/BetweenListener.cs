@@ -66,9 +66,10 @@ namespace ApGlyphs {
     public static class BetweenFountainRoomPatch {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene) {
+        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
+            if (mode == LoadSceneMode.Additive) return;
             if (!betweenListener) betweenListener = SceneSearcher.Find("Manager intro")?.GetComponent<BetweenListener>();
             if (betweenListener) betweenListener.Start();
         }

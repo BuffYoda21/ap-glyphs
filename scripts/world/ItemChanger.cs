@@ -11,9 +11,10 @@ namespace ApGlyphs {
     public static class ItemChanger {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene) {
+        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
+            if (mode == LoadSceneMode.Additive) return;
 
             if (scene.name == "Game")
                 PlaceItemsGame();

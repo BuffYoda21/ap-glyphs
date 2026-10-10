@@ -38,10 +38,10 @@ namespace ApGlyphs {
 
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene) {
+        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
-            if (scene.name != "Intro") return;  // only run on Intro scene
+            if (mode == LoadSceneMode.Additive || scene.name != "Intro") return;  // only run on Intro scene
 
             // create required class instances
             GameObject manager = SceneSearcher.Find("Manager intro")?.gameObject;

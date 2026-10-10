@@ -8,7 +8,8 @@ namespace ApGlyphs {
     public static class VoidGateManager {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene) {
+        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+            if (mode == LoadSceneMode.Additive) return;
             gateObjectsToDisable.Clear();
             gateObjectsToEnable.Clear();
             voidGate = null;

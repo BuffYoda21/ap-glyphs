@@ -9,10 +9,10 @@ namespace ApGlyphs {
     public static class DeathLinkManager {
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene) {
+        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
             if (scene.handle == lastSceneHandle) return;
             lastSceneHandle = scene.handle;
-            if (scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
+            if (mode == LoadSceneMode.Additive || scene.name != "Game" && scene.name != "Memory" && scene.name != "Outer Void") return;
             if (!player) player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
         }
 
