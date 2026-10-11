@@ -57,6 +57,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="sprites/archipelago/*.png" />
+    <EmbeddedResource Include="sprites/font/*.png" />
     <EmbeddedResource Include="sprites/*.png" />
   </ItemGroup>
 

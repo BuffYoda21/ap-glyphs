@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using Archipelago.MultiClient.Net.Enums;
 using Il2Cpp;
+using MelonLoader;
 using UnityEngine;
 
 namespace ApGlyphs {
@@ -10,17 +11,34 @@ namespace ApGlyphs {
             Destroy(GetComponent<SpriteRenderer>()); // for base Ap Item class to handle sprites properly
             base.Start();
             vanillaItem = GetComponent<ShopItem>();
-            displayText = transform.Find("nametext").GetComponent<BuildText>();
-            displayText.text = "";
-            displayText.normaltext = true;
+            displayObj = transform.Find("nametext")?.gameObject;
+            BuildText oldBt;
+            if (displayObj) {
+                displayText = displayObj.AddComponent<BuildTextPlus>();
+                oldBt = displayObj.GetComponent<BuildText>();
+                displayText.CopyFrom(oldBt);
+                // Destroy(oldBt); // Can't destroy the old BuildText since ShopItem started referencing it sometime post 1.7.0 and this game has absolutely no error handling
+                oldBt.text = ""; // We can however keep the old BuiltText alive and set it to an empty string so that it doesn't mess with anything
+                displayText.text = "";
+            }
             reactParent = SceneSearcher.Find("World/Smile Shop/reacttext")?.gameObject;
             if (!reactParent) return;
             for (int i = 0; i < reactParent.transform.childCount; i++) {
                 Transform child = reactParent.transform.GetChild(i);
                 otherReactions.Add(child.gameObject);
             }
-            apItemReaction = Instantiate(reactParent.transform.Find("reaction (9)")?.gameObject, reactParent.transform)?.GetComponent<BuildText>();
-            if (apItemReaction) apItemReaction.text = "";
+            oldBt = Instantiate(reactParent.transform.Find("reaction (9)")?.gameObject, reactParent.transform)?.GetComponent<BuildText>();
+            apItemReaction = oldBt.gameObject.AddComponent<BuildTextPlus>();
+            apItemReaction.CopyFrom(oldBt);
+            Destroy(oldBt);
+            for (int i = apItemReaction.transform.childCount - 1; i >= 0; i--)
+                Destroy(apItemReaction.transform.GetChild(i).gameObject);
+            if (apItemReaction) {
+                apItemReaction.text = "";
+                apItemReaction.alignment = BuildTextPlus.Alignment.Right;
+                apItemReaction.x = 0f;
+                apItemReaction.y = 0f;
+            }
         }
 
         public new void Update() {
@@ -31,25 +49,30 @@ namespace ApGlyphs {
                 foreach (GameObject otherReaction in otherReactions) {
                     if (otherReaction.activeSelf) otherReaction.SetActive(false);
                 }
+                if (displayObj) displayObj.SetActive(true);
                 itemHeld = true;
             } else {
                 if (apItemReaction.gameObject.activeSelf) apItemReaction.gameObject.SetActive(false);
+                if (displayObj) displayObj.SetActive(false);
                 itemHeld = false;
             }
-            if (itemInfo == null || displayText.text != "") return;
-            if (itemInfo.Player.Slot != NetworkClient.ConnectionInfo.SlotId)
-                displayText.text = itemInfo.Player.Name + "s ";
-            displayText.text = NormalizeText(displayText.text + itemInfo.ItemName);
+            if (itemInfo == null) return;
+            if (string.IsNullOrEmpty(displayText.text)) {
+                if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId)
+                    displayText.text = itemInfo.ItemName;
+                else
+                    displayText.text = itemInfo.Player.Name + "'s " + itemInfo.ItemName;
+            }
             if (apItemReaction.text != "") return;
             List<string> possibleReactions = new List<string>();
             if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) {
                 //reactions for vanilla items
                 if (itemInfo.ItemName.StartsWith("Button Shard")) {
-                    possibleReactions.Add("i love cut content");
+                    possibleReactions.Add("i love cut content!");
                 } else {
                     switch (itemInfo.ItemName) {
                         case "Progressive Sword":
-                            possibleReactions.Add("it is dangerous to go alone take this");
+                            possibleReactions.Add("it's dangerous to go alone take this");
                             break;
                         case "Progressive Dash Orb":
                             possibleReactions.Add("ok so now we are playing celeste huh");
@@ -58,7 +81,7 @@ namespace ApGlyphs {
                             possibleReactions.Add("if you are seeing this something has gone horribly wrong");
                             break;
                         case "Grapple":
-                            possibleReactions.Add("i promise i didn't kidnap him");
+                            possibleReactions.Add("i promise i didn't kidnap him!");
                             break;
                         case "Progressive Parry":
                             possibleReactions.Add("every good game has a parry mechanic right?");
@@ -77,7 +100,7 @@ namespace ApGlyphs {
                             possibleReactions.Add("knowledge but yellow");
                             break;
                         case "Smile Token":
-                            possibleReactions.Add("it is not a scam i swear");
+                            possibleReactions.Add("it's not a scam i swear!");
                             break;
                         case "Rune Cube":
                             possibleReactions.Add("you spin me right round baby");
@@ -90,7 +113,7 @@ namespace ApGlyphs {
                             possibleReactions.Add("use its power wisely");
                             break;
                         case "Seeds":
-                            possibleReactions.Add("george certified");
+                            possibleReactions.Add("# george certified");
                             break;
                         case "Pink Bow":
                             possibleReactions.Add("pretty pink");
@@ -132,7 +155,7 @@ namespace ApGlyphs {
                     // special reactions if ap item is from another glyphs world
                     possibleReactions.Add("an item from another timeline?");
                     possibleReactions.Add("seems oddly familiar");
-                    possibleReactions.Add("i think i recognize that one");
+                    possibleReactions.Add("i think i recognize that one!");
                     if (itemInfo.ItemName == "Smile Token") possibleReactions.Add("pay it forward");
                 } else {
                     // feztale knighteste dread reference
@@ -140,14 +163,14 @@ namespace ApGlyphs {
                         possibleReactions.Add("i love feztale knighteste dread");
                     }
                     // special reactions if ap item is not from another glyphs world
-                    possibleReactions.Add($"whats a {itemInfo.ItemName}?");
+                    possibleReactions.Add($"what's a {itemInfo.ItemName}?");
                     possibleReactions.Add($"never heard of {itemInfo.ItemGame}");
                     possibleReactions.Add($"how did that get here?");
                 }
                 // reactions for ap items
-                possibleReactions.Add($"whos {itemInfo.Player.Name}?");
+                possibleReactions.Add($"who's {itemInfo.Player.Name}?");
                 possibleReactions.Add("what is that?");
-                possibleReactions.Add("an item from another world? strange");
+                possibleReactions.Add("an item from another world? strange...");
                 possibleReactions.Add("how do you even plan on getting it to them?");
                 possibleReactions.Add("i love archipelago");
                 if (itemInfo.Flags.HasFlag(ItemFlags.Advancement)) {
@@ -163,9 +186,11 @@ namespace ApGlyphs {
             if (itemInfo.Flags.HasFlag(ItemFlags.Trap)) {
                 possibleReactions.Add("i wouldn't do that if i were you");
             }
-            apItemReaction.text = possibleReactions[UnityEngine.Random.Range(0, possibleReactions.Count)];
-            apItemReaction.text = NormalizeText(apItemReaction.text);
-            apItemReaction.transform.localPosition = new Vector3(13.2f - apItemReaction.text.Length * 0.4f, apItemReaction.transform.localPosition.y, apItemReaction.transform.localPosition.z);
+            apItemReaction.text = possibleReactions[Random.Range(0, possibleReactions.Count)];
+            //apItemReaction.text = NormalizeText(apItemReaction.text);
+            MelonLogger.Msg($"[{itemInfo.ItemName}] Reaction: {apItemReaction.text}");
+            apItemReaction.transform.localPosition = new Vector3(10f, apItemReaction.transform.localPosition.y, apItemReaction.transform.localPosition.z);
+            apItemReaction.placed = false;
         }
 
         public new void OnTriggerEnter2D(Collider2D other) { }
@@ -184,6 +209,8 @@ namespace ApGlyphs {
             }
         }
 
+        // normalizes text to prevent errors with vanilla BuildText
+        // shouldn't be needed with the new BuildTextPlus
         private string NormalizeText(string origText) {
             if (origText == null) return null;
             StringBuilder sb = new StringBuilder(origText.Length);
@@ -199,9 +226,10 @@ namespace ApGlyphs {
         public int price = 2;
         public int shopId = -1;
         private ShopItem vanillaItem;
-        private BuildText displayText;
+        private GameObject displayObj;
+        private BuildTextPlus displayText;
         private GameObject reactParent;
-        private BuildText apItemReaction;
+        private BuildTextPlus apItemReaction;
         private List<GameObject> otherReactions = new List<GameObject>();
     }
 }

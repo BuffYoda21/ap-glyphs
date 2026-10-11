@@ -47,8 +47,8 @@ namespace ApGlyphs {
                 {"Progressive Chicken Hat_2", Resources.Load<Sprite>("sprites/default/hats/chicken/chicken 1")},
                 {"Crown", Resources.Load<Sprite>("sprites/default/hats/crown")},
                 {"HP Refill", Resources.Load<Sprite>("sprites/items/Heal")},
-                {"AP Logo Color", LoadSpriteFromResources("archipelago.logo-color.png", new Vector2(0.5f, 0.5f), 1628)},
-                {"AP Logo Blue", LoadSpriteFromResources("archipelago.logo-blue.png", new Vector2(0.5f, 0.5f), 1628)},
+                {"AP Logo Color", LoadSpriteFromResources("archipelago.logo-color", new Vector2(0.5f, 0.5f), 1628)},
+                {"AP Logo Blue", LoadSpriteFromResources("archipelago.logo-blue", new Vector2(0.5f, 0.5f), 1628)},
             };
 
             int count = 0;
@@ -115,8 +115,8 @@ namespace ApGlyphs {
             }
         }
 
-        private static Sprite LoadSpriteFromResources(string path, Vector2 pivot = new Vector2(), int ppu = 8) {
-            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ApGlyphs.sprites." + path);
+        public static Sprite LoadSpriteFromResources(string path, Vector2 pivot = new Vector2(), int ppu = 8) {
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ApGlyphs.sprites." + path + ".png");
             if (stream == null) return null;
             ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
 
@@ -125,7 +125,11 @@ namespace ApGlyphs {
                 image.Height,
                 TextureFormat.RGBA32,
                 false
-            );
+            ) {
+                hideFlags = HideFlags.DontUnloadUnusedAsset,
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp,
+            };
 
             var colors = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Color>(image.Width * image.Height);
 
