@@ -19,7 +19,7 @@ namespace ApGlyphs {
                 displayText.CopyFrom(oldBt);
                 // Destroy(oldBt); // Can't destroy the old BuildText since ShopItem started referencing it sometime post 1.7.0 and this game has absolutely no error handling
                 oldBt.text = ""; // We can however keep the old BuiltText alive and set it to an empty string so that it doesn't mess with anything
-                displayText.text = "";
+                displayText.SetText("");
             }
             reactParent = SceneSearcher.Find("World/Smile Shop/reacttext")?.gameObject;
             if (!reactParent) return;
@@ -34,7 +34,7 @@ namespace ApGlyphs {
             for (int i = apItemReaction.transform.childCount - 1; i >= 0; i--)
                 Destroy(apItemReaction.transform.GetChild(i).gameObject);
             if (apItemReaction) {
-                apItemReaction.text = "";
+                apItemReaction.SetText("");
                 apItemReaction.alignment = BuildTextPlus.Alignment.Right;
                 apItemReaction.x = 0f;
                 apItemReaction.y = 0f;
@@ -57,13 +57,13 @@ namespace ApGlyphs {
                 itemHeld = false;
             }
             if (itemInfo == null) return;
-            if (string.IsNullOrEmpty(displayText.text)) {
+            if (string.IsNullOrEmpty(displayText.GetFullText())) {
                 if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId)
-                    displayText.text = itemInfo.ItemName;
+                    displayText.SetText((itemInfo.ItemName, NetworkClient.GetItemColor(this)));
                 else
-                    displayText.text = itemInfo.Player.Name + "'s " + itemInfo.ItemName;
+                    displayText.SetText((itemInfo.Player.Name + "'s ", Color.white), (itemInfo.ItemName, NetworkClient.GetItemColor(this)));
             }
-            if (apItemReaction.text != "") return;
+            if (!string.IsNullOrEmpty(apItemReaction.GetFullText())) return;
             List<string> possibleReactions = new List<string>();
             if (itemInfo.Player.Slot == NetworkClient.ConnectionInfo.SlotId) {
                 //reactions for vanilla items
@@ -186,9 +186,9 @@ namespace ApGlyphs {
             if (itemInfo.Flags.HasFlag(ItemFlags.Trap)) {
                 possibleReactions.Add("i wouldn't do that if i were you");
             }
-            apItemReaction.text = possibleReactions[Random.Range(0, possibleReactions.Count)];
+            apItemReaction.SetText((possibleReactions[Random.Range(0, possibleReactions.Count)], Color.black));
             //apItemReaction.text = NormalizeText(apItemReaction.text);
-            MelonLogger.Msg($"[{itemInfo.ItemName}] Reaction: {apItemReaction.text}");
+            MelonLogger.Msg($"[{itemInfo.ItemName}] Reaction: {apItemReaction.GetFullText()}");
             apItemReaction.transform.localPosition = new Vector3(10f, apItemReaction.transform.localPosition.y, apItemReaction.transform.localPosition.z);
             apItemReaction.placed = false;
         }

@@ -171,13 +171,21 @@ namespace ApGlyphs {
                 } else {
                     notifMsg = $"Sent {itemInfo.ItemName} to {itemInfo.Player.Name}";
                 }
-                if (itemInfo.Flags.HasFlag(ItemFlags.Advancement)) notifColor = new Color32(255, 0, 163, 255); // clarity pink
-                else if (itemInfo.Flags.HasFlag(ItemFlags.Trap)) notifColor = Color.red;
-                else notifColor = Color.white;
+                notifColor = GetItemColor(itemInfo);
             }
             NotificationManager.Notify(notifMsg, notifColor);
             session.Locations.CompleteLocationChecks(locationArray);
         }
+
+        public static Color GetItemColor(Archipelago.MultiClient.Net.Models.ItemInfo itemInfo) {
+            if (itemInfo == null) return Color.white;
+            if (itemInfo.Flags.HasFlag(ItemFlags.Advancement)) return new Color32(255, 0, 163, 255); // clarity pink
+            else if (itemInfo.Flags.HasFlag(ItemFlags.Trap)) return Color.red;
+            else if (itemInfo.Flags.HasFlag(ItemFlags.NeverExclude)) return Color.blue;
+            else return Color.white;
+        }
+
+        public static Color GetItemColor(ArchipelagoItem apItem) => GetItemColor(apItem.itemInfo);
 
         public static void ClearGoal() => session.SetGoalAchieved();
 

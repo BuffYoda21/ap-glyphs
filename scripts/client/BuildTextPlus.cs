@@ -12,68 +12,71 @@ namespace ApGlyphs {
                 fading = true;
                 fastfadeout();
             }
-            if (placed || sequenceLocked || sm.loading || string.IsNullOrEmpty(text)) return;
-            startPos = transform.localPosition;
+            if (placed || sequenceLocked || sm.loading || substrings.Count == 0) return;
+            startPosX = transform.localPosition.x;
             if (alignment == Alignment.Center) Center();
 
-            MelonLogger.Msg($"Building text: {text}");
-            for (int i = 0; i < text.Length; i++) {
-                try {
-                    if (text[i] != ' ') {
-                        char let = text.ToUpper()[i];
+            string fullMsg = GetFullText();
+            MelonLogger.Msg($"Building text: {fullMsg}");
+            foreach (var (text, col) in substrings) {
+                for (int i = 0; i < text.Length; i++) {
+                    try {
+                        if (text[i] != ' ') {
+                            char let = text.ToUpper()[i];
 
-                        // dummy prefab object base
-                        GameObject obj = Instantiate(Resources.Load<GameObject>("text/A"), new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z), transform.rotation);
-                        SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
-                        GlyphCharacterPlus gc = obj.AddComponent<GlyphCharacterPlus>();
+                            // dummy prefab object base
+                            GameObject obj = Instantiate(Resources.Load<GameObject>("text/A"), new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z), transform.rotation);
+                            SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+                            GlyphCharacterPlus gc = obj.AddComponent<GlyphCharacterPlus>();
 
-                        GlyphCharacter oldGc = obj.GetComponent<GlyphCharacter>();
-                        gc.CopyFrom(oldGc);
-                        Destroy(oldGc);
+                            GlyphCharacter oldGc = obj.GetComponent<GlyphCharacter>();
+                            gc.CopyFrom(oldGc);
+                            Destroy(oldGc);
 
-                        string path;
-                        if (sprites.TryGetValue(let, out Sprite sprite) && sprite) {
-                            sr.sprite = sprite;
-                        } else {
-                            if (customSpritePaths.TryGetValue(let, out path)) {
-                                sr.sprite = SpriteCache.LoadSpriteFromResources(path, new Vector2(0.5f, 0.5f));
-                                sprites[let] = sr.sprite;
+                            string path;
+                            if (sprites.TryGetValue(let, out Sprite sprite) && sprite) {
+                                sr.sprite = sprite;
                             } else {
-                                if (vanillaSpritePaths.TryGetValue(let, out path)) {
-                                    sr.sprite = Resources.Load<Sprite>(path);
+                                if (customSpritePaths.TryGetValue(let, out path)) {
+                                    sr.sprite = SpriteCache.LoadSpriteFromResources(path, new Vector2(0.5f, 0.5f));
                                     sprites[let] = sr.sprite;
                                 } else {
-                                    MelonLogger.Warning("Failed to find sprite for " + let);
-                                    Destroy(obj);
-                                    continue;
+                                    if (vanillaSpritePaths.TryGetValue(let, out path)) {
+                                        sr.sprite = Resources.Load<Sprite>(path);
+                                        sprites[let] = sr.sprite;
+                                    } else {
+                                        MelonLogger.Warning("Failed to find sprite for " + let);
+                                        Destroy(obj);
+                                        continue;
+                                    }
                                 }
                             }
-                        }
 
-                        obj.layer = gameObject.layer;
-                        if (hover) obj.AddComponent<Hover>();
-                        if (flicker) gc.flickeringMode = true;
-                        sr.color = col;
-                        sr.sortingOrder = order;
-                        if (fadein) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
-                        obj.transform.localScale = new Vector3(obj.transform.localScale.x * textsize, obj.transform.localScale.y * textsize, obj.transform.localScale.z);
-                        obj.transform.SetParent(transform);
-                        obj.name = text[i].ToString();
-                        characters.Add(obj);
-                        if (proximityMode && proximityTarget)
-                            gc.SetProxyGlyph(proximityTarget, proximityDist, maximumTransparency, minimumTransparency, updateproxytransparencymax);
+                            obj.layer = gameObject.layer;
+                            if (hover) obj.AddComponent<Hover>();
+                            if (flicker) gc.flickeringMode = true;
+                            sr.color = col;
+                            sr.sortingOrder = order;
+                            if (fadein) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+                            obj.transform.localScale = new Vector3(obj.transform.localScale.x * textsize, obj.transform.localScale.y * textsize, obj.transform.localScale.z);
+                            obj.transform.SetParent(transform);
+                            obj.name = text[i].ToString();
+                            characters.Add(obj);
+                            if (proximityMode && proximityTarget)
+                                gc.SetProxyGlyph(proximityTarget, proximityDist, maximumTransparency, minimumTransparency, updateproxytransparencymax);
+                        }
+                    } catch (Exception ex) {
+                        MelonLogger.Error($"Failed to create charater for {text[i]}: {ex.Message}");
                     }
-                } catch (Exception ex) {
-                    MelonLogger.Error($"Failed to create charater for {text[i]}: {ex.Message}");
+                    x += textsize;
+                    x += textsize * 0.1f;
+                    if (x > width && alignment == Alignment.Left) {
+                        x = 0f;
+                        y -= textsize * 1.15f;
+                    }
+                    if (alignment == Alignment.Right)
+                        transform.localPosition -= new Vector3(textsize * 1.1f, 0f, 0f);
                 }
-                x += textsize;
-                x += textsize * 0.1f;
-                if (x > width && alignment == Alignment.Left) {
-                    x = 0f;
-                    y -= textsize * 1.15f;
-                }
-                if (alignment == Alignment.Right)
-                    transform.localPosition -= new Vector3(textsize * 1.1f, 0f, 0f);
             }
             placed = true;
         }
@@ -101,6 +104,8 @@ namespace ApGlyphs {
         }
 
         public void Center() {
+            string text = GetFullText();
+
             if (text.Length % 2 == 1) {
                 x -= textsize * (text.Length / 2);
                 x -= textsize * 0.1f * (text.Length / 2);
@@ -115,8 +120,32 @@ namespace ApGlyphs {
             }
         }
 
+        public void SetText(params (string, Color)[] segs) {
+            substrings.Clear();
+            foreach (var (text, col) in segs)
+                substrings.Add((text, col));
+            Reset();
+        }
+
+        public void SetText(params string[] segs) {
+            substrings.Clear();
+            foreach (string text in segs)
+                substrings.Add((text, Color.white));
+            Reset();
+        }
+
+        public string GetFullText() {
+            string fullMsg = "";
+            for (int i = 0; i < substrings.Count; i++) {
+                fullMsg += substrings[i].Item1;
+                if (i < substrings.Count - 1) fullMsg += " ";
+            }
+            return fullMsg;
+        }
+
         public void CopyFrom(BuildText other) {
-            text = other.text;
+            substrings.Clear();
+            substrings.Add((other.text, other.col));
             x = other.x;
             y = other.y;
             textsize = other.textsize;
@@ -142,7 +171,6 @@ namespace ApGlyphs {
             foreach (GameObject character in other.characters)
                 characters.Add(character);
             sm = other.sm;
-            col = other.col;
         }
 
         public void Reset() {
@@ -152,7 +180,7 @@ namespace ApGlyphs {
             placed = false;
             x = 0f;
             y = 0f;
-            transform.localPosition = startPos;
+            transform.localPosition = new Vector3(startPosX, transform.localPosition.y, transform.localPosition.z);
         }
 
         public Alignment alignment = Alignment.Left;
@@ -237,7 +265,7 @@ namespace ApGlyphs {
             Right, // does not support new lines
         }
 
-        public string text;
+        public List<(string, Color)> substrings = new List<(string, Color)>();
         public float x;
         public float y;
         public float textsize;
@@ -260,8 +288,7 @@ namespace ApGlyphs {
         public GameObject proximityTarget;
         private List<GameObject> characters = new List<GameObject>();
         private SaveManager sm;
-        public Color col = Color.white;
-        private Vector3 startPos = new Vector3(0f, 0f, 0f);
+        private float startPosX = 0f;
     }
 
     public class GlyphCharacterPlus : MonoBehaviour {
