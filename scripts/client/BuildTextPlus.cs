@@ -136,10 +136,8 @@ namespace ApGlyphs {
 
         public string GetFullText() {
             string fullMsg = "";
-            for (int i = 0; i < substrings.Count; i++) {
+            for (int i = 0; i < substrings.Count; i++)
                 fullMsg += substrings[i].Item1;
-                if (i < substrings.Count - 1) fullMsg += " ";
-            }
             return fullMsg;
         }
 
