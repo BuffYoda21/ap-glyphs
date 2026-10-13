@@ -629,6 +629,7 @@ namespace ApGlyphs {
             pinSpriteRenderer.sprite = mapPinSprite;
             pinSpriteRenderer.sortingOrder = 98;
             mapPin.layer = MAP_LAYER;
+            mapPin.AddComponent<ApMapPin>();
             ArchipelagoItem component = item.GetComponent<ArchipelagoItem>();
             if (component) component.mapPin = mapPin;
         }

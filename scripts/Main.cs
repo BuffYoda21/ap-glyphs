@@ -15,6 +15,7 @@ namespace ApGlyphs {
 
             // class injection here
             ClassInjector.RegisterTypeInIl2Cpp<ApButton>();
+            ClassInjector.RegisterTypeInIl2Cpp<ApMapPin>();
             ClassInjector.RegisterTypeInIl2Cpp<ApShopItem>();
             ClassInjector.RegisterTypeInIl2Cpp<ApSmileMask>();
             ClassInjector.RegisterTypeInIl2Cpp<ArchipelagoItem>();

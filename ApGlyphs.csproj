@@ -36,6 +36,9 @@
     <Reference Include="UnityEngine.UIModule">
       <HintPath>UnityEngine.UIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <PropertyGroup>
