@@ -17,7 +17,7 @@ namespace ApGlyphs {
             if (alignment == Alignment.Center) Center();
 
             string fullMsg = GetFullText();
-            MelonLogger.Msg($"Building text: {fullMsg}");
+            // MelonLogger.Msg($"Building text: {fullMsg}");
             foreach (var (text, col) in substrings) {
                 for (int i = 0; i < text.Length; i++) {
                     try {
