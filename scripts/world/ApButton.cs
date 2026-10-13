@@ -28,6 +28,9 @@ namespace ApGlyphs {
                 idTag.col = Color.white;
                 idTag.normaltext = true;
             }
+
+            if (hasUncollectedItem)
+                ItemChanger.PlaceMapPin(id + 10000, $"Button {id}", gameObject);
         }
 
         void Update() {

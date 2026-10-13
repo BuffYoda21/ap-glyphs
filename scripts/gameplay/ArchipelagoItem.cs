@@ -14,6 +14,7 @@ namespace ApGlyphs {
             itemCache = NetworkClient.itemCache;
             if (alertJohn) john = SceneSearcher.Find("Clarity Figure")?.GetComponent<ClarityFigure>();
             if (transform.parent.name == "Heal") transform.parent.GetComponent<SpriteRenderer>().color = new Color32(0, 0, 0, 0); // for boss rush checks
+            gameObject.layer = PICKUP_LAYER;
         }
 
         public void Update() {
@@ -70,6 +71,8 @@ namespace ApGlyphs {
         public void OnDestroy() {
             if (transform.parent.name == "Heal")
                 transform.parent.GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 255); // for boss rush checks
+            if (mapPin)
+                Destroy(mapPin);
         }
 
         public void Collect() {
@@ -206,5 +209,9 @@ namespace ApGlyphs {
         public bool alertJohn = false;
         private ClarityFigure john;
         protected static Sprite orbSprite;
+        public GameObject mapPin;
+        protected static Transform mapPinParent;
+        protected const int PICKUP_LAYER = 8;
+        protected const int MAP_LAYER = 9;
     }
 }

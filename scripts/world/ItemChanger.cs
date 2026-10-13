@@ -28,6 +28,7 @@ namespace ApGlyphs {
 
         private static void PlaceItemsGame() {
             APItemParent = new GameObject("AP_Items").transform;
+            mapPinParent = new GameObject("AP Map Pins").transform;
             long locId;
             string name;
 
@@ -46,6 +47,7 @@ namespace ApGlyphs {
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.SetActive(false);
                 dashOrb.AddComponent<ReplaceOnEnable>().replacement = apItem;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -59,6 +61,7 @@ namespace ApGlyphs {
                 apItem.transform.position = map.transform.position;
                 map.transform.position = map.transform.position = new Vector3(-9.95f, -1.4814f, 0f); // for some reason setting playerprefs doesn't give map so just moving it to the player on load
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -81,6 +84,7 @@ namespace ApGlyphs {
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.SetActive(false);
                 cube2.AddComponent<ReplaceOnEnable>().replacement = apItem;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -103,6 +107,7 @@ namespace ApGlyphs {
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.SetActive(false);
                 shard9.AddComponent<ReplaceOnEnable>().replacement = apItem;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -128,6 +133,7 @@ namespace ApGlyphs {
                 GameObject carGrouping = coneHat.transform.parent.gameObject;
                 carGrouping.AddComponent<ReplaceOnEnable>().replacement = apItem;
                 carGrouping.GetComponent<ReplaceOnEnable>().destroyTarget = coneHat;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -147,6 +153,7 @@ namespace ApGlyphs {
                 apItem.transform.position = new Vector3(395f, 15f, 0f);
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.AddComponent<SeedCounter>().hiddenPosition = new Vector3(395f, 50f, 0f);
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -159,6 +166,7 @@ namespace ApGlyphs {
                 apItem.transform.position = new Vector3(402f, 15f, 0f);
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.AddComponent<SeedCounter>().hiddenPosition = new Vector3(402f, 50f, 0f);
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -175,6 +183,7 @@ namespace ApGlyphs {
                 apItem.SetActive(false);
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 cube1.AddComponent<ReplaceOnEnable>().replacement = apItem;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -192,6 +201,7 @@ namespace ApGlyphs {
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.SetActive(false);
                 blueStone.AddComponent<ReplaceOnDestroy>().replacement = apItem;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -206,6 +216,7 @@ namespace ApGlyphs {
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.SetActive(false);
                 redStone.AddComponent<ReplaceOnDestroy>().replacement = apItem;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -224,6 +235,7 @@ namespace ApGlyphs {
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.SetActive(false);
                 shard12.AddComponent<ReplaceOnEnable>().replacement = apItem;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -242,6 +254,7 @@ namespace ApGlyphs {
                 token7.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
                 UnityEngine.Object.Destroy(token7.GetComponent<Pickup>());
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -259,6 +272,7 @@ namespace ApGlyphs {
                 apItem.SetActive(false);
                 collapseController.AddComponent<ReplaceOnEnable>().replacement = apItem;
                 collapseController.GetComponent<ReplaceOnEnable>().doNotDestroy = true;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -280,6 +294,7 @@ namespace ApGlyphs {
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.SetActive(false);
                 gold2.AddComponent<ReplaceOnEnable>().replacement = apItem;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -297,6 +312,7 @@ namespace ApGlyphs {
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 apItem.SetActive(false);
                 gold3.AddComponent<ReplaceOnEnable>().replacement = apItem;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -320,6 +336,7 @@ namespace ApGlyphs {
                 apItem.SetActive(false);
                 nullBoss.AddComponent<ReplaceOnDestroy>().replacement = apItem;
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -339,6 +356,7 @@ namespace ApGlyphs {
                 shopItem.price = Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
+                PlaceMapPin(locId, name, shopItem1);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -353,6 +371,7 @@ namespace ApGlyphs {
                 shopItem.price = Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
+                PlaceMapPin(locId, name, shopItem2);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -367,6 +386,7 @@ namespace ApGlyphs {
                 shopItem.price = Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
+                PlaceMapPin(locId, name, shopItem3);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -381,6 +401,7 @@ namespace ApGlyphs {
                 shopItem.price = Convert.ToInt32((NetworkClient.slotData["shop_prices"] as JArray)[shopItem.shopId - 1]);
                 shopItem.locId = locId;
                 purchaseTrigger.items.Add(shopItem);
+                PlaceMapPin(locId, name, shopItem4);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -395,6 +416,7 @@ namespace ApGlyphs {
                 apItem.SetActive(false);
                 partyHat.AddComponent<ReplaceOnEnable>().replacement = apItem;
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -463,7 +485,7 @@ namespace ApGlyphs {
                 apItem.SetActive(false);
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
                 collapseController.AddComponent<BombHatPickupReplacer>().replacement = apItem;
-
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {locId}_{name}: {ex.Message}");
             }
@@ -590,14 +612,32 @@ namespace ApGlyphs {
                     apItem.transform.position = offset;
                 }
                 apItem.AddComponent<ArchipelagoItem>().locId = locId;
+                PlaceMapPin(locId, name, apItem);
             } catch (Exception ex) {
                 MelonLogger.Error($"Failed to place {apItem.name}: {ex.Message}");
             }
             return apItem;
         }
 
+        public static void PlaceMapPin(long locId, string name, GameObject item) {
+            GameObject mapPin = new GameObject($"{locId}_{name}");
+            mapPin.transform.SetParent(mapPinParent, true);
+            mapPin.transform.position = item.transform.position;
+            mapPin.transform.localScale = new Vector3(5f, 5f, 1f);
+            SpriteRenderer pinSpriteRenderer = mapPin.AddComponent<SpriteRenderer>();
+            if (!mapPinSprite) mapPinSprite = Resources.Load<Sprite>("sprites/ui/title icon/SaveFile - Map"); // unused save file icon for collecting the map :)
+            pinSpriteRenderer.sprite = mapPinSprite;
+            pinSpriteRenderer.sortingOrder = 98;
+            mapPin.layer = MAP_LAYER;
+            ArchipelagoItem component = item.GetComponent<ArchipelagoItem>();
+            if (component) component.mapPin = mapPin;
+        }
+
         private static int lastSceneHandle = -1;
         private static BetweenListener betweenListener;
         private static Transform APItemParent;
+        private static Transform mapPinParent;
+        private static Sprite mapPinSprite;
+        private const int MAP_LAYER = 9;
     }
 }
