@@ -13,10 +13,11 @@ namespace ApGlyphs {
             if (!player) player = SceneSearcher.Find("Player")?.GetComponent<PlayerController>();
             if (player && !rb) rb = player.GetComponent<Rigidbody2D>();
             if (!camera) camera = SceneSearcher.Find("Main Camera Parent/Main Camera");
+            gracePeriodEndTime = Time.time + GRACE_PERIOD;
         }
 
         public static void SpawnTrap(string trapName) {
-            if (!traps.ContainsKey(trapName)) return;
+            if (Time.time < gracePeriodEndTime || !traps.ContainsKey(trapName)) return;
             Trap trap = traps[trapName];
             switch (trap) {
                 case Trap.Momentum:
@@ -180,6 +181,8 @@ namespace ApGlyphs {
         private static GameObject flickerScreens;
         private static bool johnTrapSetUp = false;
         private static int lastSceneHandle = -1;
+        private static float gracePeriodEndTime = -1f;
+        private const float GRACE_PERIOD = 5f;
         private static Dictionary<string, Trap> traps = new Dictionary<string, Trap>() {
             { "Momentum Trap", Trap.Momentum },
             { "John Trap", Trap.John },
