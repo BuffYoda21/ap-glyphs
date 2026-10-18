@@ -85,6 +85,8 @@ namespace ApGlyphs {
             Vector3 offset = Random.insideUnitCircle.normalized * 30f;
             john.transform.position = player.transform.position + offset;
             johnAi.Start();
+            johnAi.player = player;
+            johnAi.vgm = vgm.GetComponent<VoidGameManager>();
             johnAi.PlayerSighted();
             TimerManager.StartTimer(30f);
             MelonCoroutines.Start(JohnTrapTimer(30f, john));
