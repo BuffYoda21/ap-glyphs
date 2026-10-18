@@ -3,6 +3,7 @@ using Il2CppInterop.Runtime.Injection;
 using UnityEngine;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [assembly: MelonInfo(typeof(ApGlyphs.Main), "ApGlyphs", "1.4.0", "BuffYoda21")]
 [assembly: MelonGame("Vortex Bros.", "GLYPHS")]
@@ -37,23 +38,36 @@ namespace ApGlyphs {
             isInitialized = true;
         }
 
-        public override void OnUpdate() => NetworkClient.Update();
+        public override void OnUpdate() {
+            NetworkClient.Update();
+            Console.Update();
+        }
 
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
         [HarmonyPostfix]
-        public static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-            if (scene.handle == lastSceneHandle) return;
-            lastSceneHandle = scene.handle;
-            if (mode == LoadSceneMode.Additive || scene.name != "Intro") return;  // only run on Intro scene
+        public static void OnSceneLoaded() {
+            if (!isFirstLoad) return;
+            isFirstLoad = false;
 
             // create required class instances
             GameObject manager = SceneSearcher.Find("Manager intro")?.gameObject;
             betweenListener = manager?.AddComponent<BetweenListener>();
             NetworkClient.itemCache.dispatcher = manager?.AddComponent<MainThreadDispatcher>();
+
+            GameObject canvasObj = new GameObject("AP Canvas");
+            Object.DontDestroyOnLoad(canvasObj);
+            APCanvas = canvasObj.AddComponent<Canvas>();
+            APCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            APCanvas.sortingOrder = 9999;
+            canvasObj.AddComponent<CanvasScaler>();
+            canvasObj.AddComponent<GraphicRaycaster>();
+
+            Console.Init();
         }
 
         public static BetweenListener betweenListener;
-        private static int lastSceneHandle;
         private bool isInitialized = false;
+        private static bool isFirstLoad = true;
+        public static Canvas APCanvas;
     }
 }

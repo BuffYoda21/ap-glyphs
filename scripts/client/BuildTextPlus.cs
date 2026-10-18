@@ -3,17 +3,36 @@ using System.Collections.Generic;
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ApGlyphs {
     public class BuildTextPlus : MonoBehaviour {
+        void Start() => Init();
+
+        public void Init() {
+            if (didInit) return;
+            try {
+                if (GetComponent<RectTransform>()) {
+                    isRect = true;
+                    rect = GetComponent<RectTransform>();
+                    startPosX = rect.anchoredPosition.x;
+                }
+            } finally {
+                didInit = true;
+            }
+        }
+
         void Update() {
             if (!sm) sm = GameObject.Find("Manager intro")?.GetComponent<SaveManager>();
-            if (triggerfadeout && !fading) {
+            if (triggerfadeout && !fading && !isRect) {
                 fading = true;
                 fastfadeout();
             }
             if (placed || sequenceLocked || sm.loading || substrings.Count == 0) return;
-            startPosX = transform.localPosition.x;
+            if (!isRect)
+                startPosX = transform.localPosition.x;
+            else
+                startPosX = rect.anchoredPosition.x;
             if (alignment == Alignment.Center) Center();
 
             string fullMsg = GetFullText();
@@ -23,62 +42,84 @@ namespace ApGlyphs {
                     try {
                         if (text[i] != ' ') {
                             char let = text.ToUpper()[i];
-
-                            // dummy prefab object base
-                            GameObject obj = Instantiate(Resources.Load<GameObject>("text/A"), new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z), transform.rotation);
-                            SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
-                            GlyphCharacterPlus gc = obj.AddComponent<GlyphCharacterPlus>();
-
-                            GlyphCharacter oldGc = obj.GetComponent<GlyphCharacter>();
-                            gc.CopyFrom(oldGc);
-                            Destroy(oldGc);
+                            if (let == '\n') NewLine();
 
                             string path;
+                            Sprite spr;
                             if (sprites.TryGetValue(let, out Sprite sprite) && sprite) {
-                                sr.sprite = sprite;
+                                spr = sprite;
+                            } else if (customSpritePaths.TryGetValue(let, out path)) {
+                                spr = SpriteCache.LoadSpriteFromResources(path, new Vector2(0.5f, 0.5f));
+                                sprites[let] = spr;
+                            } else if (vanillaSpritePaths.TryGetValue(let, out path)) {
+                                spr = Resources.Load<Sprite>(path);
+                                sprites[let] = spr;
                             } else {
-                                if (customSpritePaths.TryGetValue(let, out path)) {
-                                    sr.sprite = SpriteCache.LoadSpriteFromResources(path, new Vector2(0.5f, 0.5f));
-                                    sprites[let] = sr.sprite;
-                                } else {
-                                    if (vanillaSpritePaths.TryGetValue(let, out path)) {
-                                        sr.sprite = Resources.Load<Sprite>(path);
-                                        sprites[let] = sr.sprite;
-                                    } else {
-                                        MelonLogger.Warning("Failed to find sprite for " + let);
-                                        Destroy(obj);
-                                        continue;
-                                    }
-                                }
+                                MelonLogger.Warning("Failed to find sprite for " + let);
+                                continue;
                             }
 
-                            obj.layer = gameObject.layer;
-                            if (hover) obj.AddComponent<Hover>();
-                            if (flicker) gc.flickeringMode = true;
-                            sr.color = col;
-                            sr.sortingOrder = order;
-                            if (fadein) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
-                            obj.transform.localScale = new Vector3(obj.transform.localScale.x * textsize, obj.transform.localScale.y * textsize, obj.transform.localScale.z);
-                            obj.transform.SetParent(transform);
+                            GameObject obj;
+                            if (!isRect) {
+                                // dummy prefab object base
+                                obj = Instantiate(Resources.Load<GameObject>("text/A"), new Vector3(transform.position.x + x, transform.position.y + y, transform.position.z), transform.rotation);
+                                GlyphCharacterPlus gc = obj.AddComponent<GlyphCharacterPlus>();
+                                SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+                                GlyphCharacter oldGc = obj.GetComponent<GlyphCharacter>();
+                                gc.CopyFrom(oldGc);
+                                Destroy(oldGc);
+
+                                obj.transform.SetParent(transform, false);
+                                obj.layer = gameObject.layer;
+                                if (hover) obj.AddComponent<Hover>();
+                                if (flicker) gc.flickeringMode = true;
+                                sr.color = col;
+                                sr.sortingOrder = order;
+                                if (fadein) sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+                                obj.transform.localScale = new Vector3(obj.transform.localScale.x * textsize, obj.transform.localScale.y * textsize, obj.transform.localScale.z);
+                                if (proximityMode && proximityTarget)
+                                    gc.SetProxyGlyph(proximityTarget, proximityDist, maximumTransparency, minimumTransparency, updateproxytransparencymax);
+                            } else {
+                                obj = new GameObject();
+                                RectTransform rect = obj.AddComponent<RectTransform>();
+                                obj.transform.SetParent(transform, false);
+                                rect.anchoredPosition = new Vector2(rect.anchoredPosition.x + x, rect.anchoredPosition.y + y);
+                                rect.sizeDelta = new Vector2(textsize, textsize);
+                                Image image = obj.AddComponent<Image>();
+                                image.color = col;
+                                image.sprite = spr;
+                            }
+
+
                             obj.name = text[i].ToString();
                             characters.Add(obj);
-                            if (proximityMode && proximityTarget)
-                                gc.SetProxyGlyph(proximityTarget, proximityDist, maximumTransparency, minimumTransparency, updateproxytransparencymax);
                         }
                     } catch (Exception ex) {
                         MelonLogger.Error($"Failed to create charater for {text[i]}: {ex.Message}");
                     }
+
+                    if (x > width && alignment == Alignment.Left) {
+                        NewLine();
+                        continue;
+                    }
                     x += textsize;
                     x += textsize * 0.1f;
-                    if (x > width && alignment == Alignment.Left) {
-                        x = 0f;
-                        y -= textsize * 1.15f;
-                    }
-                    if (alignment == Alignment.Right)
+                    if (!isRect && alignment == Alignment.Right)
                         transform.localPosition -= new Vector3(textsize * 1.1f, 0f, 0f);
                 }
             }
             placed = true;
+        }
+
+        private void NewLine() {
+            x = 0f;
+            newLines++;
+            if (!pushUpOnNewLine)
+                y -= textsize * 1.15f;
+            else
+                foreach (GameObject character in characters)
+                    character.transform.localPosition += new Vector3(0f, textsize * 1.15f, 0f);
+            OnNewLine?.Invoke();
         }
 
         void OnEnable() {
@@ -122,13 +163,21 @@ namespace ApGlyphs {
 
         public void SetText(params (string, Color)[] segs) {
             substrings.Clear();
+            AppendText(segs);
+        }
+
+        public void SetText(params string[] segs) {
+            substrings.Clear();
+            AppendText(segs);
+        }
+
+        public void AppendText(params (string, Color)[] segs) {
             foreach (var (text, col) in segs)
                 substrings.Add((text, col));
             Reset();
         }
 
-        public void SetText(params string[] segs) {
-            substrings.Clear();
+        public void AppendText(params string[] segs) {
             foreach (string text in segs)
                 substrings.Add((text, Color.white));
             Reset();
@@ -172,13 +221,18 @@ namespace ApGlyphs {
         }
 
         public void Reset() {
+            if (!didStart) return;
             characters.Clear();
             for (int i = transform.childCount - 1; i >= 0; i--)
                 Destroy(transform.GetChild(i).gameObject);
             placed = false;
             x = 0f;
             y = 0f;
-            transform.localPosition = new Vector3(startPosX, transform.localPosition.y, transform.localPosition.z);
+            newLines = 1;
+            if (!isRect)
+                transform.localPosition = new Vector3(startPosX, transform.localPosition.y, transform.localPosition.z);
+            else
+                rect.anchoredPosition = new Vector2(startPosX, rect.anchoredPosition.y);
         }
 
         public Alignment alignment = Alignment.Left;
@@ -259,15 +313,17 @@ namespace ApGlyphs {
 
         public enum Alignment {
             Left,
-            Center,
-            Right, // does not support new lines
+            Center, // does not support rects
+            Right, // does not support new lines or rects
         }
 
         public List<(string, Color)> substrings = new List<(string, Color)>();
         public float x;
         public float y;
-        public float textsize;
+        public float textsize = 1f;
         public float width;
+        public int newLines = 1;
+        public bool pushUpOnNewLine;
         public float fadeinspeed = 1f;
         public float proximityDist = 5f;
         public float maximumTransparency = 0.35f;
@@ -287,6 +343,10 @@ namespace ApGlyphs {
         private List<GameObject> characters = new List<GameObject>();
         private SaveManager sm;
         private float startPosX = 0f;
+        private bool isRect = false;
+        public RectTransform rect;
+        private bool didInit = false;
+        public event Action OnNewLine;
     }
 
     public class GlyphCharacterPlus : MonoBehaviour {

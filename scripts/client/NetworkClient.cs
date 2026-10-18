@@ -8,6 +8,7 @@ using MelonLoader;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
+using Archipelago.MultiClient.Net.Helpers;
 
 namespace ApGlyphs {
     public static class NetworkClient {
@@ -146,10 +147,14 @@ namespace ApGlyphs {
             if (options.ContainsKey("DeathLink") && Convert.ToBoolean(options["DeathLink"]))
                 DeathLinkManager.EnableDeathLink();
 
+            session.MessageLog.OnMessageReceived += (msg) => Console.Log(msg);
+
             await OnConnectionSuccess();
         }
 
         private static async Task OnConnectionSuccess() => await itemCache.FetchItemPool(session, session.Locations.AllLocations);
+
+        public static void Say(string msg) => session.Say(msg); // Will pipe through a custom message handler later
 
         public static void CollectItem(ArchipelagoItem apItem) => CollectItem(apItem.locId);
 
@@ -190,22 +195,15 @@ namespace ApGlyphs {
         public static void ClearGoal() => session.SetGoalAchieved();
 
         private static void CreateConnectionIndicator() {
-            GameObject canvasObj = new GameObject("AP Canvas");
-            UnityEngine.Object.DontDestroyOnLoad(canvasObj);
-            Canvas canvas = canvasObj.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 9999;
-            canvasObj.AddComponent<CanvasScaler>();
-            canvasObj.AddComponent<GraphicRaycaster>();
-            GameObject rootObj = new GameObject("ConnectionIndicator");
-            rootObj.transform.SetParent(canvasObj.transform, false);
-            RectTransform rootRect = rootObj.AddComponent<RectTransform>();
+            GameObject indicatorObj = new GameObject("ConnectionIndicator");
+            indicatorObj.transform.SetParent(Main.APCanvas.transform, false);
+            RectTransform rootRect = indicatorObj.AddComponent<RectTransform>();
             rootRect.anchorMin = new Vector2(1f, 0f);
             rootRect.anchorMax = new Vector2(1f, 0f);
             rootRect.pivot = new Vector2(1f, 0f);
             rootRect.anchoredPosition = new Vector2(-50f, 50f);
             rootRect.sizeDelta = new Vector2(96f, 96f);
-            indicator = rootObj.AddComponent<ConnectionIndicator>();
+            indicator = indicatorObj.AddComponent<ConnectionIndicator>();
         }
 
         private static Sprite CreateCircleSprite(int diameter) {
