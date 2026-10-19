@@ -125,7 +125,7 @@ namespace ApGlyphs {
             string msg = currentText.GetFullText();
             if (string.IsNullOrWhiteSpace(msg)) return;
             // MelonLogger.Msg("[UserConsole]: " + msg);
-            NetworkClient.Say(msg);
+            NetworkClient.Say(CommandProcesser.ParseMessage(msg));
             // Log(currentText.substrings.ToArray());
         }
 

@@ -149,6 +149,8 @@ namespace ApGlyphs {
 
             session.MessageLog.OnMessageReceived += (msg) => Console.Log(msg);
 
+            ButtonManager.PopulateBundleContents();
+
             await OnConnectionSuccess();
         }
 

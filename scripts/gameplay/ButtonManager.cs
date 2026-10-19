@@ -107,7 +107,18 @@ namespace ApGlyphs {
                     //MelonLogger.Msg($"Found button shard {Convert.ToInt32(key.Split(' ')[2])}");
                     CollectShard(Convert.ToInt32(key.Split(' ')[2]));
                 }
+
+                if (key.StartsWith("Shard Bundle")) {
+                    List<int> shards = bundleContents[key];
+                    foreach (int shard in shards)
+                        CollectShard(shard);
+                }
             }
+        }
+
+        public static void PopulateBundleContents() {
+            if (NetworkClient.slotData.TryGetValue("shard_bundles", out object bundlesObj) && bundlesObj is JObject bundlesJson)
+                bundleContents = bundlesJson.ToObject<Dictionary<string, List<int>>>();
         }
 
         // Might end up moving this to a data file
@@ -384,6 +395,7 @@ namespace ApGlyphs {
         private static readonly List<ApButton> loadedButtons = new List<ApButton>();
         private static readonly Dictionary<int, ButtonColor> colorKey = new Dictionary<int, ButtonColor>();
         private static readonly List<int> brokenButtonIds = new List<int>();
+        public static Dictionary<string, List<int>> bundleContents = new Dictionary<string, List<int>>();
         private static bool randomizeColors = false;
         private static bool awaitingSlotData = true;
         public enum ButtonColor {
