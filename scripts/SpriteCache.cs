@@ -49,6 +49,7 @@ namespace ApGlyphs {
                 {"HP Refill", Resources.Load<Sprite>("sprites/items/Heal")},
                 {"AP Logo Color", LoadSpriteFromResources("archipelago.logo-color", new Vector2(0.5f, 0.5f), 1628)},
                 {"AP Logo Blue", LoadSpriteFromResources("archipelago.logo-blue", new Vector2(0.5f, 0.5f), 1628)},
+                {"Shard Bundle", LoadSpriteFromResources("shard-bundle", new Vector2(0.5f, 0.5f), 80)},
             };
 
             int count = 0;
@@ -66,6 +67,8 @@ namespace ApGlyphs {
             if (name != null && sprites.ContainsKey(name)) return sprites[name];
 
             if (name.StartsWith("Button Shard")) return sprites["Button Shard"];
+            if (name.StartsWith("Shard Bundle")) return sprites["Shard Bundle"];
+
             return null;
         }
 
@@ -84,6 +87,7 @@ namespace ApGlyphs {
                 sr.transform.localScale = new Vector3(0.25f, 0.25f, 1);
                 return;
             }
+            if (name.StartsWith("Shard Bundle")) sr.sprite = sprites["Shard Bundle"];
             if (!sprites.ContainsKey(name)) return;
             sr.sprite = sprites[name];
 
