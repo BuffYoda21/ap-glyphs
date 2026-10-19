@@ -12,7 +12,11 @@ namespace ApGlyphs {
             sr.color = colorIndex[color];
             if (isBroken) sr.sprite = Resources.Load<Sprite>("sprites/platforming/Button Broken");
             if (!buttonObj) buttonObj = gameObject.GetComponent<ButtonObj>();
-            if (buttonObj) buttonObj.type = typeIndex[color];
+            if (buttonObj) {
+                buttonObj.type = typeIndex[color];
+                if (buttonObj.save)
+                    sm = GameObject.Find("Manager intro")?.GetComponent<SaveManager>();
+            }
             buttonObj.broken = isBroken;
             hasUncollectedItem = NetworkClient.session.Locations.AllMissingLocations.Contains(id + 10000);
 
@@ -48,6 +52,7 @@ namespace ApGlyphs {
             hasUncollectedItem = false;
             if (idTag) Destroy(idTag.gameObject);
             if (mapPin) Destroy(mapPin);
+            if (buttonObj.save && color == ButtonColor.YELLOW && sm) sm.Save(); // Only an issue with yellow save buttons. Patching all would lead to double saves.
         }
 
         public void Fix() {
@@ -66,6 +71,7 @@ namespace ApGlyphs {
         public string path = "";
         private BuildText idTag;
         private GameObject mapPin;
+        private SaveManager sm;
 
         public static readonly Dictionary<ButtonColor, Color> colorIndex = new Dictionary<ButtonColor, Color>() {
             {ButtonColor.SAVE, new Color(0.9986f, 1f, 0f, 1f)},
