@@ -20,8 +20,10 @@ namespace ApGlyphs {
                     }
 
                     foreach (KeyValuePair<string, List<int>> kv in ButtonManager.bundleContents) {
-                        if (kv.Value.Contains(id))
+                        if (kv.Value.Contains(id)) {
+                            Console.Log($"Button Shard {id} can be found in {kv.Key}. Hinting for {kv.Key}.");
                             return $"!hint {kv.Key}";
+                        }
                     }
                     return msg;
             }
