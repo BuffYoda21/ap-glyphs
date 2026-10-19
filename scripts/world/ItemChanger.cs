@@ -619,7 +619,7 @@ namespace ApGlyphs {
             return apItem;
         }
 
-        public static void PlaceMapPin(long locId, string name, GameObject item) {
+        public static GameObject PlaceMapPin(long locId, string name, GameObject item) {
             GameObject mapPin = new GameObject($"{locId}_{name}");
             mapPin.transform.SetParent(mapPinParent, true);
             mapPin.transform.position = item.transform.position;
@@ -632,6 +632,7 @@ namespace ApGlyphs {
             mapPin.AddComponent<ApMapPin>();
             ArchipelagoItem component = item.GetComponent<ArchipelagoItem>();
             if (component) component.mapPin = mapPin;
+            return mapPin;
         }
 
         private static int lastSceneHandle = -1;

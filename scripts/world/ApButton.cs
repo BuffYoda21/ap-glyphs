@@ -30,7 +30,7 @@ namespace ApGlyphs {
             }
 
             if (hasUncollectedItem)
-                ItemChanger.PlaceMapPin(id + 10000, $"Button {id}", gameObject);
+                mapPin = ItemChanger.PlaceMapPin(id + 10000, $"Button {id}", gameObject);
         }
 
         void Update() {
@@ -42,10 +42,12 @@ namespace ApGlyphs {
 
         void OnDisable() => Unregister(this);
 
+        // isBroken can be assumed false since that would have prevented the press
         private void OnPress() {
             NetworkClient.CollectItem(id + 10000); // CollectItem handlies invalid IDs and already collected locations but should probably rework this anyway
             hasUncollectedItem = false;
-            if (idTag) Destroy(idTag.gameObject); // isBroken can be assumed false since that would have prevented the press
+            if (idTag) Destroy(idTag.gameObject);
+            if (mapPin) Destroy(mapPin);
         }
 
         public void Fix() {
@@ -63,6 +65,7 @@ namespace ApGlyphs {
         public ButtonObj buttonObj;
         public string path = "";
         private BuildText idTag;
+        private GameObject mapPin;
 
         public static readonly Dictionary<ButtonColor, Color> colorIndex = new Dictionary<ButtonColor, Color>() {
             {ButtonColor.SAVE, new Color(0.9986f, 1f, 0f, 1f)},
