@@ -192,6 +192,13 @@ namespace ApGlyphs {
             }
         }
 
+        public static void Clear() {
+            foreach (BuildTextPlus text in log) {
+                UnityEngine.Object.Destroy(text.gameObject);
+            }
+            log.Clear();
+        }
+
         private static bool consoleOpen = false;
         private static bool closeNextFrame = false;
         private static Canvas APCanvas;

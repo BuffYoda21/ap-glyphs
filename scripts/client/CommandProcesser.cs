@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace ApGlyphs {
     public static class CommandProcesser {
@@ -26,6 +27,20 @@ namespace ApGlyphs {
                         }
                     }
                     return msg;
+
+                case "!clear":
+                    Console.Clear();
+                    return null;
+
+                case "!info":
+                    if (parts.Length < 2) {
+                        Console.Log($"{NetworkClient.ConnectionInfo.SlotName}: {msg}");
+                        Console.Log("Usage: !info <option name>");
+                        return null;
+                    }
+                    string option = string.Join("_", parts[1..]);
+                    Console.Log($"{option}: {((JObject)NetworkClient.slotData["options"]).ToObject<Dictionary<string, string>>()[option]}");
+                    return null;
             }
 
             return msg;
