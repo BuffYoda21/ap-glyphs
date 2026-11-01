@@ -14,7 +14,7 @@ namespace ApGlyphs {
             triggerEnabled = false;
             trigger = SceneSearcher.Find(TRIGGER_ENABLED_TRANSFORM_PATH + "/" + TRIGGER_DISABLED_TRANSFORM_RELATIVE_PATH)?.gameObject;
             try {
-                wizGlyphstones = Convert.ToInt32(NetworkClient.options["WizardRequirements"]);
+                wizGlyphstones = (int)NetworkClient.options["wizard_requirements"];
             } catch (Exception ex) {
                 MelonLogger.Error("Failed to get WizardRequirements: " + ex.Message);
                 wizGlyphstones = 3;

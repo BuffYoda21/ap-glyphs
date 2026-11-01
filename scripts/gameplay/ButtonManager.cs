@@ -17,7 +17,7 @@ namespace ApGlyphs {
             if (!button) return false;
 
             if (awaitingSlotData) {
-                randomizeColors = Convert.ToBoolean(NetworkClient.options["ButtonColorsRandomized"]);
+                randomizeColors = (int)NetworkClient.options["random_button_color_percent"] > 0;
                 if (randomizeColors) {
                     if (NetworkClient.slotData.TryGetValue("button_colors", out object rawColors)) {
                         Dictionary<int, int> buttonColors = ((JObject)rawColors).ToObject<Dictionary<int, int>>();

@@ -39,7 +39,7 @@ namespace ApGlyphs {
                         return null;
                     }
                     string option = string.Join("_", parts[1..]);
-                    Console.Log($"{option}: {((JObject)NetworkClient.slotData["options"]).ToObject<Dictionary<string, string>>()[option]}");
+                    Console.Log($"{option}: {NetworkClient.options[option]}");
                     return null;
             }
 

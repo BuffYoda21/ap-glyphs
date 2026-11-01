@@ -44,7 +44,7 @@ namespace ApGlyphs {
 
         private static void FetchGoal() {
             try {
-                switch ((int)NetworkClient.options["Goal"]) {
+                switch ((int)NetworkClient.options["goal"]) {
                     case (int)Goal.FalseEnding: goal = Goal.FalseEnding; break;
                     case (int)Goal.GoodEnding: goal = Goal.GoodEnding; break;
                     case (int)Goal.TrueEnding: goal = Goal.TrueEnding; break;
@@ -52,7 +52,7 @@ namespace ApGlyphs {
                     case (int)Goal.Epilogue: goal = Goal.Epilogue; break;
                     case (int)Goal.AllEndings: goal = Goal.AllEndings; break;
                     default:
-                        MelonLogger.Error("Failed to parse " + NetworkClient.options["Goal"]);
+                        MelonLogger.Error("Failed to parse " + NetworkClient.options["goal"]);
                         break;
                 }
             } catch (Exception ex) {

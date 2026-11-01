@@ -137,14 +137,14 @@ namespace ApGlyphs {
         }
 
         private static void GetWraithRequirement() {
-            wraithRequirement = (WraithRequirement)Convert.ToInt32(NetworkClient.options["WraithRequirements"]);
+            wraithRequirement = (WraithRequirement)Convert.ToInt32(NetworkClient.options["wraith_requirements"]);
             switch (wraithRequirement) {
                 case WraithRequirement.Vanilla: wraithRequirement = WraithRequirement.SilverShard; wraithRequirementCount = 15; break;
-                case WraithRequirement.SilverShard: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithSilverCount"]); break;
-                case WraithRequirement.GoldShard: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithGoldCount"]); break;
-                case WraithRequirement.SmileToken: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithSmileCount"]); break;
-                case WraithRequirement.RuneCube: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithRuneCount"]); break;
-                case WraithRequirement.GlyphStone: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["WraithGlyphstoneCount"]); break;
+                case WraithRequirement.SilverShard: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["wraith_silver_count"]); break;
+                case WraithRequirement.GoldShard: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["wraith_gold_count"]); break;
+                case WraithRequirement.SmileToken: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["wraith_smile_count"]); break;
+                case WraithRequirement.RuneCube: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["wraith_rune_count"]); break;
+                case WraithRequirement.GlyphStone: wraithRequirementCount = Convert.ToInt32(NetworkClient.options["wraith_glyphstone_count"]); break;
             }
         }
 
