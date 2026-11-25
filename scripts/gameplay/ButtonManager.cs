@@ -37,7 +37,7 @@ namespace ApGlyphs {
                 awaitingSlotData = false;
             }
 
-            if (!randomizeColors) return false;
+            // if (!randomizeColors) return false; // Temporary fix. Cleaner fix coming in 2.0.0
 
             if (button.gameObject.GetComponent<ApButton>()) {
                 ApButton apb = button.gameObject.GetComponent<ApButton>();
@@ -387,7 +387,7 @@ namespace ApGlyphs {
         private static readonly List<int> brokenButtonIds = new List<int>();
         public static NetworkClient client;
         private static InventoryManager inventory;
-        private static bool randomizeColors = false;
+        public static bool randomizeColors = false;
         private static bool awaitingSlotData = true;
         public enum ButtonColor {
             SAVE = -1,

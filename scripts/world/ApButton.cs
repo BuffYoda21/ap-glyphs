@@ -11,7 +11,8 @@ namespace ApGlyphs {
         void Start() {
             isBroken = IsBroken(id);
             SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
-            sr.color = colorIndex[color];
+            if (randomizeColors)
+                sr.color = colorIndex[color];
             if (isBroken) sr.sprite = Resources.Load<Sprite>("sprites/platforming/Button Broken");
             if (!buttonObj) buttonObj = gameObject.GetComponent<ButtonObj>();
             if (buttonObj) buttonObj.type = typeIndex[color];
